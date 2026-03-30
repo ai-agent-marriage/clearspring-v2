@@ -1,9 +1,10 @@
 global:
   resolve_timeout: 5m
-  smtp_smarthost: 'smtp.example.com:587'
-  smtp_from: 'alertmanager@clearspring.com'
-  smtp_auth_username: 'alertmanager@clearspring.com'
-  smtp_auth_password: 'YOUR_SMTP_PASSWORD'
+  smtp_smarthost: 'smtp.gmail.com:465'
+  smtp_from: 'davisedwad82@gmail.com'
+  smtp_auth_username: 'davisedwad82@gmail.com'
+  smtp_auth_password: 'dghc wioj lggw bwpu'
+  smtp_require_tls: true
 
 # 模板文件
 templates:
@@ -38,27 +39,28 @@ receivers:
   # 飞书机器人 - 一般告警
   - name: 'feishu'
     webhook_configs:
-      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_KEY'
+      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/3297ae19-077a-4b42-b827-cd56b5b82791'
         send_resolved: true
         max_alerts: 5
   
   # 飞书机器人 - 严重告警
   - name: 'feishu-critical'
     webhook_configs:
-      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_CRITICAL_WEBHOOK_KEY'
+      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/3297ae19-077a-4b42-b827-cd56b5b82791'
         send_resolved: true
         max_alerts: 10
   
   # 飞书机器人 - 警告
   - name: 'feishu-warning'
     webhook_configs:
-      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WARNING_WEBHOOK_KEY'
+      - url: 'https://open.feishu.cn/open-apis/bot/v2/hook/3297ae19-077a-4b42-b827-cd56b5b82791'
         send_resolved: true
   
-  # 邮件通知
+  # 邮件通知（Gmail）
   - name: 'email'
     email_configs:
-      - to: 'ops-team@clearspring.com'
+      - to: 'davisedwad82@gmail.com'
+        from: 'davisedwad82@gmail.com'
         send_resolved: true
         html: '{{ template "email.html" . }}'
   
