@@ -1,0 +1,20 @@
+/* 清如 ClearSpring V2.0 - CSS 变量规范 */
+:root {
+  /* 圆角规范 */
+  --cs-radius: 24rpx;
+  --cs-radius-sm: 12rpx;
+  --cs-radius-lg: 48rpx;
+  
+  /* 祈福者端配色 */
+  --cs-bg-primary: #EFEEE9;
+  --cs-primary: #D4B87B;
+  --cs-primary-dark: #B89A5B;
+  
+  /* 执行者端配色 */
+  --cs-executor-bg: #4A5D4E;
+  --cs-executor-primary: #334537;
+  
+  /* 液态玻璃效果 */
+  --cs-glass-bg: rgba(255, 255, 255, 0.7);
+  --cs-glass-blur: 10px;
+}

@@ -1,0 +1,130 @@
+<!--
+  清如 ClearSpring V2.0 - 执行者端审核状态页
+  页面路径：pages/executor/status/status
+  设计规范：
+    - 主色调：岱绿 #4A5D4E
+    - 组件圆角：24rpx
+    - 按钮热区：≥88rpx
+-->
+
+<view class="status-page">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">审核状态</block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 审核结果展示 -->
+    <view class="result-card card-shadow {{resultClass}}">
+      <view class="result-icon">
+        <text class="cuIcon-{{resultIcon}}"></text>
+      </view>
+      <view class="result-title">{{resultTitle}}</view>
+      <view class="result-desc">{{resultDesc}}</view>
+      <view class="result-time" wx:if="{{auditTime}}">
+        <text>审核时间：{{auditTime}}</text>
+      </view>
+    </view>
+
+    <!-- 驳回原因（仅驳回状态显示） -->
+    <view wx:if="{{auditStatus === 3}}" class="reject-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-info"></text>
+        <text>驳回原因</text>
+      </view>
+      <view class="reject-card card-shadow">
+        <view class="reject-content">
+          <text>{{rejectReason || '暂无说明'}}</text>
+        </view>
+        <view class="reject-suggestions">
+          <view class="suggestion-item">
+            <text class="cuIcon-cuIcon-check"></text>
+            <text>请确保身份证照片清晰完整</text>
+          </view>
+          <view class="suggestion-item">
+            <text class="cuIcon-cuIcon-check"></text>
+            <text>放生证需在有效期内</text>
+          </view>
+          <view class="suggestion-item">
+            <text class="cuIcon-cuIcon-check"></text>
+            <text>推荐信需法师签字盖章</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 审核通过后的引导 -->
+    <view wx:if="{{auditStatus === 2}}" class="success-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-gift"></text>
+        <text>接下来做什么？</text>
+      </view>
+      <view class="guide-list">
+        <view class="guide-item card-shadow" bindtap="goToOrderHall">
+          <view class="guide-icon bg-green">
+            <text class="cuIcon-cuIcon-shop"></text>
+          </view>
+          <view class="guide-content">
+            <text class="guide-title">去抢单大厅</text>
+            <text class="guide-desc">查看可接取的放生任务</text>
+          </view>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="guide-item card-shadow" bindtap="goToAssistant">
+          <view class="guide-icon bg-blue">
+            <text class="cuIcon-cuIcon-read"></text>
+          </view>
+          <view class="guide-content">
+            <text class="guide-title">查看任务助手</text>
+            <text class="guide-desc">学习放生仪轨和注意事项</text>
+          </view>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="guide-item card-shadow" bindtap="goToIncome">
+          <view class="guide-icon bg-orange">
+            <text class="cuIcon-cuIcon-wallet"></text>
+          </view>
+          <view class="guide-content">
+            <text class="guide-title">查看收入</text>
+            <text class="guide-desc">了解收益规则和提现方式</text>
+          </view>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 待审核提示 -->
+    <view wx:if="{{auditStatus === 1}}" class="pending-section">
+      <view class="pending-card card-shadow">
+        <view class="pending-icon">
+          <text class="cuIcon-cuIcon-time"></text>
+        </view>
+        <view class="pending-title">审核中</view>
+        <view class="pending-desc">
+          <text>您的资料正在审核中，预计 1-3 个工作日内完成</text>
+        </view>
+        <view class="pending-tips">
+          <view class="tip-item">
+            <text class="cuIcon-cuIcon-notice"></text>
+            <text>审核期间请保持手机畅通</text>
+          </view>
+          <view class="tip-item">
+            <text class="cuIcon-cuIcon-notice"></text>
+            <text>如有问题我们会通过短信联系您</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 重新提交按钮（驳回状态） -->
+    <view wx:if="{{auditStatus === 3}}" class="resubmit-section">
+      <button class="resubmit-btn" bindtap="resubmit">
+        <text class="cuIcon-cuIcon-refresh"></text>
+        <text>重新提交</text>
+      </button>
+    </view>
+
+    <!-- 底部占位 -->
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+</view>

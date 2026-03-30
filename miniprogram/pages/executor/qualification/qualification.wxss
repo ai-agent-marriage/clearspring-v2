@@ -1,0 +1,385 @@
+/**
+ * 清如 ClearSpring V2.0 - 执行者端资质审核页样式
+ * 页面路径：pages/executor/qualification/qualification
+ * 
+ * 设计规范：
+ * - 主色调：岱绿 #4A5D4E
+ * - 组件圆角：24rpx
+ * - 按钮热区：≥88rpx
+ */
+
+/* ====================
+   CSS 变量定义
+   ==================== */
+page {
+  --executor-green: #4A5D4E;           /* 岱绿主色 */
+  --executor-green-light: #6B7D6E;     /* 浅绿色 */
+  --executor-green-dark: #3A4A3E;      /* 深绿色 */
+  --executor-green-bg: rgba(74, 93, 78, 0.08);  /* 绿色背景 */
+  --bg-primary: #F5F5F0;               /* 浅色背景 */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-hint: #999999;
+  --card-radius: 24rpx;
+  --btn-min-height: 88rpx;
+  --shadow-light: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+/* ====================
+   页面基础样式
+   ==================== */
+.qualification-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(135deg, #F5F5F0 0%, #EBEAE6 100%);
+}
+
+.content-scroll {
+  flex: 1;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+
+/* ====================
+   卡片通用样式
+   ==================== */
+.card-shadow {
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  margin-bottom: 30rpx;
+}
+
+/* ====================
+   审核进度卡片
+   ==================== */
+.progress-card {
+  margin-top: 30rpx;
+  padding: 40rpx;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.progress-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.progress-status {
+  font-size: 28rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 30rpx;
+}
+
+.progress-status.pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #FFC107;
+}
+
+.progress-status.auditing {
+  background: rgba(74, 93, 78, 0.15);
+  color: var(--executor-green);
+}
+
+.progress-status.approved {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.progress-status.rejected {
+  background: rgba(244, 67, 54, 0.15);
+  color: #F44336;
+}
+
+.progress-bar-bg {
+  height: 12rpx;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 40rpx;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  border-radius: 6rpx;
+  transition: width 0.5s ease;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.step-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.step-icon text {
+  font-size: 32rpx;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.step-item.active .step-icon {
+  background: var(--executor-green);
+}
+
+.step-item.active .step-icon text {
+  color: #FFFFFF;
+}
+
+.step-label {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  transition: color 0.3s ease;
+}
+
+.step-item.active .step-label {
+  color: var(--executor-green);
+  font-weight: bold;
+}
+
+.step-line {
+  flex: 1;
+  height: 4rpx;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 0 20rpx;
+  margin-bottom: 48rpx;
+  transition: background 0.3s ease;
+}
+
+.step-line.active {
+  background: var(--executor-green);
+}
+
+/* ====================
+   上传区域
+   ==================== */
+.upload-section {
+  margin-top: 40rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+}
+
+.section-title text:first-child {
+  margin-right: 16rpx;
+  font-size: 40rpx;
+  color: var(--executor-green);
+}
+
+.upload-item {
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.upload-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.required-mark {
+  color: #F44336;
+  margin-right: 8rpx;
+}
+
+.upload-hint {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.upload-card {
+  width: 100%;
+  height: 300rpx;
+  border-radius: var(--card-radius);
+  border: 2rpx dashed rgba(74, 93, 78, 0.3);
+  background: var(--executor-green-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.upload-card.single {
+  height: 360rpx;
+}
+
+.upload-card:active {
+  border-color: var(--executor-green);
+  background: rgba(74, 93, 78, 0.15);
+}
+
+.upload-card image {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-placeholder text:first-child {
+  font-size: 64rpx;
+  color: var(--executor-green);
+  margin-bottom: 16rpx;
+}
+
+.upload-tip {
+  font-size: 26rpx;
+  color: var(--text-hint);
+}
+
+/* ====================
+   信息确认区域
+   ==================== */
+.info-section {
+  margin-top: 40rpx;
+}
+
+.info-list {
+  padding: 0;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.info-divider {
+  height: 1rpx;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0 30rpx;
+}
+
+/* ====================
+   提交按钮
+   ==================== */
+.submit-section {
+  margin-top: 60rpx;
+  margin-bottom: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submit-btn {
+  width: 100%;
+  min-height: var(--btn-min-height);
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  box-shadow: 0 8rpx 24rpx rgba(74, 93, 78, 0.4);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.submit-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 16rpx rgba(74, 93, 78, 0.3);
+}
+
+.submit-btn.disabled {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+}
+
+.submit-btn text:first-child {
+  font-size: 36rpx;
+}
+
+.submit-hint {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: var(--text-hint);
+  text-align: center;
+}
+
+/* ====================
+   响应式适配
+   ==================== */
+@media (max-width: 375px) {
+  .progress-card {
+    padding: 30rpx;
+  }
+  
+  .progress-title {
+    font-size: 28rpx;
+  }
+  
+  .upload-card {
+    height: 260rpx;
+  }
+  
+  .submit-btn {
+    font-size: 28rpx;
+  }
+}

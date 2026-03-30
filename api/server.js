@@ -18,6 +18,7 @@ dotenv.config();
 const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
 const executorRoutes = require('./routes/executor');
+const adminRoutes = require('./routes/admin');
 
 // 中间件导入
 const { errorHandler } = require('./middleware/errorHandler');
@@ -74,6 +75,7 @@ async function connectRedis() {
 app.use('/api/user', userRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/executor', executorRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 健康检查
 app.get('/health', (req, res) => {
@@ -119,6 +121,16 @@ async function startServer() {
       console.log(`  执行者接口:`);
       console.log(`    GET    /api/executor/list`);
       console.log(`    GET    /api/executor/detail/:id`);
+      console.log(`  管理端接口:`);
+      console.log(`    GET    /api/admin/orders - 订单列表`);
+      console.log(`    PUT    /api/admin/order/:id/status - 订单状态更新`);
+      console.log(`    DELETE /api/admin/order/:id - 订单删除`);
+      console.log(`    GET    /api/admin/qualifications - 资质审核列表`);
+      console.log(`    PUT    /api/admin/qualification/:id - 资质审核`);
+      console.log(`    GET    /api/admin/executors - 执行者列表`);
+      console.log(`    PUT    /api/admin/executor/:id/status - 执行者状态更新`);
+      console.log(`    GET    /api/admin/profit-sharing - 分账配置`);
+      console.log(`    PUT    /api/admin/profit-sharing - 分账配置更新`);
     });
   } catch (error) {
     console.error('服务器启动失败:', error);

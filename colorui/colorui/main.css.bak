@@ -34,7 +34,7 @@ image {
 }
 
 .radius {
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 }
 
 /* ==================
@@ -217,7 +217,7 @@ switch.radius .wx-switch-input::before,
 switch.radius .uni-switch-input::after,
 switch.radius .uni-switch-input,
 switch.radius .uni-switch-input::before {
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 }
 
 switch .wx-switch-input::before,
@@ -663,7 +663,7 @@ radio.white.checked .uni-radio-input {
 	transform: scale(0.5);
 	transform-origin: 0 0;
 	box-sizing: border-box;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 12upx;
 	z-index: 1;
 	pointer-events: none;
 }
@@ -772,7 +772,7 @@ button.cuIcon.lg {
 }
 
 .cu-tag.radius[class*="line"]::after {
-	border-radius: var(--cs-radius-sm);
+	border-radius: 12upx;
 }
 
 .cu-tag.round[class*="line"]::after {
@@ -1064,7 +1064,7 @@ button.cuIcon.lg {
 	width: 260upx;
 	height: 260upx;
 	background-color: #ffffff;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 	box-shadow: 0 0 0upx 2000upx rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
@@ -1472,7 +1472,7 @@ button.cuIcon.lg {
 	overflow: hidden;
 	margin-right: 30upx;
 	margin-left: 30upx;
-	border-radius: var(--cs-radius)
+	border-radius: 20upx
 }
 
 
@@ -1523,7 +1523,7 @@ button.cuIcon.lg {
 	position: absolute;
 	display: inline-block;
 	bottom: -0.2rem;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	width: 100%;
 	height: 0.6rem;
 	left: 0.6rem;
@@ -2032,7 +2032,7 @@ button.cuIcon.lg {
 
 .cu-timeline>.cu-item>.content {
 	padding: 30upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	display: block;
 	line-height: 1.6;
 }
@@ -2079,7 +2079,7 @@ button.cuIcon.lg {
 
 .cu-chat .cu-item>.main .content {
 	padding: 20upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	display: inline-flex;
 	max-width: 100%;
 	align-items: center;
@@ -2168,7 +2168,7 @@ button.cuIcon.lg {
 	font-size: 24upx;
 	padding: 8upx 12upx;
 	background-color: rgba(0, 0, 0, 0.2);
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	color: #ffffff;
 	max-width: 400upx;
 	line-height: 1.4;
@@ -2187,7 +2187,7 @@ button.cuIcon.lg {
 	display: block;
 	background-color: #ffffff;
 	overflow: hidden;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 	margin: 30upx;
 }
 
@@ -2229,7 +2229,7 @@ button.cuIcon.lg {
 .cu-card.case.no-card .image {
 	margin: 30upx 30upx 0;
 	overflow: hidden;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 }
 
 .cu-card.dynamic {
@@ -2253,20 +2253,20 @@ button.cuIcon.lg {
 .cu-card.dynamic>.cu-item .square-img {
 	width: 100%;
 	height: 200upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 }
 
 .cu-card.dynamic>.cu-item .only-img {
 	width: 100%;
 	height: 320upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 }
 
 /* card.dynamic>.cu-item .comment {
   padding: 20upx;
   background-color: #f1f1f1;
   margin: 0 30upx 30upx;
-  border-radius: var(--cs-radius-sm);
+  border-radius: 6upx;
 } */
 
 .cu-card.article {
@@ -2294,7 +2294,7 @@ button.cuIcon.lg {
 	width: 240upx;
 	height: 6.4em;
 	margin-right: 20upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 }
 
 .cu-card.article>.cu-item .content .desc {
@@ -2453,7 +2453,7 @@ button.cuIcon.lg {
 	width: 680upx;
 	max-width: 100%;
 	background-color: #f8f8f8;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 	overflow: hidden;
 }
 
@@ -2531,7 +2531,7 @@ swiper.square-dot .uni-swiper-dot {
 	opacity: 0.4;
 	width: 10upx;
 	height: 10upx;
-	border-radius: var(--cs-radius);
+	border-radius: 20upx;
 	margin: 0 8upx !important;
 }
 
@@ -2564,7 +2564,7 @@ swiper.round-dot .uni-swiper-dot.uni-swiper-dot-active::after {
 	bottom: 0;
 	margin: auto;
 	background-color: #ffffff;
-	border-radius: var(--cs-radius);
+	border-radius: 20upx;
 }
 
 swiper.round-dot .wx-swiper-dot.wx-swiper-dot-active,
@@ -2605,7 +2605,7 @@ swiper.round-dot .uni-swiper-dot.uni-swiper-dot-active {
 	width: 100%;
 	display: block;
 	height: 100%;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 10upx;
 	transform: scale(0.9);
 	transition: all 0.2s ease-in 0s;
 	overflow: hidden;
@@ -2643,7 +2643,7 @@ swiper.round-dot .uni-swiper-dot.uni-swiper-dot-active {
 .tower-swiper .tower-item .swiper-item {
 	width: 100%;
 	height: 100%;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	overflow: hidden;
 }
 
@@ -2928,7 +2928,7 @@ scroll-view.cu-steps .cu-item {
 .grid.grid-square>view {
 	margin-right: 20upx;
 	margin-bottom: 20upx;
-	border-radius: var(--cs-radius-sm);
+	border-radius: 6upx;
 	position: relative;
 	overflow: hidden;
 }

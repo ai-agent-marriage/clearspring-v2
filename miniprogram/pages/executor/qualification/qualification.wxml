@@ -1,0 +1,157 @@
+<!--
+  清如 ClearSpring V2.0 - 执行者端资质审核页
+  页面路径：pages/executor/qualification/qualification
+  设计规范：
+    - 主色调：岱绿 #4A5D4E
+    - 组件圆角：24rpx
+    - 按钮热区：≥88rpx
+-->
+
+<view class="qualification-page">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">资质审核</block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 审核进度卡片 -->
+    <view class="progress-card card-shadow">
+      <view class="progress-header">
+        <text class="progress-title">审核进度</text>
+        <text class="progress-status {{statusClass}}">{{statusText}}</text>
+      </view>
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fill" style="width: {{progress}}%;"></view>
+      </view>
+      <view class="progress-steps">
+        <view class="step-item {{currentStep >= 1 ? 'active' : ''}}">
+          <view class="step-icon">
+            <text class="cuIcon-cuIcon-fillcheck"></text>
+          </view>
+          <text class="step-label">提交资料</text>
+        </view>
+        <view class="step-line {{currentStep >= 2 ? 'active' : ''}}"></view>
+        <view class="step-item {{currentStep >= 2 ? 'active' : ''}}">
+          <view class="step-icon">
+            <text class="cuIcon-cuIcon-rank"></text>
+          </view>
+          <text class="step-label">审核中</text>
+        </view>
+        <view class="step-line {{currentStep >= 3 ? 'active' : ''}}"></view>
+        <view class="step-item {{currentStep >= 3 ? 'active' : ''}}">
+          <view class="step-icon">
+            <text class="cuIcon-cuIcon-explore"></text>
+          </view>
+          <text class="step-label">审核通过</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 资质上传表单 -->
+    <view class="upload-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-document"></text>
+        <text>资质资料上传</text>
+      </view>
+
+      <!-- 身份证上传 -->
+      <view class="upload-item card-shadow">
+        <view class="upload-header">
+          <text class="upload-title">
+            <text class="required-mark">*</text>
+            身份证正反面
+          </text>
+          <text class="upload-hint">请确保清晰完整</text>
+        </view>
+        <view class="upload-grid">
+          <view class="upload-card" bindtap="uploadImage" data-type="idCardFront">
+            <image wx:if="{{idCardFront}}" src="{{idCardFront}}" mode="aspectFill"></image>
+            <view wx:else class="upload-placeholder">
+              <text class="cuIcon-cuIcon-add"></text>
+              <text class="upload-tip">身份证正面</text>
+            </view>
+          </view>
+          <view class="upload-card" bindtap="uploadImage" data-type="idCardBack">
+            <image wx:if="{{idCardBack}}" src="{{idCardBack}}" mode="aspectFill"></image>
+            <view wx:else class="upload-placeholder">
+              <text class="cuIcon-cuIcon-add"></text>
+              <text class="upload-tip">身份证反面</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 放生证上传 -->
+      <view class="upload-item card-shadow">
+        <view class="upload-header">
+          <text class="upload-title">
+            <text class="required-mark">*</text>
+            放生证/相关证书
+          </text>
+          <text class="upload-hint">如有请上传</text>
+        </view>
+        <view class="upload-card single" bindtap="uploadImage" data-type="releaseCert">
+          <image wx:if="{{releaseCert}}" src="{{releaseCert}}" mode="aspectFill"></image>
+          <view wx:else class="upload-placeholder">
+            <text class="cuIcon-cuIcon-add"></text>
+            <text class="upload-tip">上传放生证</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 推荐信上传 -->
+      <view class="upload-item card-shadow">
+        <view class="upload-header">
+          <text class="upload-title">
+            <text class="required-mark">*</text>
+            法师推荐信
+          </text>
+          <text class="upload-hint">推荐法师签署的推荐信</text>
+        </view>
+        <view class="upload-card single" bindtap="uploadImage" data-type="recommendLetter">
+          <image wx:if="{{recommendLetter}}" src="{{recommendLetter}}" mode="aspectFill"></image>
+          <view wx:else class="upload-placeholder">
+            <text class="cuIcon-cuIcon-add"></text>
+            <text class="upload-tip">上传推荐信</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 个人信息确认 -->
+    <view class="info-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-profile"></text>
+        <text>个人信息确认</text>
+      </view>
+      <view class="info-list card-shadow">
+        <view class="info-item">
+          <text class="info-label">姓名</text>
+          <text class="info-value">{{userInfo.realName || '未填写'}}</text>
+        </view>
+        <view class="info-divider"></view>
+        <view class="info-item">
+          <text class="info-label">手机号</text>
+          <text class="info-value">{{maskedPhone}}</text>
+        </view>
+        <view class="info-divider"></view>
+        <view class="info-item">
+          <text class="info-label">身份证号</text>
+          <text class="info-value">{{maskedIdCard}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="submit-btn {{canSubmit ? '' : 'disabled'}}" bindtap="submitQualification" disabled="{{!canSubmit}}">
+        <text class="cuIcon-cuIcon-submit"></text>
+        <text>提交审核</text>
+      </button>
+      <text class="submit-hint">请确保所有资料真实有效，审核将在 1-3 个工作日内完成</text>
+    </view>
+
+    <!-- 底部占位 -->
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+</view>
