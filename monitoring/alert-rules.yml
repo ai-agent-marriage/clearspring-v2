@@ -1,0 +1,112 @@
+groups:
+  - name: clearspring_alerts
+    rules:
+      # CPU 使用率告警
+      - alert: HighCPU
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU 使用率过高 - {{ $labels.instance }}"
+          description: "CPU 使用率已超过 80%，当前值：{{ $value }}%"
+      
+      # CPU 严重告警
+      - alert: CriticalCPU
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "CPU 使用率严重过高 - {{ $labels.instance }}"
+          description: "CPU 使用率已超过 95%，当前值：{{ $value }}%"
+      
+      # 内存使用率告警
+      - alert: HighMemory
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "内存使用率过高 - {{ $labels.instance }}"
+          description: "内存使用率已超过 85%，当前值：{{ $value }}%"
+      
+      # 内存严重告警
+      - alert: CriticalMemory
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "内存使用率严重过高 - {{ $labels.instance }}"
+          description: "内存使用率已超过 95%，当前值：{{ $value }}%"
+      
+      # 磁盘使用率告警
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "磁盘使用率过高 - {{ $labels.instance }}"
+          description: "磁盘使用率已超过 90%，当前值：{{ $value }}%"
+      
+      # 磁盘严重告警
+      - alert: CriticalDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "磁盘使用率严重过高 - {{ $labels.instance }}"
+          description: "磁盘使用率已超过 95%，当前值：{{ $value }}%"
+      
+      # 服务宕机告警
+      - alert: ServiceDown
+        expr: up{job="clearspring-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "ClearSpring API 服务宕机"
+          description: "服务已停止响应超过 1 分钟"
+      
+      # 接口响应时间告警
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="clearspring-api"}[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "接口响应时间过长"
+          description: "95% 的请求响应时间超过 1 秒，当前值：{{ $value }}s"
+      
+      # 接口错误率告警
+      - alert: HighErrorRate
+        expr: sum(rate(http_requests_total{job="clearspring-api",status=~"5.."}[5m])) / sum(rate(http_requests_total{job="clearspring-api"}[5m])) * 100 > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "接口错误率过高"
+          description: "HTTP 5xx 错误率超过 1%，当前值：{{ $value }}%"
+      
+      # PM2 进程重启告警
+      - alert: PM2FrequentRestarts
+        expr: increase(pm2_process_restarts{app="clearspring-api"}[1h]) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PM2 进程频繁重启"
+          description: "过去 1 小时内进程重启超过 5 次"
+      
+      # PM2 内存告警
+      - alert: PM2HighMemory
+        expr: pm2_process_memory_bytes{app="clearspring-api"} > 500000000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PM2 进程内存使用过高"
+          description: "进程内存超过 500MB，当前值：{{ $value | humanize1024 }}"
