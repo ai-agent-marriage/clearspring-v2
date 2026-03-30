@@ -1,6 +1,5 @@
 import request from './request'
 
-// 管理员登录
 export function login(data) {
   return request({
     url: '/admin/login',
@@ -9,15 +8,13 @@ export function login(data) {
   })
 }
 
-// 获取管理员信息
-export function getAdminInfo() {
+export function getInfo() {
   return request({
     url: '/admin/info',
     method: 'get'
   })
 }
 
-// 退出登录
 export function logout() {
   return request({
     url: '/admin/logout',
