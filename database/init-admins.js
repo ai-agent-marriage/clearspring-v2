@@ -1,14 +1,16 @@
 # 管理员账号初始化脚本
 # 执行方式：在微信云开发控制台 → 数据库 → 执行
+# 密码已使用 bcrypt 加密（salt rounds = 10）
 
 // 1. 创建 admins 集合（如果不存在）
 // 集合名称：admins
 
 // 2. 添加默认管理员账号
+// 密码：admin123 (已加密)
 db.collection('admins').add({
   data: {
     username: 'admin',
-    password: 'admin123', // 生产环境请修改为强密码
+    passwordHash: '$2a$10$vezVXN68I3PcEpNo3B09Q.9goZJk8Tb7.U2Ms5PgtnHIltsAGFgiy',
     role: 'super_admin',
     status: 'active',
     permissions: [
@@ -34,10 +36,11 @@ db.collection('admins').add({
 });
 
 // 3. 添加运营管理员账号
+// 密码：operator123 (已加密)
 db.collection('admins').add({
   data: {
     username: 'operator',
-    password: 'operator123',
+    passwordHash: '$2a$10$f8ud07UMY7Ccns3KM17.9uLceh./H1isZ04d6KQL6ESL8brGdK/.m',
     role: 'operator',
     status: 'active',
     permissions: [
@@ -57,10 +60,11 @@ db.collection('admins').add({
 });
 
 // 4. 添加审核员账号
+// 密码：auditor123 (已加密)
 db.collection('admins').add({
   data: {
     username: 'auditor',
-    password: 'auditor123',
+    passwordHash: '$2a$10$3a94a1iODy1JWb3IKjZ7p.3hO94HAlh2JFB9G0k4segjtCKynmpQm',
     role: 'auditor',
     status: 'active',
     permissions: [
@@ -77,9 +81,10 @@ db.collection('admins').add({
   }
 });
 
-console.log('管理员账号初始化完成！');
-console.log('默认账号：');
-console.log('  - 超级管理员：admin / admin123');
-console.log('  - 运营管理员：operator / operator123');
-console.log('  - 审核员：auditor / auditor123');
-console.log('⚠️ 生产环境请立即修改默认密码！');
+logger.info('管理员账号初始化完成！');
+logger.info('默认账号（密码已加密存储）：');
+logger.info('  - 超级管理员：admin / admin123');
+logger.info('  - 运营管理员：operator / operator123');
+logger.info('  - 审核员：auditor / auditor123');
+logger.info('⚠️ 生产环境请立即修改默认密码！');
+logger.info('🔒 密码已使用 bcrypt 加密存储');

@@ -26,7 +26,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log('首页加载完成', options);
+    logger.info('首页加载完成', options);
     this.loadUserData();
   },
 

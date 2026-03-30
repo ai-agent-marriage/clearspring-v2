@@ -1,5 +1,6 @@
 /**
  * 用户接口路由
+ * @module routes/user
  */
 
 const express = require('express');
@@ -10,8 +11,57 @@ const { getDb } = require('../server');
 const axios = require('axios');
 
 /**
- * POST /api/user/login
- * 微信登录
+ * @swagger
+ * /api/user/login:
+ *   post:
+ *     summary: 微信登录
+ *     tags: [用户]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - code
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 description: 微信登录 code
+ *               encryptedData:
+ *                 type: string
+ *                 description: 微信加密数据
+ *               iv:
+ *                 type: string
+ *                 description: 微信加密向量
+ *     responses:
+ *       200:
+ *         description: 登录成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: SUCCESS
+ *                 message:
+ *                   type: string
+ *                   example: 登录成功
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ *                       description: JWT Token
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       400:
+ *         description: 参数错误
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/login', async (req, res, next) => {
   try {
@@ -81,8 +131,8 @@ router.post('/login', async (req, res, next) => {
         openId: user.openId,
         role: user.role
       },
-      process.env.JWT_SECRET || 'clearspring_v2_secret_key_2026',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
     );
     
     res.json({

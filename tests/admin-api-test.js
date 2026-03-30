@@ -16,6 +16,8 @@
  */
 
 const http = require('http');
+const logger = require('../../utils/logger');
+
 
 const BASE_URL = 'http://101.96.192.63:3000';
 let adminToken = null;
@@ -84,13 +86,13 @@ function recordTest(name, passed, statusCode, response, error = null) {
   });
   
   const icon = passed ? '✅' : (error === 'SKIPPED' ? '⏭️' : '❌');
-  console.log(`   ${icon} ${name}${error && error !== 'SKIPPED' ? ` - ${error}` : ''}`);
+  logger.info(`   ${icon} ${name}${error && error !== 'SKIPPED' ? ` - ${error}` : ''}`);
 }
 
 // 测试 0: 健康检查
 async function testHealth() {
-  console.log('\n📊 测试 0: 健康检查');
-  console.log('   GET /health');
+  logger.info('\n📊 测试 0: 健康检查');
+  logger.info('   GET /health');
   
   try {
     const result = await httpRequest({
@@ -111,8 +113,8 @@ async function testHealth() {
 
 // 测试 1: 管理员登录
 async function testAdminLogin() {
-  console.log('\n🔐 测试 1: 管理员登录');
-  console.log('   POST /api/admin/auth/login');
+  logger.info('\n🔐 测试 1: 管理员登录');
+  logger.info('   POST /api/admin/auth/login');
   
   try {
     const result = await httpRequest({
@@ -131,7 +133,7 @@ async function testAdminLogin() {
     const passed = result.statusCode === 200 && result.data.code === 'SUCCESS';
     if (passed && result.data.data && result.data.data.token) {
       adminToken = result.data.data.token;
-      console.log(`   ✅ Token 已获取`);
+      logger.info(`   ✅ Token 已获取`);
     }
     recordTest('管理员登录', passed, result.statusCode, result.data);
     return passed;
@@ -143,12 +145,12 @@ async function testAdminLogin() {
 
 // 测试 2: 获取管理员信息
 async function testAdminProfile() {
-  console.log('\n👤 测试 2: 获取管理员信息');
-  console.log('   GET /api/admin/auth/profile');
+  logger.info('\n👤 测试 2: 获取管理员信息');
+  logger.info('   GET /api/admin/auth/profile');
   
   if (!adminToken) {
     recordTest('获取管理员信息', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -174,12 +176,12 @@ async function testAdminProfile() {
 
 // 测试 3: Dashboard 概览
 async function testDashboardOverview() {
-  console.log('\n📈 测试 3: Dashboard 概览');
-  console.log('   GET /api/admin/dashboard/overview');
+  logger.info('\n📈 测试 3: Dashboard 概览');
+  logger.info('   GET /api/admin/dashboard/overview');
   
   if (!adminToken) {
     recordTest('Dashboard 概览', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -205,12 +207,12 @@ async function testDashboardOverview() {
 
 // 测试 4: 订单列表
 async function testAdminOrders() {
-  console.log('\n📦 测试 4: 订单列表');
-  console.log('   GET /api/admin/orders');
+  logger.info('\n📦 测试 4: 订单列表');
+  logger.info('   GET /api/admin/orders');
   
   if (!adminToken) {
     recordTest('订单列表', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -236,12 +238,12 @@ async function testAdminOrders() {
 
 // 测试 5: 执行者列表
 async function testAdminExecutors() {
-  console.log('\n👷 测试 5: 执行者列表');
-  console.log('   GET /api/admin/executors');
+  logger.info('\n👷 测试 5: 执行者列表');
+  logger.info('   GET /api/admin/executors');
   
   if (!adminToken) {
     recordTest('执行者列表', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -267,12 +269,12 @@ async function testAdminExecutors() {
 
 // 测试 6: 资质审核列表
 async function testAdminQualifications() {
-  console.log('\n📜 测试 6: 资质审核列表');
-  console.log('   GET /api/admin/qualifications');
+  logger.info('\n📜 测试 6: 资质审核列表');
+  logger.info('   GET /api/admin/qualifications');
   
   if (!adminToken) {
     recordTest('资质审核列表', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -298,12 +300,12 @@ async function testAdminQualifications() {
 
 // 测试 7: 分账配置
 async function testProfitSharing() {
-  console.log('\n💰 测试 7: 分账配置');
-  console.log('   GET /api/admin/profit-sharing');
+  logger.info('\n💰 测试 7: 分账配置');
+  logger.info('   GET /api/admin/profit-sharing');
   
   if (!adminToken) {
     recordTest('分账配置', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -329,12 +331,12 @@ async function testProfitSharing() {
 
 // 测试 8: 管理员列表
 async function testAdminsList() {
-  console.log('\n👥 测试 8: 管理员列表');
-  console.log('   GET /api/admin/admins');
+  logger.info('\n👥 测试 8: 管理员列表');
+  logger.info('   GET /api/admin/admins');
   
   if (!adminToken) {
     recordTest('管理员列表', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -360,12 +362,12 @@ async function testAdminsList() {
 
 // 测试 9: 操作日志列表
 async function testAuditLogs() {
-  console.log('\n📋 测试 9: 操作日志列表');
-  console.log('   GET /api/admin/audit-logs');
+  logger.info('\n📋 测试 9: 操作日志列表');
+  logger.info('   GET /api/admin/audit-logs');
   
   if (!adminToken) {
     recordTest('操作日志列表', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -391,12 +393,12 @@ async function testAuditLogs() {
 
 // 测试 10: Dashboard 实时数据
 async function testDashboardRealtime() {
-  console.log('\n⚡ 测试 10: Dashboard 实时数据');
-  console.log('   GET /api/admin/dashboard/realtime');
+  logger.info('\n⚡ 测试 10: Dashboard 实时数据');
+  logger.info('   GET /api/admin/dashboard/realtime');
   
   if (!adminToken) {
     recordTest('Dashboard 实时数据', false, null, null, 'SKIPPED');
-    console.log('   ⏭️  跳过 (缺少 Token)');
+    logger.info('   ⏭️  跳过 (缺少 Token)');
     return false;
   }
   
@@ -422,8 +424,8 @@ async function testDashboardRealtime() {
 
 // 测试 11: 管理员列表 API（验证 CORS）
 async function testCORS() {
-  console.log('\n🌐 测试 11: CORS 配置验证');
-  console.log('   OPTIONS /api/admin/auth/login');
+  logger.info('\n🌐 测试 11: CORS 配置验证');
+  logger.info('   OPTIONS /api/admin/auth/login');
   
   try {
     const result = await httpRequest({
@@ -440,7 +442,7 @@ async function testCORS() {
     
     const passed = result.statusCode === 204 || result.statusCode === 200;
     const corsHeader = result.headers['access-control-allow-origin'];
-    console.log(`   CORS Header: ${corsHeader || '未设置'}`);
+    logger.info(`   CORS Header: ${corsHeader || '未设置'}`);
     recordTest('CORS 配置验证', passed, result.statusCode, { corsHeader });
     return passed;
   } catch (error) {
@@ -451,42 +453,42 @@ async function testCORS() {
 
 // 生成测试报告
 function generateReport() {
-  console.log('\n' + '='.repeat(70));
-  console.log('📊 管理端 API 测试报告');
-  console.log('='.repeat(70));
-  console.log(`测试时间：${new Date().toLocaleString('zh-CN')}`);
-  console.log(`API 地址：${BASE_URL}`);
-  console.log('');
-  console.log(`总计：${testSummary.total} 个测试`);
-  console.log(`✅ 通过：${testSummary.passed}`);
-  console.log(`❌ 失败：${testSummary.failed}`);
-  console.log(`⏭️  跳过：${testSummary.skipped}`);
+  logger.info('\n' + '='.repeat(70));
+  logger.info('📊 管理端 API 测试报告');
+  logger.info('='.repeat(70));
+  logger.info(`测试时间：${new Date().toLocaleString('zh-CN')}`);
+  logger.info(`API 地址：${BASE_URL}`);
+  logger.info('');
+  logger.info(`总计：${testSummary.total} 个测试`);
+  logger.info(`✅ 通过：${testSummary.passed}`);
+  logger.info(`❌ 失败：${testSummary.failed}`);
+  logger.info(`⏭️  跳过：${testSummary.skipped}`);
   
   const successRate = testSummary.total > 0 
     ? ((testSummary.passed / testSummary.total) * 100).toFixed(1)
     : 0;
-  console.log(`成功率：${successRate}%`);
+  logger.info(`成功率：${successRate}%`);
   
-  console.log('\n详细结果:');
+  logger.info('\n详细结果:');
   testResults.forEach((result, index) => {
     const icon = result.passed ? '✅' : (result.error === 'SKIPPED' ? '⏭️' : '❌');
-    console.log(`  ${index + 1}. ${icon} ${result.name}`);
+    logger.info(`  ${index + 1}. ${icon} ${result.name}`);
     if (result.error && result.error !== 'SKIPPED') {
-      console.log(`     错误：${result.error}`);
+      logger.info(`     错误：${result.error}`);
     }
   });
   
-  console.log('\n' + '='.repeat(70));
+  logger.info('\n' + '='.repeat(70));
   
   return testSummary;
 }
 
 // 主函数
 async function main() {
-  console.log('🚀 清如 ClearSpring V2.0 - 管理端 API 测试');
-  console.log('测试开始时间:', new Date().toLocaleString('zh-CN'));
-  console.log('API 地址:', BASE_URL);
-  console.log('');
+  logger.info('🚀 清如 ClearSpring V2.0 - 管理端 API 测试');
+  logger.info('测试开始时间:', new Date().toLocaleString('zh-CN'));
+  logger.info('API 地址:', BASE_URL);
+  logger.info('');
   
   const startTime = Date.now();
   
@@ -510,8 +512,8 @@ async function main() {
   // 生成报告
   const report = generateReport();
   
-  console.log(`\n⏱️  测试耗时：${duration}ms`);
-  console.log('测试结束时间:', new Date().toLocaleString('zh-CN'));
+  logger.info(`\n⏱️  测试耗时：${duration}ms`);
+  logger.info('测试结束时间:', new Date().toLocaleString('zh-CN'));
   
   return report;
 }
@@ -519,7 +521,7 @@ async function main() {
 // 运行测试
 main()
   .then(report => {
-    console.log('\n测试完成！');
+    logger.info('\n测试完成！');
     process.exit(report.failed === 0 ? 0 : 1);
   })
   .catch(error => {

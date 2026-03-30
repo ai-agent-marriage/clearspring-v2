@@ -3,6 +3,8 @@
  */
 
 const express = require('express');
+
+const { validate, createAdminSchema, updateAdminSchema, resetPasswordSchema, idParamSchema, adminListQuerySchema } = require('../../validators/admin.validator');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
@@ -44,7 +46,7 @@ const superAdminMiddleware = (req, res, next) => {
  * 管理员列表
  * 查询参数：page, pageSize, status, keyword
  */
-router.get('/', superAdminMiddleware, async (req, res, next) => {
+router.get('/', superAdminMiddleware, validate(adminListQuerySchema, 'query'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const {
@@ -122,7 +124,7 @@ router.get('/', superAdminMiddleware, async (req, res, next) => {
  * GET /api/admin/admin/:id
  * 管理员详情
  */
-router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
+router.get('/admin/:id', superAdminMiddleware, validate(idParamSchema, 'params'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const adminId = req.params.id;
@@ -165,7 +167,7 @@ router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  * 创建管理员
  * Body: username, password, nickName, phone, email, permissions
  */
-router.post('/admin', superAdminMiddleware, async (req, res, next) => {
+router.post('/admin', superAdminMiddleware, validate(createAdminSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const { username, password, nickName, phone, email, permissions } = req.body;
@@ -239,7 +241,7 @@ router.post('/admin', superAdminMiddleware, async (req, res, next) => {
  * 更新管理员信息
  * Body: nickName, phone, email, permissions, status
  */
-router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
+router.put('/admin/:id', superAdminMiddleware, validate(idParamSchema, 'params'), validate(updateAdminSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const adminId = req.params.id;
@@ -301,7 +303,7 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  * DELETE /api/admin/admin/:id
  * 删除管理员
  */
-router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
+router.delete('/admin/:id', superAdminMiddleware, validate(idParamSchema, 'params'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const adminId = req.params.id;
@@ -359,7 +361,7 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  * PUT /api/admin/admin/:id/reset-password
  * 重置管理员密码
  */
-router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, next) => {
+router.put('/admin/:id/reset-password', superAdminMiddleware, validate(idParamSchema, 'params'), validate(resetPasswordSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const adminId = req.params.id;

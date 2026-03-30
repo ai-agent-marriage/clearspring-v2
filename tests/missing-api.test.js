@@ -4,6 +4,8 @@
  */
 
 const assert = require('assert');
+const logger = require('../../utils/logger');
+
 
 // 测试配置
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
@@ -43,12 +45,12 @@ function test(name, fn) {
       await fn();
       testResults.passed++;
       testResults.tests.push({ name, status: 'passed' });
-      console.log(`✅ ${name}`);
+      logger.info(`✅ ${name}`);
     } catch (error) {
       testResults.failed++;
       testResults.tests.push({ name, status: 'failed', error: error.message });
-      console.log(`❌ ${name}`);
-      console.log(`   错误：${error.message}`);
+      logger.info(`❌ ${name}`);
+      logger.info(`   错误：${error.message}`);
     }
   };
 }
@@ -68,8 +70,8 @@ function assertTrue(condition, message) {
 // ==================== Dashboard Stats API 测试 ====================
 
 async function testDashboardStats() {
-  console.log('\n📊 Dashboard Stats API 测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n📊 Dashboard Stats API 测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取统计数据
   await test('GET /api/admin/dashboard/stats - 获取统计数据', async () => {
@@ -98,8 +100,8 @@ async function testDashboardStats() {
 // ==================== Orders Export API 测试 ====================
 
 async function testOrdersExport() {
-  console.log('\n📦 Orders Export API 测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n📦 Orders Export API 测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 导出订单 Excel
   await test('GET /api/admin/orders/export?format=xlsx - 导出 Excel', async () => {
@@ -178,8 +180,8 @@ async function testOrdersExport() {
 // ==================== Profit Sharing Update API 测试 ====================
 
 async function testProfitSharingUpdate() {
-  console.log('\n💰 Profit Sharing Update API 测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n💰 Profit Sharing Update API 测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 更新分账配置
   await test('PUT /api/admin/profit-sharing - 更新分账配置', async () => {
@@ -253,8 +255,8 @@ async function testProfitSharingUpdate() {
 // ==================== Export History API 测试 ====================
 
 async function testExportHistory() {
-  console.log('\n📜 Export History API 测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n📜 Export History API 测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取导出历史
   await test('GET /api/admin/export/history - 获取导出历史', async () => {
@@ -287,8 +289,8 @@ async function testExportHistory() {
 // ==================== Settings Update API 测试 ====================
 
 async function testSettingsUpdate() {
-  console.log('\n⚙️  Settings Update API 测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n⚙️  Settings Update API 测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 更新系统设置
   await test('POST /api/admin/settings - 更新系统设置', async () => {
@@ -391,15 +393,15 @@ async function testSettingsUpdate() {
 // ==================== 主测试流程 ====================
 
 async function runAllTests() {
-  console.log('╔════════════════════════════════════════════════════╗');
-  console.log('║   清如 ClearSpring V2 - 缺失 API 实现测试            ║');
-  console.log('╚════════════════════════════════════════════════════╝');
-  console.log(`\n📍 API 地址：${API_BASE_URL}`);
-  console.log(`🔑 Token: ${ADMIN_TOKEN ? '已配置' : '未配置（部分测试可能失败）'}`);
+  logger.info('╔════════════════════════════════════════════════════╗');
+  logger.info('║   清如 ClearSpring V2 - 缺失 API 实现测试            ║');
+  logger.info('╚════════════════════════════════════════════════════╝');
+  logger.info(`\n📍 API 地址：${API_BASE_URL}`);
+  logger.info(`🔑 Token: ${ADMIN_TOKEN ? '已配置' : '未配置（部分测试可能失败）'}`);
   
   if (!ADMIN_TOKEN) {
-    console.log('\n⚠️  警告：未配置 ADMIN_TOKEN，请设置环境变量后重试');
-    console.log('   export ADMIN_TOKEN="your_admin_token_here"\n');
+    logger.info('\n⚠️  警告：未配置 ADMIN_TOKEN，请设置环境变量后重试');
+    logger.info('   export ADMIN_TOKEN="your_admin_token_here"\n');
   }
   
   try {
@@ -411,21 +413,21 @@ async function runAllTests() {
     await testSettingsUpdate();
     
     // 输出测试结果
-    console.log('\n╔════════════════════════════════════════════════════╗');
-    console.log('║              测试结果汇总                          ║');
-    console.log('╚════════════════════════════════════════════════════╝');
-    console.log(`\n✅ 通过：${testResults.passed}`);
-    console.log(`❌ 失败：${testResults.failed}`);
-    console.log(`📊 总计：${testResults.passed + testResults.failed}`);
-    console.log(`📈 通过率：${((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(2)}%`);
+    logger.info('\n╔════════════════════════════════════════════════════╗');
+    logger.info('║              测试结果汇总                          ║');
+    logger.info('╚════════════════════════════════════════════════════╝');
+    logger.info(`\n✅ 通过：${testResults.passed}`);
+    logger.info(`❌ 失败：${testResults.failed}`);
+    logger.info(`📊 总计：${testResults.passed + testResults.failed}`);
+    logger.info(`📈 通过率：${((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(2)}%`);
     
     if (testResults.failed > 0) {
-      console.log('\n❌ 失败的测试:');
+      logger.info('\n❌ 失败的测试:');
       testResults.tests
         .filter(t => t.status === 'failed')
         .forEach(t => {
-          console.log(`   - ${t.name}`);
-          console.log(`     错误：${t.error}`);
+          logger.info(`   - ${t.name}`);
+          logger.info(`     错误：${t.error}`);
         });
     }
     
@@ -451,8 +453,8 @@ function generateReport() {
     tests: testResults.tests
   };
   
-  console.log('\n📄 测试报告已生成:');
-  console.log(JSON.stringify(report, null, 2));
+  logger.info('\n📄 测试报告已生成:');
+  logger.info(JSON.stringify(report, null, 2));
 }
 
 // 运行测试

@@ -9,6 +9,8 @@
  */
 
 const http = require('http');
+const logger = require('../../utils/logger');
+
 
 const BASE_URL = 'http://101.96.192.63:3000';
 let authToken = null;
@@ -53,8 +55,8 @@ function httpRequest(options, postData = null, timeout = 5000) {
 
 // 测试：健康检查
 async function testHealth() {
-  console.log('\n📊 测试 0: 健康检查');
-  console.log('   GET /health');
+  logger.info('\n📊 测试 0: 健康检查');
+  logger.info('   GET /health');
   
   try {
     const result = await httpRequest({
@@ -72,11 +74,11 @@ async function testHealth() {
       response: result.data
     });
     
-    console.log(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
-    console.log(`   响应：${JSON.stringify(result.data)}`);
+    logger.info(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
+    logger.info(`   响应：${JSON.stringify(result.data)}`);
     return passed;
   } catch (error) {
-    console.log(`   状态：❌ 失败 - ${error.message}`);
+    logger.info(`   状态：❌ 失败 - ${error.message}`);
     testResults.push({
       name: '健康检查',
       passed: false,
@@ -88,8 +90,8 @@ async function testHealth() {
 
 // 测试 1: 用户登录
 async function testUserLogin() {
-  console.log('\n👤 测试 1: 用户登录接口');
-  console.log('   POST /api/user/login');
+  logger.info('\n👤 测试 1: 用户登录接口');
+  logger.info('   POST /api/user/login');
   
   try {
     const result = await httpRequest({
@@ -107,11 +109,11 @@ async function testUserLogin() {
     const passed = result.statusCode === 200 && result.data.code === 'SUCCESS';
     if (passed && result.data.data && result.data.data.token) {
       authToken = result.data.data.token;
-      console.log(`   状态：✅ 通过 (Token 已获取)`);
+      logger.info(`   状态：✅ 通过 (Token 已获取)`);
     } else {
-      console.log(`   状态：${passed ? '⚠️  部分通过' : '❌ 失败'}`);
+      logger.info(`   状态：${passed ? '⚠️  部分通过' : '❌ 失败'}`);
     }
-    console.log(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
+    logger.info(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
     
     testResults.push({
       name: '用户登录',
@@ -123,7 +125,7 @@ async function testUserLogin() {
     
     return passed;
   } catch (error) {
-    console.log(`   状态：❌ 失败 - ${error.message}`);
+    logger.info(`   状态：❌ 失败 - ${error.message}`);
     testResults.push({
       name: '用户登录',
       passed: false,
@@ -135,11 +137,11 @@ async function testUserLogin() {
 
 // 测试 2: 订单创建
 async function testOrderCreate() {
-  console.log('\n📦 测试 2: 订单创建接口');
-  console.log('   POST /api/order/create');
+  logger.info('\n📦 测试 2: 订单创建接口');
+  logger.info('   POST /api/order/create');
   
   if (!authToken) {
-    console.log('   状态：⏭️  跳过 (缺少 Token)');
+    logger.info('   状态：⏭️  跳过 (缺少 Token)');
     testResults.push({
       name: '订单创建',
       passed: false,
@@ -170,8 +172,8 @@ async function testOrderCreate() {
     
     const passed = result.statusCode === 200 && 
                    (result.data.code === 'SUCCESS' || result.data.code === 'CREATED');
-    console.log(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
-    console.log(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
+    logger.info(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
+    logger.info(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
     
     testResults.push({
       name: '订单创建',
@@ -182,7 +184,7 @@ async function testOrderCreate() {
     
     return passed;
   } catch (error) {
-    console.log(`   状态：❌ 失败 - ${error.message}`);
+    logger.info(`   状态：❌ 失败 - ${error.message}`);
     testResults.push({
       name: '订单创建',
       passed: false,
@@ -194,11 +196,11 @@ async function testOrderCreate() {
 
 // 测试 3: 订单列表
 async function testOrderList() {
-  console.log('\n📋 测试 3: 订单列表接口');
-  console.log('   GET /api/order/list');
+  logger.info('\n📋 测试 3: 订单列表接口');
+  logger.info('   GET /api/order/list');
   
   if (!authToken) {
-    console.log('   状态：⏭️  跳过 (缺少 Token)');
+    logger.info('   状态：⏭️  跳过 (缺少 Token)');
     testResults.push({
       name: '订单列表',
       passed: false,
@@ -219,8 +221,8 @@ async function testOrderList() {
     });
     
     const passed = result.statusCode === 200 && result.data.code === 'SUCCESS';
-    console.log(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
-    console.log(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
+    logger.info(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
+    logger.info(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
     
     testResults.push({
       name: '订单列表',
@@ -231,7 +233,7 @@ async function testOrderList() {
     
     return passed;
   } catch (error) {
-    console.log(`   状态：❌ 失败 - ${error.message}`);
+    logger.info(`   状态：❌ 失败 - ${error.message}`);
     testResults.push({
       name: '订单列表',
       passed: false,
@@ -243,8 +245,8 @@ async function testOrderList() {
 
 // 测试 4: 执行者列表
 async function testExecutorList() {
-  console.log('\n👷 测试 4: 执行者列表接口');
-  console.log('   GET /api/executor/list');
+  logger.info('\n👷 测试 4: 执行者列表接口');
+  logger.info('   GET /api/executor/list');
   
   try {
     const result = await httpRequest({
@@ -255,8 +257,8 @@ async function testExecutorList() {
     });
     
     const passed = result.statusCode === 200 && result.data.code === 'SUCCESS';
-    console.log(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
-    console.log(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
+    logger.info(`   状态：${passed ? '✅ 通过' : '❌ 失败'}`);
+    logger.info(`   响应：${JSON.stringify(result.data).substring(0, 200)}...`);
     
     testResults.push({
       name: '执行者列表',
@@ -267,7 +269,7 @@ async function testExecutorList() {
     
     return passed;
   } catch (error) {
-    console.log(`   状态：❌ 失败 - ${error.message}`);
+    logger.info(`   状态：❌ 失败 - ${error.message}`);
     testResults.push({
       name: '执行者列表',
       passed: false,
@@ -279,38 +281,38 @@ async function testExecutorList() {
 
 // 生成测试报告
 function generateReport() {
-  console.log('\n' + '='.repeat(60));
-  console.log('📊 测试结果报告');
-  console.log('='.repeat(60));
+  logger.info('\n' + '='.repeat(60));
+  logger.info('📊 测试结果报告');
+  logger.info('='.repeat(60));
   
   const total = testResults.length;
   const passed = testResults.filter(r => r.passed).length;
   const failed = total - passed;
   
-  console.log(`\n总计：${total} 个测试`);
-  console.log(`✅ 通过：${passed}`);
-  console.log(`❌ 失败：${failed}`);
-  console.log(`成功率：${((passed / total) * 100).toFixed(1)}%`);
+  logger.info(`\n总计：${total} 个测试`);
+  logger.info(`✅ 通过：${passed}`);
+  logger.info(`❌ 失败：${failed}`);
+  logger.info(`成功率：${((passed / total) * 100).toFixed(1)}%`);
   
-  console.log('\n详细结果:');
+  logger.info('\n详细结果:');
   testResults.forEach((result, index) => {
     const icon = result.passed ? '✅' : '❌';
-    console.log(`  ${index + 1}. ${icon} ${result.name}`);
+    logger.info(`  ${index + 1}. ${icon} ${result.name}`);
     if (result.error) {
-      console.log(`     错误：${result.error}`);
+      logger.info(`     错误：${result.error}`);
     }
   });
   
-  console.log('\n' + '='.repeat(60));
+  logger.info('\n' + '='.repeat(60));
   
   return { total, passed, failed, successRate: ((passed / total) * 100).toFixed(1) };
 }
 
 // 主函数
 async function main() {
-  console.log('🚀 清如 ClearSpring V2.0 - API 联调测试');
-  console.log('测试开始时间:', new Date().toISOString());
-  console.log('API 地址:', BASE_URL);
+  logger.info('🚀 清如 ClearSpring V2.0 - API 联调测试');
+  logger.info('测试开始时间:', new Date().toISOString());
+  logger.info('API 地址:', BASE_URL);
   
   const startTime = Date.now();
   
@@ -327,8 +329,8 @@ async function main() {
   // 生成报告
   const report = generateReport();
   
-  console.log(`\n⏱️  测试耗时：${duration}ms`);
-  console.log('测试结束时间:', new Date().toISOString());
+  logger.info(`\n⏱️  测试耗时：${duration}ms`);
+  logger.info('测试结束时间:', new Date().toISOString());
   
   // 返回结果
   return report;
@@ -337,7 +339,7 @@ async function main() {
 // 运行测试
 main()
   .then(report => {
-    console.log('\n测试完成！');
+    logger.info('\n测试完成！');
     process.exit(report.failed === 0 ? 0 : 1);
   })
   .catch(error => {

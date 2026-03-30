@@ -160,7 +160,8 @@
 }
 
 .btn {
-  height: 88rpx;
+  min-height: 88rpx;
+  min-width: 88rpx;
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -177,6 +178,7 @@
 .btn-prev {
   background: #F5F5F5;
   color: #666666;
+  min-height: 88rpx;
 }
 
 .btn-prev[disabled] {
@@ -187,12 +189,14 @@
   background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
   color: #FFFFFF;
   flex: 1;
+  min-height: 88rpx;
 }
 
 .btn-next {
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   color: #FFFFFF;
   flex: 2;
+  min-height: 88rpx;
 }
 
 /* 笔记弹窗 */

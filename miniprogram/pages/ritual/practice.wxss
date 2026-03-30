@@ -197,9 +197,10 @@
   white-space: pre-wrap;
 }
 
-/* 按钮 */
+/* 按钮 - P0 修复：确保最小热区 88rpx */
 .btn {
-  height: 88rpx;
+  min-height: 88rpx;
+  min-width: 88rpx;
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -217,6 +218,7 @@
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   color: #FFFFFF;
   width: 100%;
+  min-height: 88rpx;
 }
 
 .btn-primary[disabled] {
@@ -227,10 +229,12 @@
   background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
   color: #FFFFFF;
   width: 100%;
+  min-height: 88rpx;
 }
 
 .btn-small {
-  height: 64rpx;
+  min-height: 88rpx;
+  min-width: 88rpx;
   padding: 0 40rpx;
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   color: #FFFFFF;
@@ -242,6 +246,7 @@
   background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
   color: #FFFFFF;
   width: 100%;
+  min-height: 88rpx;
   margin-top: 30rpx;
 }
 

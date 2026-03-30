@@ -1,9 +1,10 @@
 /**
  * 创建初始管理员账户脚本
+ * 使用 bcrypt 加密密码
  */
 
 const { MongoClient } = require('mongodb');
-const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const logger = require('../utils/logger');
 
 async function createInitialAdmin() {
@@ -22,20 +23,26 @@ async function createInitialAdmin() {
       return;
     }
     
+    // 生成 bcrypt 加密密码
+    const passwordHash = await bcrypt.hash('admin123', 10);
+    
     // 创建管理员账户
     const admin = {
       username: 'admin',
-      password: 'admin123', // 简单密码，生产环境应该加密
+      passwordHash: passwordHash,
       role: 'super_admin',
       permissions: ['*'],
       status: 'active',
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      passwordChangedAt: new Date()
     };
     
     const result = await db.collection('admins').insertOne(admin);
-    logger.info('初始管理员账户创建成功', { username: 'admin', password: 'admin123' });
-    logger.warn('请在生产环境中立即修改密码！');
+    logger.info('初始管理员账户创建成功', { username: 'admin' });
+    logger.info('默认密码：admin123');
+    logger.warn('⚠️ 请在生产环境中立即修改密码！');
+    logger.info('🔒 密码已使用 bcrypt 加密存储');
     
     await client.close();
   } catch (error) {

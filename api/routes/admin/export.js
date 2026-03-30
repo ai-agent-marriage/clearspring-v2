@@ -133,9 +133,9 @@ router.get('/orders', adminMiddleware, async (req, res, next) => {
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-      res.sendFile(filepath, (err) => {
-        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
-      });
+      const fileContent = fs.readFileSync(filepath);
+      res.send(fileContent);
+      setTimeout(() => { try { fs.unlinkSync(filepath); } catch(e) {} }, 60000);
     }
   } catch (error) {
     next(error);
@@ -213,9 +213,9 @@ router.get('/executors', adminMiddleware, async (req, res, next) => {
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-      res.sendFile(filepath, (err) => {
-        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
-      });
+      const fileContent = fs.readFileSync(filepath);
+      res.send(fileContent);
+      setTimeout(() => { try { fs.unlinkSync(filepath); } catch(e) {} }, 60000);
     }
   } catch (error) {
     next(error);
@@ -264,9 +264,9 @@ router.get('/users', adminMiddleware, async (req, res, next) => {
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-      res.sendFile(filepath, (err) => {
-        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
-      });
+      const fileContent = fs.readFileSync(filepath);
+      res.send(fileContent);
+      setTimeout(() => { try { fs.unlinkSync(filepath); } catch(e) {} }, 60000);
     }
   } catch (error) {
     next(error);
@@ -331,9 +331,9 @@ router.get('/qualifications', adminMiddleware, async (req, res, next) => {
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-      res.sendFile(filepath, (err) => {
-        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
-      });
+      const fileContent = fs.readFileSync(filepath);
+      res.send(fileContent);
+      setTimeout(() => { try { fs.unlinkSync(filepath); } catch(e) {} }, 60000);
     }
   } catch (error) {
     next(error);
@@ -433,9 +433,9 @@ router.get('/orders/export', adminMiddleware, async (req, res, next) => {
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-      res.sendFile(filepath, (err) => {
-        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
-      });
+      const fileContent = fs.readFileSync(filepath);
+      res.send(fileContent);
+      setTimeout(() => { try { fs.unlinkSync(filepath); } catch(e) {} }, 60000);
     }
   } catch (error) {
     next(error);

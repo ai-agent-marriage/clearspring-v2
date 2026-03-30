@@ -10,6 +10,8 @@
  */
 
 const request = require('supertest');
+const logger = require('../../utils/logger');
+
 
 // 配置
 const BASE_URL = process.env.API_URL || 'http://101.96.192.63:3000';
@@ -897,7 +899,7 @@ describe('🏥 健康检查', () => {
 // ==================== 测试报告生成 ====================
 
 afterAll(() => {
-  console.log('\n========================================');
-  console.log('✅ 测试套件执行完成');
-  console.log('========================================\n');
+  logger.info('\n========================================');
+  logger.info('✅ 测试套件执行完成');
+  logger.info('========================================\n');
 });

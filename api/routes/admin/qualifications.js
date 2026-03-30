@@ -3,6 +3,8 @@
  */
 
 const express = require('express');
+
+const { validate, auditQualificationSchema, idParamSchema, qualificationListQuerySchema } = require('../../validators/admin.validator');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
@@ -34,7 +36,7 @@ const adminMiddleware = (req, res, next) => {
  * 资质审核列表
  * 查询参数：page, pageSize, status, type, userId
  */
-router.get('/', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, validate(qualificationListQuerySchema, 'query'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const {
@@ -134,7 +136,7 @@ router.get('/', adminMiddleware, async (req, res, next) => {
  * 审核通过/驳回
  * Body: status (approved/rejected), rejectReason (驳回时必填), auditRemark
  */
-router.put('/:id', adminMiddleware, async (req, res, next) => {
+router.put('/:id', adminMiddleware, validate(auditQualificationSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const qualificationId = req.params.id;
@@ -156,7 +158,7 @@ router.put('/:id', adminMiddleware, async (req, res, next) => {
     });
     
     if (!qualification) {
-      throw new AppError('资质记录不存在', 'QUALIFICATION_NOT_FOUND', 404);
+      throw new AppError('资质记录不存在', 'CERTIFICATE_NOT_FOUND', 404);
     }
     
     // 检查是否已经审核过

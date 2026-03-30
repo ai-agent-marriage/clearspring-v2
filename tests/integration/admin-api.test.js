@@ -4,6 +4,8 @@
  */
 
 const assert = require('assert');
+const logger = require('../../utils/logger');
+
 
 // 测试配置
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
@@ -43,12 +45,12 @@ function test(name, fn) {
       await fn();
       testResults.passed++;
       testResults.tests.push({ name, status: 'passed' });
-      console.log(`✅ ${name}`);
+      logger.info(`✅ ${name}`);
     } catch (error) {
       testResults.failed++;
       testResults.tests.push({ name, status: 'failed', error: error.message });
-      console.log(`❌ ${name}`);
-      console.log(`   错误：${error.message}`);
+      logger.info(`❌ ${name}`);
+      logger.info(`   错误：${error.message}`);
     }
   };
 }
@@ -68,8 +70,8 @@ function assertTrue(condition, message) {
 // ==================== 订单管理测试 ====================
 
 async function testOrderManagement() {
-  console.log('\n📦 订单管理测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n📦 订单管理测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取订单列表
   await test('GET /api/admin/orders - 获取订单列表', async () => {
@@ -128,7 +130,7 @@ async function testOrderManagement() {
       assertEqual(response.status, 200, '状态码');
       assertEqual(data.code, 'SUCCESS', '返回码');
     } else {
-      console.log('   ⚠️  跳过：没有已取消的订单可删除');
+      logger.info('   ⚠️  跳过：没有已取消的订单可删除');
     }
   });
   
@@ -143,7 +145,7 @@ async function testOrderManagement() {
       assertEqual(response.status, 400, '状态码应为 400');
       assertEqual(data.code, 'ORDER_CANNOT_DELETE', '错误码');
     } else {
-      console.log('   ⚠️  跳过：没有已完成的订单');
+      logger.info('   ⚠️  跳过：没有已完成的订单');
     }
   });
 }
@@ -151,8 +153,8 @@ async function testOrderManagement() {
 // ==================== 资质审核测试 ====================
 
 async function testQualificationAudit() {
-  console.log('\n📜 资质审核测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n📜 资质审核测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取资质审核列表
   await test('GET /api/admin/qualifications - 获取资质列表', async () => {
@@ -188,7 +190,7 @@ async function testQualificationAudit() {
       assertEqual(data.code, 'SUCCESS', '返回码');
       assertEqual(data.data.status, 'approved', '新状态');
     } else {
-      console.log('   ⚠️  跳过：没有待审核的资质');
+      logger.info('   ⚠️  跳过：没有待审核的资质');
     }
   });
   
@@ -208,7 +210,7 @@ async function testQualificationAudit() {
       assertEqual(data.code, 'SUCCESS', '返回码');
       assertEqual(data.data.status, 'rejected', '新状态');
     } else {
-      console.log('   ⚠️  跳过：没有待审核的资质');
+      logger.info('   ⚠️  跳过：没有待审核的资质');
     }
   });
   
@@ -224,7 +226,7 @@ async function testQualificationAudit() {
       assertEqual(response.status, 400, '状态码应为 400');
       assertEqual(data.code, 'MISSING_REJECT_REASON', '错误码');
     } else {
-      console.log('   ⚠️  跳过：没有待审核的资质');
+      logger.info('   ⚠️  跳过：没有待审核的资质');
     }
   });
 }
@@ -232,8 +234,8 @@ async function testQualificationAudit() {
 // ==================== 执行者管理测试 ====================
 
 async function testExecutorManagement() {
-  console.log('\n👤 执行者管理测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n👤 执行者管理测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取执行者列表
   await test('GET /api/admin/executors - 获取执行者列表', async () => {
@@ -282,8 +284,8 @@ async function testExecutorManagement() {
 // ==================== 分账配置测试 ====================
 
 async function testProfitSharing() {
-  console.log('\n💰 分账配置测试');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('\n💰 分账配置测试');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
   // 测试 1: 获取分账配置
   await test('GET /api/admin/profit-sharing - 获取分账配置', async () => {
@@ -335,15 +337,15 @@ async function testProfitSharing() {
 // ==================== 主测试流程 ====================
 
 async function runAllTests() {
-  console.log('╔════════════════════════════════════════════════════╗');
-  console.log('║   清如 ClearSpring V2 - 管理端 API 集成测试          ║');
-  console.log('╚════════════════════════════════════════════════════╝');
-  console.log(`\n📍 API 地址：${API_BASE_URL}`);
-  console.log(`🔑 Token: ${ADMIN_TOKEN ? '已配置' : '未配置（部分测试可能失败）'}`);
+  logger.info('╔════════════════════════════════════════════════════╗');
+  logger.info('║   清如 ClearSpring V2 - 管理端 API 集成测试          ║');
+  logger.info('╚════════════════════════════════════════════════════╝');
+  logger.info(`\n📍 API 地址：${API_BASE_URL}`);
+  logger.info(`🔑 Token: ${ADMIN_TOKEN ? '已配置' : '未配置（部分测试可能失败）'}`);
   
   if (!ADMIN_TOKEN) {
-    console.log('\n⚠️  警告：未配置 ADMIN_TOKEN，请设置环境变量后重试');
-    console.log('   export ADMIN_TOKEN="your_admin_token_here"\n');
+    logger.info('\n⚠️  警告：未配置 ADMIN_TOKEN，请设置环境变量后重试');
+    logger.info('   export ADMIN_TOKEN="your_admin_token_here"\n');
   }
   
   try {
@@ -354,21 +356,21 @@ async function runAllTests() {
     await testProfitSharing();
     
     // 输出测试结果
-    console.log('\n╔════════════════════════════════════════════════════╗');
-    console.log('║              测试结果汇总                          ║');
-    console.log('╚════════════════════════════════════════════════════╝');
-    console.log(`\n✅ 通过：${testResults.passed}`);
-    console.log(`❌ 失败：${testResults.failed}`);
-    console.log(`📊 总计：${testResults.passed + testResults.failed}`);
-    console.log(`📈 通过率：${((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(2)}%`);
+    logger.info('\n╔════════════════════════════════════════════════════╗');
+    logger.info('║              测试结果汇总                          ║');
+    logger.info('╚════════════════════════════════════════════════════╝');
+    logger.info(`\n✅ 通过：${testResults.passed}`);
+    logger.info(`❌ 失败：${testResults.failed}`);
+    logger.info(`📊 总计：${testResults.passed + testResults.failed}`);
+    logger.info(`📈 通过率：${((testResults.passed / (testResults.passed + testResults.failed)) * 100).toFixed(2)}%`);
     
     if (testResults.failed > 0) {
-      console.log('\n❌ 失败的测试:');
+      logger.info('\n❌ 失败的测试:');
       testResults.tests
         .filter(t => t.status === 'failed')
         .forEach(t => {
-          console.log(`   - ${t.name}`);
-          console.log(`     错误：${t.error}`);
+          logger.info(`   - ${t.name}`);
+          logger.info(`     错误：${t.error}`);
         });
     }
     
@@ -394,8 +396,8 @@ function generateReport() {
     tests: testResults.tests
   };
   
-  console.log('\n📄 测试报告已生成:');
-  console.log(JSON.stringify(report, null, 2));
+  logger.info('\n📄 测试报告已生成:');
+  logger.info(JSON.stringify(report, null, 2));
 }
 
 // 运行测试

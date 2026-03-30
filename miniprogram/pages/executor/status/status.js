@@ -27,7 +27,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log('审核状态页加载完成', options);
+    logger.info('审核状态页加载完成', options);
     this.loadAuditStatus();
   },
 

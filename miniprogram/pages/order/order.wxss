@@ -385,6 +385,7 @@ page {
 .action-btn {
   width: 100%;
   min-height: var(--btn-min-height);
+  min-width: 88rpx;
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -398,12 +399,14 @@ page {
   background: #FFFFFF;
   color: #E54D42;
   box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+  min-height: 88rpx;
 }
 
 .btn-view {
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10rpx);
   border: 2rpx solid rgba(255, 255, 255, 0.5);
+  min-height: 88rpx;
 }
 
 /* ====================

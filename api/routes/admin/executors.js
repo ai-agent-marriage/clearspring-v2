@@ -3,6 +3,8 @@
  */
 
 const express = require('express');
+
+const { validate, updateExecutorStatusSchema, idParamSchema } = require('../../validators/admin.validator');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
@@ -167,7 +169,7 @@ router.get('/', adminMiddleware, async (req, res, next) => {
  * 执行者状态更新
  * Body: status (active/inactive/banned), remark
  */
-router.put('/:id/status', adminMiddleware, async (req, res, next) => {
+router.put('/:id/status', adminMiddleware, validate(idParamSchema, 'params'), validate(updateExecutorStatusSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const executorId = req.params.id;

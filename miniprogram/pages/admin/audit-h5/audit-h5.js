@@ -51,7 +51,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log('资质审核 H5 页加载完成', options);
+    logger.info('资质审核 H5 页加载完成', options);
     this.loadAuditList();
     this.loadPendingCount();
   },

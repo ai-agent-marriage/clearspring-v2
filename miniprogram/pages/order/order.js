@@ -56,7 +56,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    console.log('订单页加载完成', options);
+    logger.info('订单页加载完成', options);
     
     // 判断是否从 Tab 进入
     if (options.fromTab === 'true') {

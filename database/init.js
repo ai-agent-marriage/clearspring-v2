@@ -13,41 +13,47 @@ async function initDatabase() {
   let client;
   
   try {
-    console.log('🔌 连接 MongoDB...');
+    logger.info('🔌 连接 MongoDB...');
     client = new MongoClient(MONGODB_URI);
     await client.connect();
-    console.log('✅ MongoDB 连接成功');
+    logger.info('✅ MongoDB 连接成功');
     
     const db = client.db(DB_NAME);
     
     // 1. users 集合 - 用户表
-    console.log('\n📋 初始化 users 集合...');
+    logger.info('\n📋 初始化 users 集合...');
     await db.createCollection('users');
     const users = db.collection('users');
     
     await users.createIndex({ openId: 1 }, { unique: true });
     await users.createIndex({ unionId: 1 }, { sparse: true });
+    await users.createIndex({ username: 1 }, { sparse: true });
+    await users.createIndex({ role: 1 });
+    await users.createIndex({ status: 1 });
     await users.createIndex({ role: 1, status: 1 });
     await users.createIndex({ phone: 1 }, { sparse: true });
     await users.createIndex({ createdAt: -1 });
     
-    console.log('✅ users 集合创建成功，索引已建立');
+    logger.info('✅ users 集合创建成功，索引已建立');
     
     // 2. orders 集合 - 订单表
-    console.log('\n📋 初始化 orders 集合...');
+    logger.info('\n📋 初始化 orders 集合...');
     await db.createCollection('orders');
     const orders = db.collection('orders');
     
     await orders.createIndex({ orderNo: 1 }, { unique: true });
+    await orders.createIndex({ userId: 1 });
     await orders.createIndex({ userId: 1, createdAt: -1 });
+    await orders.createIndex({ executorId: 1 });
     await orders.createIndex({ executorId: 1, status: 1 });
+    await orders.createIndex({ status: 1 });
     await orders.createIndex({ status: 1, serviceDate: 1 });
     await orders.createIndex({ createdAt: -1 });
     
-    console.log('✅ orders 集合创建成功，索引已建立');
+    logger.info('✅ orders 集合创建成功，索引已建立');
     
     // 3. evidence 集合 - 证据表
-    console.log('\n📋 初始化 evidence 集合...');
+    logger.info('\n📋 初始化 evidence 集合...');
     await db.createCollection('evidence');
     const evidence = db.collection('evidence');
     
@@ -56,10 +62,10 @@ async function initDatabase() {
     await evidence.createIndex({ orderId: 1 });
     await evidence.createIndex({ status: 1 });
     
-    console.log('✅ evidence 集合创建成功，索引已建立');
+    logger.info('✅ evidence 集合创建成功，索引已建立');
     
     // 4. certificates 集合 - 证书表
-    console.log('\n📋 初始化 certificates 集合...');
+    logger.info('\n📋 初始化 certificates 集合...');
     await db.createCollection('certificates');
     const certificates = db.collection('certificates');
     
@@ -68,10 +74,10 @@ async function initDatabase() {
     await certificates.createIndex({ certificateNo: 1 }, { unique: true, sparse: true });
     await certificates.createIndex({ createdAt: -1 });
     
-    console.log('✅ certificates 集合创建成功，索引已建立');
+    logger.info('✅ certificates 集合创建成功，索引已建立');
     
     // 5. transactions 集合 - 交易表
-    console.log('\n📋 初始化 transactions 集合...');
+    logger.info('\n📋 初始化 transactions 集合...');
     await db.createCollection('transactions');
     const transactions = db.collection('transactions');
     
@@ -81,10 +87,10 @@ async function initDatabase() {
     await transactions.createIndex({ status: 1, type: 1 });
     await transactions.createIndex({ createdAt: -1 });
     
-    console.log('✅ transactions 集合创建成功，索引已建立');
+    logger.info('✅ transactions 集合创建成功，索引已建立');
     
     // 6. audit_logs 集合 - 审计日志表
-    console.log('\n📋 初始化 audit_logs 集合...');
+    logger.info('\n📋 初始化 audit_logs 集合...');
     await db.createCollection('audit_logs');
     const auditLogs = db.collection('audit_logs');
     
@@ -93,27 +99,41 @@ async function initDatabase() {
     await auditLogs.createIndex({ orderId: 1 });
     await auditLogs.createIndex({ timestamp: -1 }, { expireAfterSeconds: 7776000 }); // 90 天后自动过期
     
-    console.log('✅ audit_logs 集合创建成功，索引已建立');
+    logger.info('✅ audit_logs 集合创建成功，索引已建立');
     
     // 创建 locks 集合（用于分布式锁）
-    console.log('\n📋 初始化 locks 集合（分布式锁）...');
+    logger.info('\n📋 初始化 locks 集合（分布式锁）...');
     await db.createCollection('locks');
     const locks = db.collection('locks');
     
     await locks.createIndex({ key: 1 }, { unique: true });
     await locks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
     
-    console.log('✅ locks 集合创建成功，索引已建立');
+    logger.info('✅ locks 集合创建成功，索引已建立');
     
-    console.log('\n🎉 数据库初始化完成！');
-    console.log('\n集合列表:');
-    console.log('  1. users - 用户表');
-    console.log('  2. orders - 订单表');
-    console.log('  3. evidence - 证据表');
-    console.log('  4. certificates - 证书表');
-    console.log('  5. transactions - 交易表');
-    console.log('  6. audit_logs - 审计日志表');
-    console.log('  7. locks - 分布式锁（系统用）');
+    // 8. qualifications 集合 - 资质审核表
+    logger.info('\n📋 初始化 qualifications 集合...');
+    await db.createCollection('qualifications');
+    const qualifications = db.collection('qualifications');
+    
+    await qualifications.createIndex({ userId: 1 });
+    await qualifications.createIndex({ status: 1 });
+    await qualifications.createIndex({ userId: 1, status: 1 });
+    await qualifications.createIndex({ type: 1 });
+    await qualifications.createIndex({ createdAt: -1 });
+    
+    logger.info('✅ qualifications 集合创建成功，索引已建立');
+    
+    logger.info('\n🎉 数据库初始化完成！');
+    logger.info('\n集合列表:');
+    logger.info('  1. users - 用户表');
+    logger.info('  2. orders - 订单表');
+    logger.info('  3. evidence - 证据表');
+    logger.info('  4. certificates - 证书表');
+    logger.info('  5. transactions - 交易表');
+    logger.info('  6. audit_logs - 审计日志表');
+    logger.info('  7. locks - 分布式锁（系统用）');
+    logger.info('  8. qualifications - 资质审核表');
     
   } catch (error) {
     console.error('❌ 数据库初始化失败:', error);
@@ -121,7 +141,7 @@ async function initDatabase() {
   } finally {
     if (client) {
       await client.close();
-      console.log('\n👋 MongoDB 连接已关闭');
+      logger.info('\n👋 MongoDB 连接已关闭');
     }
   }
 }

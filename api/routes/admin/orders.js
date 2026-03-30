@@ -3,6 +3,8 @@
  */
 
 const express = require('express');
+
+const { validate, updateOrderStatusSchema, idParamSchema, orderListQuerySchema } = require('../../validators/admin.validator');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
@@ -34,7 +36,7 @@ const adminMiddleware = (req, res, next) => {
  * 订单列表（分页/筛选）
  * 查询参数：page, pageSize, status, paymentStatus, serviceType, startDate, endDate, keyword
  */
-router.get('/', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, validate(orderListQuerySchema, 'query'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const {
@@ -185,7 +187,7 @@ router.get('/', adminMiddleware, async (req, res, next) => {
 const exportRoutes = require('./export');
 router.use('/export', exportRoutes);
 
-router.put('/:id/status', adminMiddleware, async (req, res, next) => {
+router.put('/:id/status', adminMiddleware, validate(idParamSchema, 'params'), validate(updateOrderStatusSchema, 'body'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const orderId = req.params.id;
@@ -265,7 +267,7 @@ router.put('/:id/status', adminMiddleware, async (req, res, next) => {
  * DELETE /api/admin/order/:id
  * 订单删除
  */
-router.delete('/:id', adminMiddleware, async (req, res, next) => {
+router.delete('/:id', adminMiddleware, validate(idParamSchema, 'params'), async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const orderId = req.params.id;

@@ -114,7 +114,8 @@
 
 .btn {
   flex: 1;
-  height: 88rpx;
+  min-height: 88rpx;
+  min-width: 88rpx;
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -131,17 +132,20 @@
 .btn-primary {
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   color: #FFFFFF;
+  min-height: 88rpx;
 }
 
 .btn-secondary {
   background: #FFFFFF;
   color: #D4A574;
   border: 2rpx solid #D4A574;
+  min-height: 88rpx;
 }
 
 .btn-success {
   background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
   color: #FFFFFF;
+  min-height: 88rpx;
 }
 
 /* 区块 */

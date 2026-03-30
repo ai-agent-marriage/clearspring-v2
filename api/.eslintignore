@@ -1,0 +1,13 @@
+node_modules
+coverage
+dist
+build
+*.min.js
+logs
+*.log
+.env
+.DS_Store
+colorui
+miniprogram
+admin-h5
+admin-pc

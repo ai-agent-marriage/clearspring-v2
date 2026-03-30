@@ -25,6 +25,10 @@ const contentRoutes = require('./routes/content');
 const { errorHandler } = require('./middleware/errorHandler');
 const { authMiddleware } = require('./middleware/auth');
 
+// Swagger 文档
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./utils/swagger');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const logger = require('./utils/logger');
@@ -96,6 +100,13 @@ app.use('/api/order', orderRoutes);
 app.use('/api/executor', executorRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/content', contentRoutes);
+
+// Swagger API 文档
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: '清如 ClearSpring API 文档',
+}));
 
 // 健康检查
 app.get('/health', (req, res) => {

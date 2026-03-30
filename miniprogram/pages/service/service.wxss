@@ -260,6 +260,7 @@ page {
 .action-btn {
   width: 100%;
   min-height: var(--btn-min-height);
+  min-width: 88rpx;
   border-radius: 44rpx;
   display: flex;
   align-items: center;
@@ -272,6 +273,7 @@ page {
   background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-dark) 100%);
   color: #FFFFFF;
   box-shadow: 0 8rpx 24rpx rgba(212, 184, 123, 0.4);
+  min-height: 88rpx;
 }
 
 .btn-primary:active {
@@ -483,11 +485,13 @@ page {
 .btn-cancel {
   background: #F5F5F5;
   color: var(--text-secondary);
+  min-height: 88rpx;
 }
 
 .btn-confirm {
   color: #FFFFFF;
   box-shadow: 0 8rpx 24rpx rgba(229, 77, 66, 0.4);
+  min-height: 88rpx;
 }
 
 /* ====================

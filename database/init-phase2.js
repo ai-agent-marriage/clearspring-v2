@@ -17,15 +17,15 @@ async function initializeDatabase() {
   let client;
   
   try {
-    console.log('🔌 连接 MongoDB...');
+    logger.info('🔌 连接 MongoDB...');
     client = new MongoClient(MONGODB_URI);
     await client.connect();
-    console.log('✅ MongoDB 连接成功');
+    logger.info('✅ MongoDB 连接成功');
     
     const db = client.db(DB_NAME);
     
     // 1. 创建 wiki_contents 集合
-    console.log('\n📚 初始化 wiki_contents (百科内容)...');
+    logger.info('\n📚 初始化 wiki_contents (百科内容)...');
     await db.createCollection('wiki_contents');
     
     const wikiCollection = db.collection('wiki_contents');
@@ -65,10 +65,10 @@ async function initializeDatabase() {
         updatedAt: new Date()
       }
     ]);
-    console.log('✅ wiki_contents 初始化完成');
+    logger.info('✅ wiki_contents 初始化完成');
     
     // 2. 创建 meditation_courses 集合
-    console.log('\n🧘 初始化 meditation_courses (冥想课程)...');
+    logger.info('\n🧘 初始化 meditation_courses (冥想课程)...');
     await db.createCollection('meditation_courses');
     
     const meditationCoursesCollection = db.collection('meditation_courses');
@@ -125,10 +125,10 @@ async function initializeDatabase() {
         createdAt: new Date()
       }
     ]);
-    console.log('✅ meditation_courses 初始化完成');
+    logger.info('✅ meditation_courses 初始化完成');
     
     // 3. 创建 meditation_records 集合
-    console.log('\n📝 初始化 meditation_records (冥想记录)...');
+    logger.info('\n📝 初始化 meditation_records (冥想记录)...');
     await db.createCollection('meditation_records');
     
     const meditationRecordsCollection = db.collection('meditation_records');
@@ -136,10 +136,10 @@ async function initializeDatabase() {
     await meditationRecordsCollection.createIndex({ courseId: 1 });
     await meditationRecordsCollection.createIndex({ completedAt: -1 });
     await meditationRecordsCollection.createIndex({ userId: 1, completedAt: -1 });
-    console.log('✅ meditation_records 初始化完成');
+    logger.info('✅ meditation_records 初始化完成');
     
     // 4. 创建 ritual_contents 集合
-    console.log('\n📖 初始化 ritual_contents (仪轨内容)...');
+    logger.info('\n📖 初始化 ritual_contents (仪轨内容)...');
     await db.createCollection('ritual_contents');
     
     const ritualContentsCollection = db.collection('ritual_contents');
@@ -193,10 +193,10 @@ async function initializeDatabase() {
         createdAt: new Date()
       }
     ]);
-    console.log('✅ ritual_contents 初始化完成');
+    logger.info('✅ ritual_contents 初始化完成');
     
     // 5. 创建 ritual_progress 集合
-    console.log('\n📊 初始化 ritual_progress (学习进度)...');
+    logger.info('\n📊 初始化 ritual_progress (学习进度)...');
     await db.createCollection('ritual_progress');
     
     const ritualProgressCollection = db.collection('ritual_progress');
@@ -205,15 +205,15 @@ async function initializeDatabase() {
     await ritualProgressCollection.createIndex({ userId: 1, ritualId: 1 }, { unique: true });
     await ritualProgressCollection.createIndex({ completed: 1 });
     await ritualProgressCollection.createIndex({ updatedAt: -1 });
-    console.log('✅ ritual_progress 初始化完成');
+    logger.info('✅ ritual_progress 初始化完成');
     
-    console.log('\n✅✅✅ 数据库初始化全部完成！');
-    console.log('\n集合列表:');
-    console.log('  📚 wiki_contents - 百科内容');
-    console.log('  🧘 meditation_courses - 冥想课程');
-    console.log('  📝 meditation_records - 冥想记录');
-    console.log('  📖 ritual_contents - 仪轨内容');
-    console.log('  📊 ritual_progress - 学习进度');
+    logger.info('\n✅✅✅ 数据库初始化全部完成！');
+    logger.info('\n集合列表:');
+    logger.info('  📚 wiki_contents - 百科内容');
+    logger.info('  🧘 meditation_courses - 冥想课程');
+    logger.info('  📝 meditation_records - 冥想记录');
+    logger.info('  📖 ritual_contents - 仪轨内容');
+    logger.info('  📊 ritual_progress - 学习进度');
     
   } catch (error) {
     console.error('❌ 数据库初始化失败:', error);
@@ -221,7 +221,7 @@ async function initializeDatabase() {
   } finally {
     if (client) {
       await client.close();
-      console.log('\n👋 MongoDB 连接已关闭');
+      logger.info('\n👋 MongoDB 连接已关闭');
     }
   }
 }

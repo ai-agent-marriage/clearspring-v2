@@ -54,15 +54,15 @@ async function seedTestData() {
   let client;
   
   try {
-    console.log('🔌 连接 MongoDB...');
+    logger.info('🔌 连接 MongoDB...');
     client = new MongoClient(MONGODB_URI);
     await client.connect();
-    console.log('✅ MongoDB 连接成功');
+    logger.info('✅ MongoDB 连接成功');
     
     const db = client.db(DB_NAME);
     
     // ==================== 1. 管理员账号 ====================
-    console.log('\n📋 创建管理员账号...');
+    logger.info('\n📋 创建管理员账号...');
     const admins = db.collection('admins');
     
     // 清空现有管理员数据（可选，生产环境请注释）
@@ -91,10 +91,10 @@ async function seedTestData() {
       { $set: adminData },
       { upsert: true }
     );
-    console.log('✅ 管理员账号创建成功：admin / admin123');
+    logger.info('✅ 管理员账号创建成功：admin / admin123');
     
     // ==================== 2. 执行者账号 ====================
-    console.log('\n📋 创建执行者账号...');
+    logger.info('\n📋 创建执行者账号...');
     const executors = db.collection('executors');
     
     // 清空现有执行者数据（可选）
@@ -185,10 +185,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 执行者账号创建成功：${executorBaseData.length} 个`);
+    logger.info(`✅ 执行者账号创建成功：${executorBaseData.length} 个`);
     
     // ==================== 3. 用户账号 ====================
-    console.log('\n📋 创建用户账号...');
+    logger.info('\n📋 创建用户账号...');
     const users = db.collection('users');
     
     const userBaseData = [];
@@ -214,10 +214,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 用户账号创建成功：${userBaseData.length} 个`);
+    logger.info(`✅ 用户账号创建成功：${userBaseData.length} 个`);
     
     // ==================== 4. 订单数据 ====================
-    console.log('\n📋 创建订单数据...');
+    logger.info('\n📋 创建订单数据...');
     const orders = db.collection('orders');
     
     // 清空现有订单数据（可选）
@@ -267,10 +267,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 订单数据创建成功：${orderData.length} 个`);
+    logger.info(`✅ 订单数据创建成功：${orderData.length} 个`);
     
     // ==================== 5. 资质审核数据 ====================
-    console.log('\n📋 创建资质审核数据...');
+    logger.info('\n📋 创建资质审核数据...');
     const qualifications = db.collection('qualifications');
     
     // 清空现有资质数据（可选）
@@ -311,10 +311,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 资质审核数据创建成功：${qualificationData.length} 个`);
+    logger.info(`✅ 资质审核数据创建成功：${qualificationData.length} 个`);
     
     // ==================== 6. 分账配置 ====================
-    console.log('\n📋 创建分账配置...');
+    logger.info('\n📋 创建分账配置...');
     const profitConfigs = db.collection('profit_configs');
     
     const profitConfigData = {
@@ -337,10 +337,10 @@ async function seedTestData() {
       { $set: profitConfigData },
       { upsert: true }
     );
-    console.log('✅ 分账配置创建成功');
+    logger.info('✅ 分账配置创建成功');
     
     // ==================== 7. 交易记录 ====================
-    console.log('\n📋 创建交易记录...');
+    logger.info('\n📋 创建交易记录...');
     const transactions = db.collection('transactions');
     
     const transactionTypes = ['payment', 'refund', 'distribution', 'withdrawal'];
@@ -375,10 +375,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 交易记录创建成功：${transactionData.length} 个`);
+    logger.info(`✅ 交易记录创建成功：${transactionData.length} 个`);
     
     // ==================== 8. 证书数据 ====================
-    console.log('\n📋 创建证书数据...');
+    logger.info('\n📋 创建证书数据...');
     const certificates = db.collection('certificates');
     
     const certificateTypes = ['放生证书', '功德证书', '超度证书', '祈福证书'];
@@ -409,10 +409,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 证书数据创建成功：${certificateData.length} 个`);
+    logger.info(`✅ 证书数据创建成功：${certificateData.length} 个`);
     
     // ==================== 9. 申诉数据 ====================
-    console.log('\n📋 创建申诉数据...');
+    logger.info('\n📋 创建申诉数据...');
     const appeals = db.collection('appeals');
     
     const appealStatuses = ['pending', 'processing', 'resolved', 'rejected'];
@@ -449,10 +449,10 @@ async function seedTestData() {
         { upsert: true }
       );
     }
-    console.log(`✅ 申诉数据创建成功：${appealData.length} 个`);
+    logger.info(`✅ 申诉数据创建成功：${appealData.length} 个`);
     
     // ==================== 10. 审计日志 ====================
-    console.log('\n📋 创建审计日志...');
+    logger.info('\n📋 创建审计日志...');
     const auditLogs = db.collection('audit_logs');
     
     const logTypes = ['login', 'order_create', 'order_update', 'qualification_review', 'profit_distribute'];
@@ -479,30 +479,30 @@ async function seedTestData() {
     for (const log of auditLogData) {
       await auditLogs.insertOne(log);
     }
-    console.log(`✅ 审计日志创建成功：${auditLogData.length} 个`);
+    logger.info(`✅ 审计日志创建成功：${auditLogData.length} 个`);
     
     // ==================== 汇总报告 ====================
-    console.log('\n' + '='.repeat(60));
-    console.log('🎉 测试数据导入完成！');
-    console.log('='.repeat(60));
-    console.log('\n📊 数据汇总:');
-    console.log('  ✅ 管理员账号：1 个');
-    console.log('  ✅ 执行者账号：5 个');
-    console.log('  ✅ 用户账号：20 个');
-    console.log('  ✅ 订单数据：20 个');
-    console.log('  ✅ 资质审核：10 个');
-    console.log('  ✅ 分账配置：1 个');
-    console.log('  ✅ 交易记录：20 个');
-    console.log('  ✅ 证书数据：15 个');
-    console.log('  ✅ 申诉数据：5 个');
-    console.log('  ✅ 审计日志：30 个');
-    console.log('\n🔑 默认账号信息:');
-    console.log('  管理员：admin / admin123');
-    console.log('\n💡 提示:');
-    console.log('  - 生产环境请修改默认密码');
-    console.log('  - 可根据需要调整测试数据量');
-    console.log('  - 数据已做去重处理，重复运行不会创建重复数据');
-    console.log('='.repeat(60));
+    logger.info('\n' + '='.repeat(60));
+    logger.info('🎉 测试数据导入完成！');
+    logger.info('='.repeat(60));
+    logger.info('\n📊 数据汇总:');
+    logger.info('  ✅ 管理员账号：1 个');
+    logger.info('  ✅ 执行者账号：5 个');
+    logger.info('  ✅ 用户账号：20 个');
+    logger.info('  ✅ 订单数据：20 个');
+    logger.info('  ✅ 资质审核：10 个');
+    logger.info('  ✅ 分账配置：1 个');
+    logger.info('  ✅ 交易记录：20 个');
+    logger.info('  ✅ 证书数据：15 个');
+    logger.info('  ✅ 申诉数据：5 个');
+    logger.info('  ✅ 审计日志：30 个');
+    logger.info('\n🔑 默认账号信息:');
+    logger.info('  管理员：admin / admin123');
+    logger.info('\n💡 提示:');
+    logger.info('  - 生产环境请修改默认密码');
+    logger.info('  - 可根据需要调整测试数据量');
+    logger.info('  - 数据已做去重处理，重复运行不会创建重复数据');
+    logger.info('='.repeat(60));
     
   } catch (error) {
     console.error('❌ 测试数据导入失败:', error);
@@ -510,7 +510,7 @@ async function seedTestData() {
   } finally {
     if (client) {
       await client.close();
-      console.log('\n👋 MongoDB 连接已关闭');
+      logger.info('\n👋 MongoDB 连接已关闭');
     }
   }
 }
@@ -519,7 +519,7 @@ async function seedTestData() {
 if (require.main === module) {
   seedTestData()
     .then(() => {
-      console.log('\n✅ 脚本执行完成');
+      logger.info('\n✅ 脚本执行完成');
       process.exit(0);
     })
     .catch((error) => {
