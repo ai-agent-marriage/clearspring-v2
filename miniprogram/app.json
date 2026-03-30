@@ -7,6 +7,10 @@
     "pages/meditation/player",
     "pages/meditation/courses",
     "pages/meditation/stats",
+    "pages/ritual/index",
+    "pages/ritual/detail",
+    "pages/ritual/learn",
+    "pages/ritual/practice",
     "pages/admin/audit-h5/audit-h5",
     "pages/admin/arbitration-h5/arbitration-h5"
   ],
