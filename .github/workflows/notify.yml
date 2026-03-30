@@ -11,11 +11,6 @@ jobs:
     steps:
       - name: Send Feishu notification
         run: |
-          if [ -n "${{ secrets.FEISHU_WEBHOOK }}" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"msg_type":"text","content":{"text":"部署完成！"}}' \
-              ${{ secrets.FEISHU_WEBHOOK }} || true
-          else
-            echo "⚠️ FEISHU_WEBHOOK not configured, skipping notification"
-          fi
-        continue-on-error: true
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"msg_type":"text","content":{"text":"🚀 清如 ClearSpring 部署完成！\n\n✅ 代码已推送\n✅ 服务已重启\n✅ 访问：https://springs.dexoconnect.com"}}' \
+            https://open.feishu.cn/open-apis/bot/v2/hook/3297ae19-077a-4b42-b827-cd56b5b82791

@@ -42,16 +42,15 @@ jobs:
         continue-on-error: true
       
       - name: Restart service
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: 101.96.192.63
           username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /root/.openclaw/workspace/projects/clearspring-v2/api
             npm install
             pm2 restart clearspring-api
-        continue-on-error: true
       
       - name: Deployment Status
         run: echo "✅ Deployment completed successfully!"
