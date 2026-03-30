@@ -2,6 +2,8 @@
  * 错误处理中间件
  */
 
+const logger = require('../utils/logger');
+
 class AppError extends Error {
   constructor(message, code, statusCode = 400) {
     super(message);
@@ -24,13 +26,17 @@ const errorHandler = (err, req, res, next) => {
     code = 'INTERNAL_ERROR';
   }
   
-  console.error(`[${new Date().toISOString()}] ${code}: ${message}`);
-  if (err.stack) {
-    console.error(err.stack);
-  }
+  logger.error(`${code}: ${message}`, { 
+    code, 
+    message, 
+    stack: err.stack,
+    timestamp: new Date().toISOString()
+  });
   
-  res.status(statusCode).json({
+  // 所有业务错误都返回 200，通过 code 字段区分成功/失败
+  res.status(200).json({
     code,
+    data: null,
     message,
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });

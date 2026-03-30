@@ -1,0 +1,25 @@
+{
+  "name": "clearspring-v2-tests",
+  "version": "2.0.0",
+  "description": "清如 ClearSpring V2.0 自动化测试套件",
+  "scripts": {
+    "test": "jest --config jest.config.js --verbose --detectOpenHandles",
+    "test:api": "jest --config jest.config.js jest-api.test.js --verbose",
+    "test:coverage": "jest --config jest.config.js --coverage --detectOpenHandles",
+    "test:watch": "jest --config jest.config.js --watch",
+    "test:report": "jest --config jest.config.js --json --outputFile=test-results.json"
+  },
+  "keywords": [
+    "clearspring",
+    "test",
+    "jest",
+    "supertest"
+  ],
+  "author": "ClearSpring Team",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^4.4.0",
+    "supertest": "^6.3.3"
+  }
+}

@@ -12,24 +12,26 @@ const { Parser } = require('json2csv');
 const ExcelJS = require('exceljs');
 const path = require('path');
 const fs = require('fs');
+const logger = require('../../utils/logger');
 
 
 
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 // 确保导出目录存在
@@ -42,7 +44,7 @@ if (!fs.existsSync(exportDir)) {
  * GET /api/admin/export/orders
  * 导出订单数据
  */
-router.get('/export/orders', adminMiddleware, async (req, res, next) => {
+router.get('/orders', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const {
@@ -118,7 +120,7 @@ router.get('/export/orders', adminMiddleware, async (req, res, next) => {
       const filepath = path.join(exportDir, `${filename}.csv`);
       fs.writeFileSync(filepath, csv, 'utf-8');
       
-      await logExport(req.user.userId, 'orders', data.length, format);
+      await logExport(db, req.user.userId, 'orders', data.length, format);
       
       res.setHeader('Content-Type', 'text/csv;charset=utf-8');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.csv"`);
@@ -127,7 +129,7 @@ router.get('/export/orders', adminMiddleware, async (req, res, next) => {
       const filepath = path.join(exportDir, `${filename}.xlsx`);
       await generateExcel(data, filepath, 'Orders');
       
-      await logExport(req.user.userId, 'orders', data.length, format);
+      await logExport(db, req.user.userId, 'orders', data.length, format);
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
@@ -144,7 +146,7 @@ router.get('/export/orders', adminMiddleware, async (req, res, next) => {
  * GET /api/admin/export/executors
  * 导出执行者数据
  */
-router.get('/export/executors', adminMiddleware, async (req, res, next) => {
+router.get('/executors', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const { status, format = 'xlsx' } = req.query;
@@ -207,7 +209,7 @@ router.get('/export/executors', adminMiddleware, async (req, res, next) => {
       const filepath = path.join(exportDir, `${filename}.xlsx`);
       await generateExcel(data, filepath, 'Executors');
       
-      await logExport(req.user.userId, 'executors', data.length, format);
+      await logExport(db, req.user.userId, 'executors', data.length, format);
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
@@ -224,7 +226,7 @@ router.get('/export/executors', adminMiddleware, async (req, res, next) => {
  * GET /api/admin/export/users
  * 导出用户数据
  */
-router.get('/export/users', adminMiddleware, async (req, res, next) => {
+router.get('/users', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const { format = 'xlsx' } = req.query;
@@ -258,7 +260,7 @@ router.get('/export/users', adminMiddleware, async (req, res, next) => {
       const filepath = path.join(exportDir, `${filename}.xlsx`);
       await generateExcel(data, filepath, 'Users');
       
-      await logExport(req.user.userId, 'users', data.length, format);
+      await logExport(db, req.user.userId, 'users', data.length, format);
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
@@ -275,7 +277,7 @@ router.get('/export/users', adminMiddleware, async (req, res, next) => {
  * GET /api/admin/export/qualifications
  * 导出资质审核数据
  */
-router.get('/export/qualifications', adminMiddleware, async (req, res, next) => {
+router.get('/qualifications', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const { status, format = 'xlsx' } = req.query;
@@ -283,13 +285,13 @@ router.get('/export/qualifications', adminMiddleware, async (req, res, next) => 
     const query = {};
     if (status) query.status = status;
     
-    const certificates = await db.collection('certificates')
+    const qualifications = await db.collection('qualifications')
       .find(query)
       .sort({ createdAt: -1 })
       .limit(10000)
       .toArray();
     
-    const userIds = certificates.filter(c => c.userId).map(c => c.userId.toString());
+    const userIds = qualifications.filter(q => q.userId).map(q => q.userId.toString());
     const users = await db.collection('users')
       .find({ _id: { $in: userIds.map(id => new ObjectId(id)) } })
       .project({ _id: 1, nickName: 1, phone: 1 })
@@ -298,7 +300,7 @@ router.get('/export/qualifications', adminMiddleware, async (req, res, next) => 
     const userMap = {};
     users.forEach(u => { userMap[u._id.toString()] = u; });
     
-    const data = certificates.map(cert => ({
+    const data = qualifications.map(cert => ({
       qualificationId: cert._id.toString(),
       userNickName: userMap[cert.userId?.toString()]?.nickName || '',
       userPhone: userMap[cert.userId?.toString()]?.phone || '',
@@ -325,7 +327,7 @@ router.get('/export/qualifications', adminMiddleware, async (req, res, next) => 
       const filepath = path.join(exportDir, `${filename}.xlsx`);
       await generateExcel(data, filepath, 'Qualifications');
       
-      await logExport(req.user.userId, 'qualifications', data.length, format);
+      await logExport(db, req.user.userId, 'qualifications', data.length, format);
       
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
@@ -333,6 +335,173 @@ router.get('/export/qualifications', adminMiddleware, async (req, res, next) => 
         if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
       });
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/export/orders/export
+ * 订单导出（别名接口，与 /orders 功能相同）
+ */
+router.get('/orders/export', adminMiddleware, async (req, res, next) => {
+  try {
+    const db = req.app.get('db');
+    const {
+      startDate,
+      endDate,
+      status,
+      serviceType,
+      format = 'xlsx'
+    } = req.query;
+    
+    const query = {};
+    if (status) query.status = status;
+    if (serviceType) query.serviceType = serviceType;
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) query.createdAt.$gte = new Date(startDate);
+      if (endDate) query.createdAt.$lte = new Date(endDate);
+    }
+    
+    const orders = await db.collection('orders')
+      .find(query)
+      .sort({ createdAt: -1 })
+      .limit(10000)
+      .toArray();
+    
+    const userIds = [...new Set(orders.filter(o => o.userId).map(o => o.userId.toString()))];
+    const executorIds = [...new Set(orders.filter(o => o.executorId).map(o => o.executorId.toString()))];
+    
+    const users = await db.collection('users')
+      .find({ _id: { $in: userIds.map(id => new ObjectId(id)) } })
+      .project({ _id: 1, nickName: 1, phone: 1 })
+      .toArray();
+    
+    const executors = await db.collection('users')
+      .find({ _id: { $in: executorIds.map(id => new ObjectId(id)) } })
+      .project({ _id: 1, nickName: 1, phone: 1 })
+      .toArray();
+    
+    const userMap = {};
+    users.forEach(u => { userMap[u._id.toString()] = u; });
+    
+    const executorMap = {};
+    executors.forEach(e => { executorMap[e._id.toString()] = e; });
+    
+    const data = orders.map(order => ({
+      orderNo: order.orderNo,
+      serviceType: order.serviceType,
+      serviceName: order.serviceName,
+      serviceDate: order.serviceDate ? new Date(order.serviceDate).toLocaleDateString('zh-CN') : '',
+      location: order.location,
+      price: order.price,
+      quantity: order.quantity,
+      totalPrice: order.totalPrice,
+      status: getOrderStatusName(order.status),
+      paymentStatus: getPaymentStatusName(order.paymentStatus),
+      userNickName: userMap[order.userId?.toString()]?.nickName || '',
+      userPhone: userMap[order.userId?.toString()]?.phone || '',
+      executorNickName: executorMap[order.executorId?.toString()]?.nickName || '',
+      executorPhone: executorMap[order.executorId?.toString()]?.phone || '',
+      grabTime: order.grabTime ? new Date(order.grabTime).toLocaleString('zh-CN') : '',
+      paidAt: order.paidAt ? new Date(order.paidAt).toLocaleString('zh-CN') : '',
+      completedAt: order.completedAt ? new Date(order.completedAt).toLocaleString('zh-CN') : '',
+      cancelledAt: order.cancelledAt ? new Date(order.cancelledAt).toLocaleString('zh-CN') : '',
+      createdAt: order.createdAt ? new Date(order.createdAt).toLocaleString('zh-CN') : '',
+      remark: order.remark || ''
+    }));
+    
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `orders_${timestamp}`;
+    
+    if (format === 'csv') {
+      const csv = generateCSV(data);
+      const filepath = path.join(exportDir, `${filename}.csv`);
+      fs.writeFileSync(filepath, csv, 'utf-8');
+      
+      await logExport(db, req.user.userId, 'orders', data.length, format);
+      
+      res.setHeader('Content-Type', 'text/csv;charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}.csv"`);
+      res.send(csv);
+    } else {
+      const filepath = path.join(exportDir, `${filename}.xlsx`);
+      await generateExcel(data, filepath, 'Orders');
+      
+      await logExport(db, req.user.userId, 'orders', data.length, format);
+      
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
+      res.sendFile(filepath, (err) => {
+        if (!err) setTimeout(() => fs.unlinkSync(filepath), 60000);
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/export/history
+ * 导出历史记录
+ */
+router.get('/history', adminMiddleware, async (req, res, next) => {
+  try {
+    const db = req.app.get('db');
+    const { page = 1, pageSize = 20, dataType } = req.query;
+    
+    const query = { type: 'admin_data_export' };
+    if (dataType) {
+      query.dataType = dataType;
+    }
+    
+    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const limit = parseInt(pageSize);
+    
+    // 查询导出历史
+    const history = await db.collection('audit_logs')
+      .find(query)
+      .sort({ timestamp: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    
+    // 计算总数
+    const total = await db.collection('audit_logs').countDocuments(query);
+    
+    // 获取用户信息
+    const userIds = history.map(h => h.userId).filter(id => id);
+    const users = await db.collection('users')
+      .find({ _id: { $in: userIds } })
+      .project({ _id: 1, nickName: 1 })
+      .toArray();
+    
+    const userMap = {};
+    users.forEach(u => { userMap[u._id.toString()] = u; });
+    
+    const data = history.map(item => ({
+      exportId: item._id.toString(),
+      dataType: item.dataType,
+      recordCount: item.recordCount,
+      format: item.format,
+      operatorName: userMap[item.userId?.toString()]?.nickName || '未知',
+      timestamp: item.timestamp ? new Date(item.timestamp).toLocaleString('zh-CN') : ''
+    }));
+    
+    res.json({
+      code: 'SUCCESS',
+      data: {
+        history: data,
+        pagination: {
+          page: parseInt(page),
+          pageSize: parseInt(pageSize),
+          total,
+          totalPages: Math.ceil(total / parseInt(pageSize))
+        }
+      },
+      message: '获取成功'
+    });
   } catch (error) {
     next(error);
   }
@@ -378,9 +547,8 @@ async function generateExcel(data, filepath, sheetName) {
   await workbook.xlsx.writeFile(filepath);
 }
 
-async function logExport(userId, dataType, recordCount, format) {
+async function logExport(db, userId, dataType, recordCount, format) {
   try {
-    const db = req.app.get('db');
     await db.collection('audit_logs').insertOne({
       type: 'admin_data_export',
       userId: new ObjectId(userId),
@@ -390,7 +558,7 @@ async function logExport(userId, dataType, recordCount, format) {
       timestamp: new Date()
     });
   } catch (error) {
-    console.error('记录导出日志失败:', error);
+    logger.error('记录导出日志失败', { error: error.message });
   }
 }
 

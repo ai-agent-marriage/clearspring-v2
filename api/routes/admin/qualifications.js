@@ -14,18 +14,19 @@ const { ObjectId } = require('mongodb');
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -64,7 +65,7 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     const limit = parseInt(pageSize);
     
     // 查询资质列表
-    const certificates = await db.collection('certificates')
+    const qualifications = await db.collection('qualifications')
       .find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -72,12 +73,12 @@ router.get('/', adminMiddleware, async (req, res, next) => {
       .toArray();
     
     // 统计总数
-    const total = await db.collection('certificates').countDocuments(query);
+    const total = await db.collection('qualifications').countDocuments(query);
     
     // 获取用户信息（批量）
-    const userIds = certificates
-      .filter(c => c.userId)
-      .map(c => c.userId);
+    const userIds = qualifications
+      .filter(q => q.userId)
+      .map(q => q.userId);
     
     const users = await db.collection('users')
       .find({ _id: { $in: userIds } })
@@ -91,9 +92,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
-        qualifications: certificates.map(cert => ({
+        qualifications: qualifications.map(cert => ({
           qualificationId: cert._id.toString(),
           userId: cert.userId?.toString(),
           user: userMap[cert.userId?.toString()] ? {
@@ -121,7 +121,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
           total,
           totalPages: Math.ceil(total / parseInt(pageSize))
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -150,17 +151,17 @@ router.put('/:id', adminMiddleware, async (req, res, next) => {
     }
     
     // 检查资质是否存在
-    const certificate = await db.collection('certificates').findOne({
+    const qualification = await db.collection('qualifications').findOne({
       _id: new ObjectId(qualificationId)
     });
     
-    if (!certificate) {
-      throw new AppError('资质记录不存在', 'CERTIFICATE_NOT_FOUND', 404);
+    if (!qualification) {
+      throw new AppError('资质记录不存在', 'QUALIFICATION_NOT_FOUND', 404);
     }
     
     // 检查是否已经审核过
-    if (certificate.status !== 'pending') {
-      throw new AppError('该资质已经审核过', 'CERTIFICATE_ALREADY_AUDITED', 400);
+    if (qualification.status !== 'pending') {
+      throw new AppError('该资质已经审核过', 'QUALIFICATION_ALREADY_AUDITED', 400);
     }
     
     // 构建更新内容
@@ -180,21 +181,21 @@ router.put('/:id', adminMiddleware, async (req, res, next) => {
     }
     
     // 更新资质状态
-    await db.collection('certificates').updateOne(
+    await db.collection('qualifications').updateOne(
       { _id: new ObjectId(qualificationId) },
       { $set: updateData }
     );
     
-    // 如果审核通过，更新用户的证书列表
+    // 如果审核通过，更新用户的资质列表
     if (status === 'approved') {
       await db.collection('users').updateOne(
-        { _id: certificate.userId },
+        { _id: qualification.userId },
         {
           $addToSet: {
-            certificates: {
-              type: certificate.type,
-              certificateNo: certificate.certificateNo,
-              certificateName: certificate.certificateName,
+            qualifications: {
+              type: qualification.type,
+              certificateNo: qualification.certificateNo,
+              certificateName: qualification.certificateName,
               verifiedAt: new Date()
             }
           }
@@ -206,9 +207,9 @@ router.put('/:id', adminMiddleware, async (req, res, next) => {
     await db.collection('audit_logs').insertOne({
       type: 'admin_qualification_audit',
       userId: req.user.userId,
-      certificateId: new ObjectId(qualificationId),
-      certificateUserId: certificate.userId,
-      oldStatus: certificate.status,
+      qualificationId: new ObjectId(qualificationId),
+      qualificationUserId: qualification.userId,
+      oldStatus: qualification.status,
       newStatus: status,
       rejectReason: rejectReason || '',
       auditRemark: auditRemark || '',
@@ -217,12 +218,12 @@ router.put('/:id', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: status === 'approved' ? '审核通过' : '已驳回',
       data: {
         qualificationId,
         status,
         auditTime: new Date()
-      }
+      },
+      message: status === 'approved' ? '审核通过' : '已驳回'
     });
   } catch (error) {
     next(error);

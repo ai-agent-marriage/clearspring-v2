@@ -23,6 +23,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "redis": "^4.6.12",
+    "triple-beam": "^1.4.1",
+    "winston": "^3.19.0",
     "wx-server-sdk": "latest"
   },
   "devDependencies": {

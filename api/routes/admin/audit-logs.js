@@ -14,18 +14,19 @@ const { ObjectId } = require('mongodb');
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -71,10 +72,18 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     // 关键词搜索
     if (keyword) {
       const keywordRegex = new RegExp(keyword, 'i');
-      query.$or = [
-        { username: keywordRegex },
-        { targetUsername: keywordRegex }
-      ];
+      const keywordQuery = {
+        $or: [
+          { username: keywordRegex },
+          { targetUsername: keywordRegex }
+        ]
+      };
+      // 如果有其他查询条件，使用 $and 组合
+      if (Object.keys(query).length > 0) {
+        query = { $and: [query, keywordQuery] };
+      } else {
+        query = keywordQuery;
+      }
     }
     
     // 分页
@@ -92,10 +101,10 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     // 统计总数
     const total = await db.collection('audit_logs').countDocuments(query);
     
-    // 获取用户信息（批量）
-    const userIds = logs
+    // 获取用户信息（批量）- 去重并转换为 ObjectId
+    const userIds = [...new Set(logs
       .filter(log => log.userId)
-      .map(log => log.userId);
+      .map(log => log.userId instanceof ObjectId ? log.userId : new ObjectId(log.userId)))];
     
     const users = await db.collection('users')
       .find({ _id: { $in: userIds } })
@@ -109,7 +118,6 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         logs: logs.map(log => ({
           logId: log._id.toString(),
@@ -144,7 +152,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
           total,
           totalPages: Math.ceil(total / parseInt(pageSize))
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -152,10 +161,10 @@ router.get('/', adminMiddleware, async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/audit-logs/types
+ * GET /api/admin/logs/types
  * 获取日志类型列表
  */
-router.get('//types', adminMiddleware, async (req, res, next) => {
+router.get('/types', adminMiddleware, async (req, res, next) => {
   try {
     const logTypes = [
       { type: 'admin_login', name: '管理员登录' },
@@ -175,10 +184,10 @@ router.get('//types', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         logTypes
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -186,11 +195,11 @@ router.get('//types', adminMiddleware, async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/audit-logs/stats
+ * GET /api/admin/logs/stats
  * 操作日志统计
  * 查询参数：startDate, endDate, groupBy (day/week/month)
  */
-router.get('//stats', adminMiddleware, async (req, res, next) => {
+router.get('/stats', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const {
@@ -284,7 +293,6 @@ router.get('//stats', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         total,
         typeStats: typeStats.map(stat => ({
@@ -301,7 +309,8 @@ router.get('//stats', adminMiddleware, async (req, res, next) => {
           period: stat._id,
           count: stat.count
         }))
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -309,10 +318,10 @@ router.get('//stats', adminMiddleware, async (req, res, next) => {
 });
 
 /**
- * GET /api/admin/audit-logs/:id
+ * GET /api/admin/logs/:id
  * 日志详情
  */
-router.get('//:id', adminMiddleware, async (req, res, next) => {
+router.get('/:id', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     const logId = req.params.id;
@@ -327,7 +336,6 @@ router.get('//:id', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         log: {
           logId: log._id.toString(),
@@ -351,7 +359,8 @@ router.get('//:id', adminMiddleware, async (req, res, next) => {
           userAgent: log.userAgent,
           timestamp: log.timestamp
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -386,10 +395,10 @@ router.delete('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: `已删除 ${result.deletedCount} 条日志`,
       data: {
         deletedCount: result.deletedCount
-      }
+      },
+      message: `已删除 ${result.deletedCount} 条日志`
     });
   } catch (error) {
     next(error);

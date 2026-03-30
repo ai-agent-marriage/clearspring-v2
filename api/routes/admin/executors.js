@@ -8,24 +8,27 @@ const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
 const server = require('../../server');
 const { ObjectId } = require('mongodb');
+const logger = require('../../utils/logger');
 
 
 
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员（支持 admin 和 super_admin）
+    const adminRoles = ['admin', 'super_admin'];
+    if (!adminRoles.includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -110,7 +113,6 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         executors: executors.map(executor => {
           const stats = statsMap[executor._id.toString()] || {
@@ -152,7 +154,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
           total,
           totalPages: Math.ceil(total / parseInt(pageSize))
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -205,7 +208,7 @@ router.put('/:id/status', adminMiddleware, async (req, res, next) => {
     // 如果状态变为 banned，强制下线（可选：在这里添加 Redis 清理逻辑）
     if (status === 'banned') {
       // 可以在这里添加清理逻辑，比如清除 Redis session
-      console.log(`执行者 ${executorId} 已被禁用`);
+      logger.info(`执行者 ${executorId} 已被禁用`);
     }
     
     // 记录审计日志
@@ -221,12 +224,12 @@ router.put('/:id/status', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '执行者状态已更新',
       data: {
         executorId,
         status: status || executor.status,
         updatedAt: new Date()
-      }
+      },
+      message: '执行者状态已更新'
     });
   } catch (error) {
     next(error);

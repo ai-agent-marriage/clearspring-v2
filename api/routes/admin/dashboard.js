@@ -14,18 +14,19 @@ const { ObjectId } = require('mongodb');
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -112,7 +113,7 @@ router.get('/overview', adminMiddleware, async (req, res, next) => {
     });
     
     // 资质审核统计
-    const qualificationStats = await db.collection('certificates').aggregate([
+    const qualificationStats = await db.collection('qualifications').aggregate([
       {
         $group: {
           _id: '$status',
@@ -167,7 +168,6 @@ router.get('/overview', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         overview: {
           orders: {
@@ -207,7 +207,8 @@ router.get('/overview', adminMiddleware, async (req, res, next) => {
           startDate: timeRange.$gte.toISOString(),
           endDate: timeRange.$lte.toISOString()
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -268,7 +269,6 @@ router.get('/orders-trend', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         trend: trend.map(item => ({
           period: item._id,
@@ -282,7 +282,8 @@ router.get('/orders-trend', adminMiddleware, async (req, res, next) => {
           startDate: timeRange.$gte.toISOString(),
           endDate: timeRange.$lte.toISOString()
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -320,7 +321,6 @@ router.get('/service-types', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         serviceTypes: serviceTypes.map(item => ({
           type: item._id,
@@ -330,7 +330,8 @@ router.get('/service-types', adminMiddleware, async (req, res, next) => {
           avgAmount: item.avgAmount?.toFixed(2) || 0
         })),
         total
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -394,7 +395,6 @@ router.get('/executors-ranking', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         ranking: ranking.map((item, index) => {
           const executor = executorMap[item._id.toString()] || {};
@@ -409,7 +409,8 @@ router.get('/executors-ranking', adminMiddleware, async (req, res, next) => {
             totalAmount: item.totalAmount
           };
         })
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -449,7 +450,7 @@ router.get('/realtime', adminMiddleware, async (req, res, next) => {
     });
     
     // 待审核资质
-    const pendingQualifications = await db.collection('certificates').countDocuments({
+    const pendingQualifications = await db.collection('qualifications').countDocuments({
       status: 'pending'
     });
     
@@ -465,7 +466,6 @@ router.get('/realtime', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         realtime: {
           today: {
@@ -478,7 +478,101 @@ router.get('/realtime', adminMiddleware, async (req, res, next) => {
           onlineExecutors,
           timestamp: now.toISOString()
         }
-      }
+      },
+      message: '获取成功'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/dashboard/stats
+ * 统计数据（简化版概览）
+ * 返回核心统计指标
+ */
+router.get('/stats', adminMiddleware, async (req, res, next) => {
+  try {
+    const db = req.app.get('db');
+    
+    // 总订单数
+    const totalOrders = await db.collection('orders').countDocuments({});
+    
+    // 待支付订单数
+    const pendingOrders = await db.collection('orders').countDocuments({
+      status: 'pending'
+    });
+    
+    // 活跃执行者数
+    const activeExecutors = await db.collection('users').countDocuments({
+      role: 'executor',
+      status: 'active'
+    });
+    
+    // 待审核资质数
+    const pendingQualifications = await db.collection('qualifications').countDocuments({
+      status: 'pending'
+    });
+    
+    res.json({
+      code: 'SUCCESS',
+      data: {
+        totalOrders,
+        pendingOrders,
+        activeExecutors,
+        pendingQualifications
+      },
+      message: '获取成功'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/dashboard/recent-orders
+ * 最近订单列表
+ * 查询参数：limit (默认 5)
+ */
+router.get('/recent-orders', adminMiddleware, async (req, res, next) => {
+  try {
+    const db = req.app.get('db');
+    const limit = parseInt(req.query.limit) || 5;
+    
+    const orders = await db.collection('orders')
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .toArray();
+    
+    // 获取用户信息
+    const userIds = orders.filter(o => o.userId).map(o => o.userId);
+    const users = await db.collection('users')
+      .find({ _id: { $in: userIds } })
+      .project({ _id: 1, nickName: 1, phone: 1 })
+      .toArray();
+    
+    const userMap = {};
+    users.forEach(user => {
+      userMap[user._id.toString()] = user;
+    });
+    
+    res.json({
+      code: 'SUCCESS',
+      data: orders.map(order => ({
+        orderId: order._id.toString(),
+        orderNo: order.orderNo,
+        serviceType: order.serviceType,
+        serviceName: order.serviceName,
+        totalPrice: order.totalPrice,
+        status: order.status,
+        user: userMap[order.userId?.toString()] ? {
+          nickName: userMap[order.userId.toString()].nickName,
+          phone: userMap[order.userId.toString()].phone
+        } : null,
+        createdAt: order.createdAt
+      })),
+      message: '获取成功'
     });
   } catch (error) {
     next(error);

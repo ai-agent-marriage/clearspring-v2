@@ -27,6 +27,7 @@ const { authMiddleware } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const logger = require('./utils/logger');
 
 // 基础中间件
 app.use(helmet());
@@ -62,10 +63,10 @@ async function connectMongoDB() {
     // 设置到 app 对象，供路由使用
     app.set('db', db);
     
-    console.log('✅ MongoDB 连接成功');
+    logger.info('MongoDB 连接成功');
     return db;
   } catch (error) {
-    console.error('❌ MongoDB 连接失败:', error);
+    logger.error('MongoDB 连接失败', { error: error.message });
     throw error;
   }
 }
@@ -79,12 +80,12 @@ async function connectRedis() {
       password: process.env.REDIS_PASSWORD || undefined
     });
     
-    redisClient.on('error', (err) => console.error('Redis 错误:', err));
+    redisClient.on('error', (err) => logger.error('Redis 错误', { error: err.message }));
     await redisClient.connect();
-    console.log('✅ Redis 连接成功');
+    logger.info('Redis 连接成功');
     return redisClient;
   } catch (error) {
-    console.error('❌ Redis 连接失败:', error);
+    logger.error('Redis 连接失败', { error: error.message });
     // Redis 可选，不阻断启动
   }
 }
@@ -106,11 +107,12 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 404 处理
+// 404 处理 - 统一返回 200 + 业务错误码
 app.use((req, res) => {
-  res.status(404).json({
+  res.status(200).json({
     code: 'NOT_FOUND',
-    message: '接口不存在'
+    message: '接口不存在',
+    data: null
   });
 });
 
@@ -124,35 +126,18 @@ async function startServer() {
     await connectRedis();
     
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 服务器启动成功`);
-      console.log(`📍 监听地址：http://0.0.0.0:${PORT}`);
-      console.log(`🌍 环境：${process.env.NODE_ENV || 'development'}`);
-      console.log(`\n可用接口:`);
-      console.log(`  用户接口:`);
-      console.log(`    POST   /api/user/login`);
-      console.log(`    GET    /api/user/profile`);
-      console.log(`    PUT    /api/user/profile`);
-      console.log(`  订单接口:`);
-      console.log(`    POST   /api/order/create`);
-      console.log(`    GET    /api/order/list`);
-      console.log(`    GET    /api/order/detail/:id`);
-      console.log(`    POST   /api/order/cancel`);
-      console.log(`  执行者接口:`);
-      console.log(`    GET    /api/executor/list`);
-      console.log(`    GET    /api/executor/detail/:id`);
-      console.log(`  管理端接口:`);
-      console.log(`    GET    /api/admin/orders - 订单列表`);
-      console.log(`    PUT    /api/admin/order/:id/status - 订单状态更新`);
-      console.log(`    DELETE /api/admin/order/:id - 订单删除`);
-      console.log(`    GET    /api/admin/qualifications - 资质审核列表`);
-      console.log(`    PUT    /api/admin/qualification/:id - 资质审核`);
-      console.log(`    GET    /api/admin/executors - 执行者列表`);
-      console.log(`    PUT    /api/admin/executor/:id/status - 执行者状态更新`);
-      console.log(`    GET    /api/admin/profit-sharing - 分账配置`);
-      console.log(`    PUT    /api/admin/profit-sharing - 分账配置更新`);
+      logger.info('服务器启动成功');
+      logger.info(`监听地址：http://0.0.0.0:${PORT}`);
+      logger.info(`环境：${process.env.NODE_ENV || 'development'}`);
+      logger.info('可用接口列表', {
+        user: ['POST /api/user/login', 'GET /api/user/profile', 'PUT /api/user/profile'],
+        order: ['POST /api/order/create', 'GET /api/order/list', 'GET /api/order/detail/:id', 'POST /api/order/cancel'],
+        executor: ['GET /api/executor/list', 'GET /api/executor/detail/:id'],
+        admin: ['GET /api/admin/orders', 'PUT /api/admin/order/:id/status', 'DELETE /api/admin/order/:id']
+      });
     });
   } catch (error) {
-    console.error('服务器启动失败:', error);
+    logger.error('服务器启动失败', { error: error.message });
     process.exit(1);
   }
 }

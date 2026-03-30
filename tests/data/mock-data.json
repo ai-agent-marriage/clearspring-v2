@@ -1,0 +1,340 @@
+{
+  "admins": [
+    {
+      "_id": "507f1f77bcf86cd799439011",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "status": "active",
+      "permissions": ["all"],
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "lastLoginAt": "2026-03-30T08:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439012",
+      "username": "operator",
+      "password": "operator123",
+      "role": "operator",
+      "status": "active",
+      "permissions": ["manage_orders", "view_reports"],
+      "createdAt": "2026-01-15T00:00:00.000Z",
+      "lastLoginAt": "2026-03-29T10:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439013",
+      "username": "banned_admin",
+      "password": "admin123",
+      "role": "admin",
+      "status": "inactive",
+      "permissions": [],
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "lastLoginAt": "2026-02-15T00:00:00.000Z"
+    }
+  ],
+  
+  "users": [
+    {
+      "_id": "507f1f77bcf86cd799439021",
+      "openId": "oUser_001",
+      "nickName": "张三",
+      "phone": "13800138001",
+      "gender": 1,
+      "city": "上海",
+      "province": "上海市",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-01-10T00:00:00.000Z",
+      "lastLoginAt": "2026-03-30T09:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439022",
+      "openId": "oUser_002",
+      "nickName": "李四",
+      "phone": "13800138002",
+      "gender": 2,
+      "city": "北京",
+      "province": "北京市",
+      "role": "user",
+      "status": "active",
+      "createdAt": "2026-01-20T00:00:00.000Z",
+      "lastLoginAt": "2026-03-29T15:00:00.000Z"
+    }
+  ],
+  
+  "executors": [
+    {
+      "_id": "507f1f77bcf86cd799439031",
+      "openId": "oExecutor_001",
+      "nickName": "王师傅",
+      "phone": "13800138003",
+      "gender": 1,
+      "city": "上海",
+      "province": "上海市",
+      "role": "executor",
+      "status": "active",
+      "serviceTypes": ["cleaning", "maintenance"],
+      "serviceAreas": ["上海市", "浦东新区"],
+      "rating": 4.8,
+      "createdAt": "2026-01-05T00:00:00.000Z",
+      "lastLoginAt": "2026-03-30T07:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439032",
+      "openId": "oExecutor_002",
+      "nickName": "李师傅",
+      "phone": "13800138004",
+      "gender": 1,
+      "city": "上海",
+      "province": "上海市",
+      "role": "executor",
+      "status": "active",
+      "serviceTypes": ["cleaning"],
+      "serviceAreas": ["上海市", "徐汇区"],
+      "rating": 4.5,
+      "createdAt": "2026-01-08T00:00:00.000Z",
+      "lastLoginAt": "2026-03-30T08:30:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439033",
+      "openId": "oExecutor_003",
+      "nickName": "赵师傅",
+      "phone": "13800138005",
+      "gender": 1,
+      "city": "北京",
+      "province": "北京市",
+      "role": "executor",
+      "status": "inactive",
+      "serviceTypes": ["maintenance"],
+      "serviceAreas": ["北京市", "朝阳区"],
+      "rating": 4.2,
+      "createdAt": "2026-02-01T00:00:00.000Z",
+      "lastLoginAt": "2026-03-15T00:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439034",
+      "openId": "oExecutor_004",
+      "nickName": "钱师傅",
+      "phone": "13800138006",
+      "gender": 1,
+      "city": "广州",
+      "province": "广东省",
+      "role": "executor",
+      "status": "banned",
+      "serviceTypes": ["cleaning"],
+      "serviceAreas": ["广州市"],
+      "rating": 3.5,
+      "createdAt": "2026-02-10T00:00:00.000Z",
+      "lastLoginAt": "2026-03-01T00:00:00.000Z"
+    }
+  ],
+  
+  "orders": [
+    {
+      "_id": "507f1f77bcf86cd799439041",
+      "orderNo": "ORD20260330001",
+      "userId": "507f1f77bcf86cd799439021",
+      "serviceType": "cleaning",
+      "serviceName": "家庭保洁",
+      "serviceDate": "2026-04-01T10:00:00.000Z",
+      "location": "上海市浦东新区",
+      "price": 100,
+      "quantity": 1,
+      "totalPrice": 100,
+      "status": "pending",
+      "paymentStatus": "unpaid",
+      "remark": "第一次保洁服务",
+      "createdAt": "2026-03-30T08:00:00.000Z",
+      "updatedAt": "2026-03-30T08:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439042",
+      "orderNo": "ORD20260330002",
+      "userId": "507f1f77bcf86cd799439022",
+      "executorId": "507f1f77bcf86cd799439031",
+      "serviceType": "cleaning",
+      "serviceName": "深度保洁",
+      "serviceDate": "2026-04-02T14:00:00.000Z",
+      "location": "上海市徐汇区",
+      "price": 200,
+      "quantity": 1,
+      "totalPrice": 200,
+      "status": "paid",
+      "paymentStatus": "paid",
+      "grabTime": "2026-03-30T09:00:00.000Z",
+      "paidAt": "2026-03-30T08:30:00.000Z",
+      "createdAt": "2026-03-30T08:15:00.000Z",
+      "updatedAt": "2026-03-30T09:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439043",
+      "orderNo": "ORD20260330003",
+      "userId": "507f1f77bcf86cd799439021",
+      "executorId": "507f1f77bcf86cd799439032",
+      "serviceType": "maintenance",
+      "serviceName": "空调维修",
+      "serviceDate": "2026-04-03T10:00:00.000Z",
+      "location": "上海市闵行区",
+      "price": 300,
+      "quantity": 1,
+      "totalPrice": 300,
+      "status": "grabbed",
+      "paymentStatus": "paid",
+      "grabTime": "2026-03-30T10:00:00.000Z",
+      "paidAt": "2026-03-30T09:30:00.000Z",
+      "createdAt": "2026-03-30T09:00:00.000Z",
+      "updatedAt": "2026-03-30T10:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439044",
+      "orderNo": "ORD20260329001",
+      "userId": "507f1f77bcf86cd799439022",
+      "executorId": "507f1f77bcf86cd799439031",
+      "serviceType": "cleaning",
+      "serviceName": "开荒保洁",
+      "serviceDate": "2026-03-29T10:00:00.000Z",
+      "location": "北京市朝阳区",
+      "price": 500,
+      "quantity": 1,
+      "totalPrice": 500,
+      "status": "completed",
+      "paymentStatus": "paid",
+      "grabTime": "2026-03-29T08:00:00.000Z",
+      "paidAt": "2026-03-29T07:30:00.000Z",
+      "completedAt": "2026-03-29T12:00:00.000Z",
+      "createdAt": "2026-03-29T07:00:00.000Z",
+      "updatedAt": "2026-03-29T12:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439045",
+      "orderNo": "ORD20260328001",
+      "userId": "507f1f77bcf86cd799439021",
+      "serviceType": "cleaning",
+      "serviceName": "日常保洁",
+      "serviceDate": "2026-03-28T14:00:00.000Z",
+      "location": "上海市浦东新区",
+      "price": 150,
+      "quantity": 2,
+      "totalPrice": 300,
+      "status": "cancelled",
+      "paymentStatus": "refunded",
+      "cancelledAt": "2026-03-28T10:00:00.000Z",
+      "cancelReason": "用户取消",
+      "createdAt": "2026-03-28T09:00:00.000Z",
+      "updatedAt": "2026-03-28T10:00:00.000Z"
+    }
+  ],
+  
+  "certificates": [
+    {
+      "_id": "507f1f77bcf86cd799439051",
+      "userId": "507f1f77bcf86cd799439031",
+      "type": "health_cert",
+      "certificateNo": "HC2026001",
+      "certificateName": "健康证书",
+      "issueDate": "2026-01-01",
+      "expiryDate": "2027-01-01",
+      "images": ["img_001.jpg", "img_002.jpg"],
+      "status": "pending",
+      "createdAt": "2026-03-29T00:00:00.000Z",
+      "updatedAt": "2026-03-29T00:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439052",
+      "userId": "507f1f77bcf86cd799439032",
+      "type": "skill_cert",
+      "certificateNo": "SC2026001",
+      "certificateName": "专业技能证书",
+      "issueDate": "2025-12-01",
+      "expiryDate": "2026-12-01",
+      "images": ["img_003.jpg"],
+      "status": "approved",
+      "rejectReason": "",
+      "auditUserId": "507f1f77bcf86cd799439011",
+      "auditTime": "2026-03-28T00:00:00.000Z",
+      "createdAt": "2026-03-27T00:00:00.000Z",
+      "updatedAt": "2026-03-28T00:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439053",
+      "userId": "507f1f77bcf86cd799439033",
+      "type": "health_cert",
+      "certificateNo": "HC2026002",
+      "certificateName": "健康证书",
+      "issueDate": "2026-02-01",
+      "expiryDate": "2027-02-01",
+      "images": ["img_004.jpg"],
+      "status": "rejected",
+      "rejectReason": "照片模糊，无法辨认",
+      "auditUserId": "507f1f77bcf86cd799439011",
+      "auditTime": "2026-03-25T00:00:00.000Z",
+      "createdAt": "2026-03-24T00:00:00.000Z",
+      "updatedAt": "2026-03-25T00:00:00.000Z"
+    }
+  ],
+  
+  "settings": [
+    {
+      "_id": "507f1f77bcf86cd799439061",
+      "key": "profit_sharing",
+      "value": {
+        "platformRate": 0.10,
+        "executorMinRate": 0.70,
+        "executorMaxRate": 0.90,
+        "defaultExecutorRate": 0.80,
+        "minOrderAmount": 10,
+        "maxOrderAmount": 10000,
+        "withdrawMinAmount": 100,
+        "withdrawFee": 0,
+        "withdrawTaxRate": 0
+      },
+      "updatedAt": "2026-03-01T00:00:00.000Z",
+      "updatedBy": "507f1f77bcf86cd799439011",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439062",
+      "key": "system_config",
+      "value": {
+        "maintenanceMode": false,
+        "allowNewRegistrations": true,
+        "minOrderAmount": 10,
+        "maxOrderAmount": 10000,
+        "serviceAreas": ["上海市", "北京市", "广州市", "深圳市"]
+      },
+      "updatedAt": "2026-03-15T00:00:00.000Z",
+      "updatedBy": "507f1f77bcf86cd799439011",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  
+  "audit_logs": [
+    {
+      "_id": "507f1f77bcf86cd799439071",
+      "type": "admin_login",
+      "userId": "507f1f77bcf86cd799439011",
+      "username": "admin",
+      "action": "登录管理后台",
+      "ip": "127.0.0.1",
+      "timestamp": "2026-03-30T08:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439072",
+      "type": "admin_order_status_update",
+      "userId": "507f1f77bcf86cd799439011",
+      "orderId": "507f1f77bcf86cd799439044",
+      "oldStatus": "paid",
+      "newStatus": "completed",
+      "timestamp": "2026-03-29T12:00:00.000Z"
+    },
+    {
+      "_id": "507f1f77bcf86cd799439073",
+      "type": "admin_qualification_audit",
+      "userId": "507f1f77bcf86cd799439011",
+      "certificateId": "507f1f77bcf86cd799439052",
+      "certificateUserId": "507f1f77bcf86cd799439032",
+      "oldStatus": "pending",
+      "newStatus": "approved",
+      "timestamp": "2026-03-28T00:00:00.000Z"
+    }
+  ]
+}

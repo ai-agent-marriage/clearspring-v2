@@ -1,0 +1,277 @@
+<html><head><meta charset="utf-8"/><title>Test Report</title><style type="text/css">:root {
+  --text-primary: #111;
+  --text-secondary: #4f4f4f;
+  --success: #006633;
+  --success-bright: #80ffbf;
+  --danger: #cc071e;
+  --danger-bright: #fbdfe0;
+  --warning: #995c00;
+  --warning-bright: #ffeea8;
+  --panel: #eee;
+  --border: #949494;
+  --disabled: #6b6b6b;
+}
+
+html,
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  color: var(--text-primary);
+}
+body {
+  padding: 2rem 1rem;
+}
+.jesthtml-content {
+  margin: 0 auto;
+  max-width: 70rem;
+}
+header {
+  display: flex;
+  align-items: center;
+}
+#title {
+  margin: 0;
+  flex-grow: 1;
+}
+#logo {
+  height: 4rem;
+}
+#timestamp {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+#metadata-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.additional-information-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+/** SUMMARY */
+#summary {
+  color: var(--text-primary);
+  display: flex;
+  font-family: monospace;
+  font-size: 1rem;
+}
+#summary > div {
+  margin-right: 0.5rem;
+  background: var(--panel);
+  padding: 1rem;
+  min-width: 15rem;
+}
+#summary > div:last-child {
+  margin-right: 0;
+}
+@media only screen and (max-width: 720px) {
+  #summary {
+    flex-direction: column;
+  }
+  #summary > div {
+    margin-right: 0;
+    margin-top: 1rem;
+  }
+  #summary > div:first-child {
+    margin-top: 0;
+  }
+}
+
+.summary-total {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.summary-passed {
+  color: var(--success);
+  border-left: 0.4rem solid var(--success);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-failed,
+.summary-obsolete-snapshots {
+  color: var(--danger);
+  border-left: 0.4rem solid var(--danger);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-pending {
+  color: var(--warning);
+  border-left: 0.4rem solid var(--warning);
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+}
+.summary-empty {
+  color: var(--disabled);
+  border-left: 0.4rem solid var(--disabled);
+  margin-bottom: 0.15rem;
+}
+
+.test-result {
+  padding: 1rem;
+  margin-bottom: 0.25rem;
+}
+.test-result:last-child {
+  border: 0;
+}
+.test-result.passed {
+  background-color: var(--success-bright);
+  color: var(--success);
+}
+.test-result.failed {
+  background-color: var(--danger-bright);
+  color: var(--danger);
+}
+.test-result.pending {
+  background-color: var(--warning-bright);
+  color: var(--warning);
+}
+
+.test-info {
+  display: flex;
+  justify-content: space-between;
+}
+.test-suitename {
+  width: 20%;
+  text-align: left;
+  font-weight: bold;
+  word-break: break-word;
+}
+.test-title {
+  width: 40%;
+  text-align: left;
+  font-style: italic;
+}
+.test-status {
+  width: 20%;
+  text-align: right;
+}
+.test-duration {
+  width: 10%;
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.failureMessages {
+  padding: 0 1rem;
+  margin-top: 1rem;
+  border-top: 1px dashed var(--danger);
+}
+.failureMessages.suiteFailure {
+  border-top: none;
+}
+.failureMsg {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.suite-container {
+  margin-bottom: 1rem;
+}
+.suite-info {
+  padding: 1rem;
+  background-color: var(--panel);
+  color: var(--text-secondary);
+  border: 0.15rem solid;
+  border-color: var(--panel);
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.suite-info:hover {
+  border-color: var(--border);
+  cursor: pointer;
+}
+.suite-info .suite-path {
+  word-break: break-all;
+  flex-grow: 1;
+  font-family: monospace;
+  font-size: 1rem;
+}
+.suite-info .suite-time {
+  margin-left: 1rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.85rem;
+}
+.suite-info .suite-time.warn {
+  background-color: var(--danger);
+  color: #fff;
+}
+.suite-info:before {
+  content: "\2303";
+  display: inline-block;
+  margin-right: 1rem;
+  transform: rotate(180deg) translateY(0.15rem);
+}
+.suite-container[open] .suite-info:before {
+  transform: rotate(0deg) translateY(0.15rem);
+}
+
+/* CONSOLE LOGS */
+.suite-consolelog {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: var(--panel);
+}
+.suite-consolelog-header {
+  font-weight: bold;
+}
+.suite-consolelog-item {
+  padding: 0.5rem;
+}
+.suite-consolelog-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-consolelog-item-origin {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+.suite-consolelog-item-message {
+  color: var(--text-primary);
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+/* OBSOLETE SNAPSHOTS */
+.suite-obsolete-snapshots {
+  margin-bottom: 0.25rem;
+  padding: 1rem;
+  background-color: var(--danger-bright);
+  color: var(--danger);
+}
+.suite-obsolete-snapshots-header {
+  font-weight: bold;
+}
+.suite-obsolete-snapshots-item {
+  padding: 0.5rem;
+}
+.suite-obsolete-snapshots-item pre {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.suite-obsolete-snapshots-item-message {
+  color: var(--text-primary);
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+</style></head><body><main class="jesthtml-content"><header><h1 id="title">Test Report</h1></header><section id="metadata-container"><div id="timestamp">Started: 2026-03-30 17:08:06</div><div id="summary"><div id="suite-summary"><div class="summary-total">Suites (1)</div><div class="summary-passed  summary-empty">0 passed</div><div class="summary-failed ">1 failed</div><div class="summary-pending  summary-empty">0 pending</div></div><div id="test-summary"><div class="summary-total">Tests (62)</div><div class="summary-passed ">29 passed</div><div class="summary-failed ">33 failed</div><div class="summary-pending  summary-empty">0 pending</div></div></div></section><details id="suite-1" class="suite-container" open=""><summary class="suite-info"><div class="suite-path">/root/.openclaw/workspace/projects/clearspring-v2/tests/jest-api.test.js</div><div class="suite-time">1.23s</div></summary><div class="suite-tests"><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-001: 正常登录 - 有效账号密码</div><div class="test-status">failed</div><div class="test-duration">0.16s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-002: 异常场景 - 账号为空</div><div class="test-status">failed</div><div class="test-duration">0.026s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-003: 异常场景 - 密码为空</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-004: 异常场景 - 账号错误</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-005: 异常场景 - 密码错误</div><div class="test-status">failed</div><div class="test-duration">0.103s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; POST /api/admin/auth/login</div><div class="test-title">API-AUTH-008: 异常场景 - 缺少请求体</div><div class="test-status">failed</div><div class="test-duration">0.014s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; GET /api/admin/auth/info</div><div class="test-title">API-AUTH-009: 正常场景 - 有效 Token</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; GET /api/admin/auth/info</div><div class="test-title">API-AUTH-010: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.009s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; GET /api/admin/auth/info</div><div class="test-title">API-AUTH-011: 异常场景 - Token 格式错误</div><div class="test-status">failed</div><div class="test-duration">0.013s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">🔐 管理员认证模块 &gt; GET /api/admin/auth/info</div><div class="test-title">API-AUTH-012: 异常场景 - Token 过期</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/overview</div><div class="test-title">API-DASH-001: 正常场景 - 默认时间范围</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/overview</div><div class="test-title">API-DASH-002: 正常场景 - 自定义时间范围</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/overview</div><div class="test-title">API-DASH-003: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.013s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/overview</div><div class="test-title">API-DASH-005: 边界场景 - 未来时间</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/orders-trend</div><div class="test-title">API-DASH-006: 正常场景 - 按天分组</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/orders-trend</div><div class="test-title">API-DASH-007: 正常场景 - 按周分组</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/orders-trend</div><div class="test-title">API-DASH-008: 正常场景 - 按月分组</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📊 Dashboard 统计模块 &gt; GET /api/admin/dashboard/realtime</div><div class="test-title">API-DASH-011: 正常场景 - 实时数据</div><div class="test-status">passed</div><div class="test-duration">0.017s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-001: 正常场景 - 默认分页</div><div class="test-status">passed</div><div class="test-duration">0.011s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-002: 正常场景 - 状态筛选</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-003: 正常场景 - 时间范围筛选</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-004: 正常场景 - 关键词搜索</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-005: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-006: 边界场景 - 空结果</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; GET /api/admin/orders</div><div class="test-title">API-ORD-007: 边界场景 - 超大页码</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; PUT /api/admin/orders/:id/status</div><div class="test-title">API-ORD-010: 异常场景 - 订单不存在</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; PUT /api/admin/orders/:id/status</div><div class="test-title">API-ORD-011: 异常场景 - 无效状态</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; PUT /api/admin/orders/:id/status</div><div class="test-title">API-ORD-012: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; DELETE /api/admin/orders/:id</div><div class="test-title">API-ORD-015: 异常场景 - 删除非取消订单</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📦 订单管理模块 &gt; DELETE /api/admin/orders/:id</div><div class="test-title">API-ORD-016: 异常场景 - 订单不存在</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; GET /api/admin/qualifications</div><div class="test-title">API-QUAL-001: 正常场景 - 默认分页</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; GET /api/admin/qualifications</div><div class="test-title">API-QUAL-002: 正常场景 - 状态筛选</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; GET /api/admin/qualifications</div><div class="test-title">API-QUAL-004: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; PUT /api/admin/qualifications/:id</div><div class="test-title">API-QUAL-007: 异常场景 - 驳回无原因</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; PUT /api/admin/qualifications/:id</div><div class="test-title">API-QUAL-008: 异常场景 - 无效状态</div><div class="test-status">passed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; PUT /api/admin/qualifications/:id</div><div class="test-title">API-QUAL-009: 异常场景 - 资质不存在</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📜 资质审核模块 &gt; PUT /api/admin/qualifications/:id</div><div class="test-title">API-QUAL-011: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; GET /api/admin/executors</div><div class="test-title">API-EXEC-001: 正常场景 - 默认分页</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; GET /api/admin/executors</div><div class="test-title">API-EXEC-002: 正常场景 - 状态筛选</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; GET /api/admin/executors</div><div class="test-title">API-EXEC-003: 正常场景 - 关键词搜索</div><div class="test-status">passed</div><div class="test-duration">0.007s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; GET /api/admin/executors</div><div class="test-title">API-EXEC-005: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; PUT /api/admin/executors/:id/status</div><div class="test-title">API-EXEC-008: 异常场景 - 无效状态</div><div class="test-status">passed</div><div class="test-duration"> </div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; PUT /api/admin/executors/:id/status</div><div class="test-title">API-EXEC-009: 异常场景 - 执行者不存在</div><div class="test-status">failed</div><div class="test-duration">0.009s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">👷 执行者管理模块 &gt; PUT /api/admin/executors/:id/status</div><div class="test-title">API-EXEC-011: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; GET /api/admin/profit-sharing</div><div class="test-title">API-PROF-001: 正常场景 - 获取配置</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; GET /api/admin/profit-sharing</div><div class="test-title">API-PROF-003: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; PUT /api/admin/profit-sharing</div><div class="test-title">API-PROF-004: 正常场景 - 更新配置</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; PUT /api/admin/profit-sharing</div><div class="test-title">API-PROF-005: 异常场景 - 平台比例超限</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; PUT /api/admin/profit-sharing</div><div class="test-title">API-PROF-006: 异常场景 - 执行者比例超限</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; PUT /api/admin/profit-sharing</div><div class="test-title">API-PROF-007: 异常场景 - 比例总和超限</div><div class="test-status">failed</div><div class="test-duration">0.01s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">💰 分账配置模块 &gt; PUT /api/admin/profit-sharing</div><div class="test-title">API-PROF-008: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📥 数据导出模块 &gt; GET /api/admin/export/orders</div><div class="test-title">API-EXPT-001: 正常场景 - 导出 Excel</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📥 数据导出模块 &gt; GET /api/admin/export/orders</div><div class="test-title">API-EXPT-002: 正常场景 - 导出 CSV</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📥 数据导出模块 &gt; GET /api/admin/export/orders</div><div class="test-title">API-EXPT-005: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📥 数据导出模块 &gt; GET /api/admin/export/executors</div><div class="test-title">API-EXPT-006: 正常场景 - 导出执行者</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📥 数据导出模块 &gt; GET /api/admin/export/users</div><div class="test-title">API-EXPT-007: 正常场景 - 导出用户</div><div class="test-status">failed</div><div class="test-duration">0.007s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📋 操作日志模块 &gt; GET /api/admin/audit-logs</div><div class="test-title">API-LOGS-001: 正常场景 - 默认分页</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">📋 操作日志模块 &gt; GET /api/admin/audit-logs</div><div class="test-title">API-LOGS-002: 正常场景 - 类型筛选</div><div class="test-status">passed</div><div class="test-duration">0.008s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📋 操作日志模块 &gt; GET /api/admin/audit-logs</div><div class="test-title">API-LOGS-004: 异常场景 - 无 Token</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result failed"><div class="test-info"><div class="test-suitename">📋 操作日志模块 &gt; GET /api/admin/audit-logs/types</div><div class="test-title">API-LOGS-005: 正常场景 - 获取日志类型</div><div class="test-status">failed</div><div class="test-duration">0.006s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">🌐 CORS 配置验证</div><div class="test-title">API-CORS-001: 允许管理后台跨域访问</div><div class="test-status">passed</div><div class="test-duration">0.009s</div></div></div><div class="test-result passed"><div class="test-info"><div class="test-suitename">🏥 健康检查</div><div class="test-title">API-HEALTH-001: 服务健康状态</div><div class="test-status">passed</div><div class="test-duration">0.01s</div></div></div></div></details></main></body></html>

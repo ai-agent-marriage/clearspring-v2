@@ -15,28 +15,28 @@ const { ObjectId } = require('mongodb');
 /**
  * 超级管理员权限中间件
  */
-const superAdminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const superAdminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     const db = req.app.get('db');
-    const admin = await db.collection('users').findOne({
+    db.collection('users').findOne({
       _id: new ObjectId(req.user.userId)
-    });
-    
-    // 检查是否为超级管理员（permissions 包含 'all' 或 'manage_admins'）
-    if (!admin || !(admin.permissions?.includes('all') || admin.permissions?.includes('manage_admins'))) {
-      throw new AppError('权限不足，需要超级管理员权限', 'FORBIDDEN', 403);
-    }
-    
-    next();
-  } catch (error) {
-    next(error);
-  }
+    }).then(admin => {
+      // 检查是否为超级管理员（permissions 包含 'all' 或 'manage_admins'）
+      if (!admin || !(admin.permissions?.includes('all') || admin.permissions?.includes('manage_admins'))) {
+        return next(new AppError('权限不足，需要超级管理员权限', 'FORBIDDEN', 403));
+      }
+      
+      next();
+    }).catch(next);
+  });
 };
 
 /**
@@ -89,7 +89,6 @@ router.get('/', superAdminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         admins: admins.map(admin => ({
           adminId: admin._id.toString(),
@@ -111,7 +110,8 @@ router.get('/', superAdminMiddleware, async (req, res, next) => {
           total,
           totalPages: Math.ceil(total / parseInt(pageSize))
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -138,7 +138,6 @@ router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         admin: {
           adminId: admin._id.toString(),
@@ -153,7 +152,8 @@ router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
           lastLoginAt: admin.lastLoginAt,
           createdAt: admin.createdAt
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -220,14 +220,14 @@ router.post('/admin', superAdminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '管理员创建成功',
       data: {
         adminId: result.insertedId.toString(),
         username,
         nickName: newAdmin.nickName,
         permissions: newAdmin.permissions,
         createdAt: newAdmin.createdAt
-      }
+      },
+      message: '管理员创建成功'
     });
   } catch (error) {
     next(error);
@@ -282,7 +282,6 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '管理员信息已更新',
       data: {
         adminId: result._id.toString(),
         username: result.username,
@@ -290,7 +289,8 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
         permissions: result.permissions,
         status: result.status,
         updatedAt: new Date()
-      }
+      },
+      message: '管理员信息已更新'
     });
   } catch (error) {
     next(error);
@@ -343,12 +343,12 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '管理员已删除',
       data: {
         adminId,
         username: admin.username,
         deletedAt: new Date()
-      }
+      },
+      message: '管理员已删除'
     });
   } catch (error) {
     next(error);
@@ -407,11 +407,11 @@ router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, n
     
     res.json({
       code: 'SUCCESS',
-      message: '密码已重置',
       data: {
         adminId,
         passwordChangedAt: new Date()
-      }
+      },
+      message: '密码已重置'
     });
   } catch (error) {
     next(error);

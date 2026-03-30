@@ -14,20 +14,19 @@ const { ObjectId } = require('mongodb');
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    // 先通过基础认证
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
     // 检查是否为管理员
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -132,7 +131,6 @@ router.get('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         orders: orders.map(order => ({
           orderId: order._id.toString(),
@@ -169,7 +167,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
           total,
           totalPages: Math.ceil(total / parseInt(pageSize))
         }
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -180,7 +179,12 @@ router.get('/', adminMiddleware, async (req, res, next) => {
  * PUT /api/admin/order/:id/status
  * 订单状态更新
  * Body: status, remark
+ * 
+ * 注意：export 路由必须在 /:id 动态路由之前注册
  */
+const exportRoutes = require('./export');
+router.use('/export', exportRoutes);
+
 router.put('/:id/status', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
@@ -245,12 +249,12 @@ router.put('/:id/status', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '订单状态已更新',
       data: {
         orderId,
         status: status || order.status,
         updatedAt: new Date()
-      }
+      },
+      message: '订单状态已更新'
     });
   } catch (error) {
     next(error);
@@ -296,12 +300,12 @@ router.delete('/:id', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '订单已删除',
       data: {
         orderId,
         orderNo: order.orderNo,
         deletedAt: new Date()
-      }
+      },
+      message: '订单已删除'
     });
   } catch (error) {
     next(error);

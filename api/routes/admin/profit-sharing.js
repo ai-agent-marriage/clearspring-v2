@@ -14,18 +14,19 @@ const { ObjectId } = require('mongodb');
 /**
  * 管理员权限中间件
  */
-const adminMiddleware = async (req, res, next) => {
-  try {
-    await authMiddleware(req, res, () => {});
+const adminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, (err) => {
+    if (err) {
+      return next(err);
+    }
     
-    if (req.user.role !== 'admin') {
-      throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
+    // 检查是否为管理员
+    if (!['admin', 'super_admin'].includes(req.user?.role)) {
+      return next(new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403));
     }
     
     next();
-  } catch (error) {
-    next(error);
-  }
+  });
 };
 
 /**
@@ -36,8 +37,8 @@ router.get('/', adminMiddleware, async (req, res, next) => {
   try {
     const db = req.app.get('db');
     
-    // 查询分账配置（假设配置存储在 settings 集合中）
-    let config = await db.collection('settings').findOne({
+    // 查询分账配置（存储在 profit_settings 集合中）
+    let config = await db.collection('profit_settings').findOne({
       key: 'profit_sharing'
     });
     
@@ -83,17 +84,17 @@ router.get('/', adminMiddleware, async (req, res, next) => {
       };
       
       // 保存默认配置
-      await db.collection('settings').insertOne(config);
+      await db.collection('profit_settings').insertOne(config);
     }
     
     res.json({
       code: 'SUCCESS',
-      message: '获取成功',
       data: {
         profitSharing: config.value,
         lastUpdated: config.updatedAt,
         updatedBy: config.updatedBy
-      }
+      },
+      message: '获取成功'
     });
   } catch (error) {
     next(error);
@@ -135,7 +136,7 @@ router.put('/', adminMiddleware, async (req, res, next) => {
     }
     
     // 查询现有配置
-    const existingConfig = await db.collection('settings').findOne({
+    const existingConfig = await db.collection('profit_settings').findOne({
       key: 'profit_sharing'
     });
     
@@ -150,13 +151,13 @@ router.put('/', adminMiddleware, async (req, res, next) => {
     
     if (existingConfig) {
       // 更新现有配置
-      await db.collection('settings').updateOne(
+      await db.collection('profit_settings').updateOne(
         { key: 'profit_sharing' },
         { $set: updateData }
       );
     } else {
       // 创建新配置
-      await db.collection('settings').insertOne({
+      await db.collection('profit_settings').insertOne({
         key: 'profit_sharing',
         ...updateData
       });
@@ -173,12 +174,12 @@ router.put('/', adminMiddleware, async (req, res, next) => {
     
     res.json({
       code: 'SUCCESS',
-      message: '分账配置已更新',
       data: {
         profitSharing: configData,
         updatedAt: new Date(),
         updatedBy: req.user.userId
-      }
+      },
+      message: '分账配置已更新'
     });
   } catch (error) {
     next(error);

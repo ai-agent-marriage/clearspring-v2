@@ -5,32 +5,33 @@
 
 const express = require('express');
 const router = express.Router();
+const logger = require('../../utils/logger');
 
 // 内容管理路由（admin-pc 使用）
 try {
     const wikiRoutes = require('./wiki');
     router.use('/admin/wiki', wikiRoutes);
-    console.log('✅ Content Wiki Admin route loaded');
+    logger.info('Content Wiki Admin route loaded');
 } catch (err) {
-    console.error('❌ Content Wiki Admin route load failed:', err.message);
+    logger.error('Content Wiki Admin route load failed', { error: err.message });
 }
 
 // 冥想模块路由
 try {
     const meditationRoutes = require('./meditation');
     router.use('/meditation', meditationRoutes);
-    console.log('✅ Content Meditation route loaded');
+    logger.info('Content Meditation route loaded');
 } catch (err) {
-    console.error('❌ Content Meditation route load failed:', err.message);
+    logger.error('Content Meditation route load failed', { error: err.message });
 }
 
 // 仪轨学习路由
 try {
     const ritualRoutes = require('./ritual');
     router.use('/ritual', ritualRoutes);
-    console.log('✅ Content Ritual route loaded');
+    logger.info('Content Ritual route loaded');
 } catch (err) {
-    console.error('❌ Content Ritual route load failed:', err.message);
+    logger.error('Content Ritual route load failed', { error: err.message });
 }
 
 // 根路由
