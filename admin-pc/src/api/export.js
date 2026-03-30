@@ -1,40 +1,37 @@
 import request from './request'
 
-// 导出订单数据
-export function exportOrders(params) {
+export function exportOrderList(params) {
   return request({
-    url: '/admin/export/orders',
+    url: '/export/orders',
     method: 'get',
     params,
     responseType: 'blob'
   })
 }
 
-// 导出执行者数据
-export function exportExecutors(params) {
+export function exportQualificationList(params) {
   return request({
-    url: '/admin/export/executors',
+    url: '/export/qualifications',
     method: 'get',
     params,
     responseType: 'blob'
   })
 }
 
-// 导出收入数据
-export function exportRevenue(params) {
+export function exportExecutorList(params) {
   return request({
-    url: '/admin/export/revenue',
+    url: '/export/executors',
     method: 'get',
     params,
     responseType: 'blob'
   })
 }
 
-// 获取导出历史
-export function getExportHistory(params) {
+export function exportProfitRecords(params) {
   return request({
-    url: '/admin/export/history',
+    url: '/export/profit',
     method: 'get',
-    params
+    params,
+    responseType: 'blob'
   })
 }
