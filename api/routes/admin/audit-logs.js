@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -31,9 +33,9 @@ const adminMiddleware = async (req, res, next) => {
  * 操作日志列表
  * 查询参数：page, pageSize, type, userId, startDate, endDate, keyword
  */
-router.get('/audit-logs', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       page = 1,
       pageSize = 20,
@@ -52,7 +54,7 @@ router.get('/audit-logs', adminMiddleware, async (req, res, next) => {
     }
     
     if (userId) {
-      query.userId = ObjectId(userId);
+      query.userId = new ObjectId(userId);
     }
     
     // 时间范围筛选
@@ -153,7 +155,7 @@ router.get('/audit-logs', adminMiddleware, async (req, res, next) => {
  * GET /api/admin/audit-logs/types
  * 获取日志类型列表
  */
-router.get('/audit-logs/types', adminMiddleware, async (req, res, next) => {
+router.get('//types', adminMiddleware, async (req, res, next) => {
   try {
     const logTypes = [
       { type: 'admin_login', name: '管理员登录' },
@@ -188,9 +190,9 @@ router.get('/audit-logs/types', adminMiddleware, async (req, res, next) => {
  * 操作日志统计
  * 查询参数：startDate, endDate, groupBy (day/week/month)
  */
-router.get('/audit-logs/stats', adminMiddleware, async (req, res, next) => {
+router.get('//stats', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       startDate,
       endDate,
@@ -310,13 +312,13 @@ router.get('/audit-logs/stats', adminMiddleware, async (req, res, next) => {
  * GET /api/admin/audit-logs/:id
  * 日志详情
  */
-router.get('/audit-logs/:id', adminMiddleware, async (req, res, next) => {
+router.get('//:id', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const logId = req.params.id;
     
     const log = await db.collection('audit_logs').findOne({
-      _id: ObjectId(logId)
+      _id: new ObjectId(logId)
     });
     
     if (!log) {
@@ -361,14 +363,14 @@ router.get('/audit-logs/:id', adminMiddleware, async (req, res, next) => {
  * 清空日志（需要超级管理员权限）
  * 查询参数：beforeDate（可选，清空该日期之前的日志）
  */
-router.delete('/audit-logs', adminMiddleware, async (req, res, next) => {
+router.delete('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const { beforeDate } = req.query;
     
     // 检查是否为超级管理员
     const admin = await db.collection('users').findOne({
-      _id: ObjectId(req.user.userId)
+      _id: new ObjectId(req.user.userId)
     });
     
     if (!admin || !(admin.permissions?.includes('all') || admin.permissions?.includes('manage_logs'))) {

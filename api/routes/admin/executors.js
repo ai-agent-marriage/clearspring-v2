@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -31,9 +33,9 @@ const adminMiddleware = async (req, res, next) => {
  * 执行者列表
  * 查询参数：page, pageSize, status, keyword, serviceType
  */
-router.get('/executors', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       page = 1,
       pageSize = 20,
@@ -162,9 +164,9 @@ router.get('/executors', adminMiddleware, async (req, res, next) => {
  * 执行者状态更新
  * Body: status (active/inactive/banned), remark
  */
-router.put('/executor/:id/status', adminMiddleware, async (req, res, next) => {
+router.put('/:id/status', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const executorId = req.params.id;
     const { status, remark } = req.body;
     
@@ -176,7 +178,7 @@ router.put('/executor/:id/status', adminMiddleware, async (req, res, next) => {
     
     // 检查执行者是否存在
     const executor = await db.collection('users').findOne({
-      _id: ObjectId(executorId),
+      _id: new ObjectId(executorId),
       role: 'executor'
     });
     
@@ -196,7 +198,7 @@ router.put('/executor/:id/status', adminMiddleware, async (req, res, next) => {
     }
     
     await db.collection('users').updateOne(
-      { _id: ObjectId(executorId) },
+      { _id: new ObjectId(executorId) },
       { $set: updateData }
     );
     
@@ -210,7 +212,7 @@ router.put('/executor/:id/status', adminMiddleware, async (req, res, next) => {
     await db.collection('audit_logs').insertOne({
       type: 'admin_executor_status_update',
       userId: req.user.userId,
-      executorId: ObjectId(executorId),
+      executorId: new ObjectId(executorId),
       oldStatus: executor.status,
       newStatus: status || executor.status,
       remark: remark || '',

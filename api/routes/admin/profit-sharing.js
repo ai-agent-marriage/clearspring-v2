@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -30,9 +32,9 @@ const adminMiddleware = async (req, res, next) => {
  * GET /api/admin/profit-sharing
  * 分账配置
  */
-router.get('/profit-sharing', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     
     // 查询分账配置（假设配置存储在 settings 集合中）
     let config = await db.collection('settings').findOne({
@@ -103,9 +105,9 @@ router.get('/profit-sharing', adminMiddleware, async (req, res, next) => {
  * 分账配置更新
  * Body: 完整的分账配置对象
  */
-router.put('/profit-sharing', adminMiddleware, async (req, res, next) => {
+router.put('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const configData = req.body;
     
     // 验证必填字段

@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -31,9 +33,9 @@ const adminMiddleware = async (req, res, next) => {
  * 资质审核列表
  * 查询参数：page, pageSize, status, type, userId
  */
-router.get('/qualifications', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       page = 1,
       pageSize = 20,
@@ -54,7 +56,7 @@ router.get('/qualifications', adminMiddleware, async (req, res, next) => {
     }
     
     if (userId) {
-      query.userId = ObjectId(userId);
+      query.userId = new ObjectId(userId);
     }
     
     // 分页
@@ -131,9 +133,9 @@ router.get('/qualifications', adminMiddleware, async (req, res, next) => {
  * 审核通过/驳回
  * Body: status (approved/rejected), rejectReason (驳回时必填), auditRemark
  */
-router.put('/qualification/:id', adminMiddleware, async (req, res, next) => {
+router.put('/:id', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const qualificationId = req.params.id;
     const { status, rejectReason, auditRemark } = req.body;
     
@@ -149,7 +151,7 @@ router.put('/qualification/:id', adminMiddleware, async (req, res, next) => {
     
     // 检查资质是否存在
     const certificate = await db.collection('certificates').findOne({
-      _id: ObjectId(qualificationId)
+      _id: new ObjectId(qualificationId)
     });
     
     if (!certificate) {
@@ -164,7 +166,7 @@ router.put('/qualification/:id', adminMiddleware, async (req, res, next) => {
     // 构建更新内容
     const updateData = {
       status,
-      auditUserId: ObjectId(req.user.userId),
+      auditUserId: new ObjectId(req.user.userId),
       auditTime: new Date(),
       updatedAt: new Date()
     };
@@ -179,7 +181,7 @@ router.put('/qualification/:id', adminMiddleware, async (req, res, next) => {
     
     // 更新资质状态
     await db.collection('certificates').updateOne(
-      { _id: ObjectId(qualificationId) },
+      { _id: new ObjectId(qualificationId) },
       { $set: updateData }
     );
     
@@ -204,7 +206,7 @@ router.put('/qualification/:id', adminMiddleware, async (req, res, next) => {
     await db.collection('audit_logs').insertOne({
       type: 'admin_qualification_audit',
       userId: req.user.userId,
-      certificateId: ObjectId(qualificationId),
+      certificateId: new ObjectId(qualificationId),
       certificateUserId: certificate.userId,
       oldStatus: certificate.status,
       newStatus: status,

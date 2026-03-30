@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -31,9 +33,9 @@ const adminMiddleware = async (req, res, next) => {
  * 概览数据
  * 查询参数：startDate, endDate（默认最近 7 天）
  */
-router.get('/dashboard/overview', adminMiddleware, async (req, res, next) => {
+router.get('/overview', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const { startDate, endDate } = req.query;
     
     // 默认查询最近 7 天
@@ -217,9 +219,9 @@ router.get('/dashboard/overview', adminMiddleware, async (req, res, next) => {
  * 订单趋势（按天/周/月）
  * 查询参数：startDate, endDate, groupBy (day/week/month)
  */
-router.get('/dashboard/orders-trend', adminMiddleware, async (req, res, next) => {
+router.get('/orders-trend', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       startDate,
       endDate,
@@ -291,9 +293,9 @@ router.get('/dashboard/orders-trend', adminMiddleware, async (req, res, next) =>
  * GET /api/admin/dashboard/service-types
  * 服务类型分布
  */
-router.get('/dashboard/service-types', adminMiddleware, async (req, res, next) => {
+router.get('/service-types', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const { startDate, endDate } = req.query;
     
     const now = new Date();
@@ -340,9 +342,9 @@ router.get('/dashboard/service-types', adminMiddleware, async (req, res, next) =
  * 执行者排行
  * 查询参数：startDate, endDate, limit (默认 10)
  */
-router.get('/dashboard/executors-ranking', adminMiddleware, async (req, res, next) => {
+router.get('/executors-ranking', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       startDate,
       endDate,
@@ -379,7 +381,7 @@ router.get('/dashboard/executors-ranking', adminMiddleware, async (req, res, nex
     ]).toArray();
     
     // 获取执行者信息
-    const executorIds = ranking.map(item => ObjectId(item._id));
+    const executorIds = ranking.map(item => new ObjectId(item._id));
     const executors = await db.collection('users')
       .find({ _id: { $in: executorIds } })
       .project({ _id: 1, nickName: 1, avatarUrl: 1, phone: 1, rating: 1 })
@@ -418,9 +420,9 @@ router.get('/dashboard/executors-ranking', adminMiddleware, async (req, res, nex
  * GET /api/admin/dashboard/realtime
  * 实时数据
  */
-router.get('/dashboard/realtime', adminMiddleware, async (req, res, next) => {
+router.get('/realtime', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const now = new Date();
     
     // 今日统计

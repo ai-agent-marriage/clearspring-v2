@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 管理员权限中间件
@@ -33,9 +35,9 @@ const adminMiddleware = async (req, res, next) => {
  * 订单列表（分页/筛选）
  * 查询参数：page, pageSize, status, paymentStatus, serviceType, startDate, endDate, keyword
  */
-router.get('/orders', adminMiddleware, async (req, res, next) => {
+router.get('/', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       page = 1,
       pageSize = 20,
@@ -179,9 +181,9 @@ router.get('/orders', adminMiddleware, async (req, res, next) => {
  * 订单状态更新
  * Body: status, remark
  */
-router.put('/order/:id/status', adminMiddleware, async (req, res, next) => {
+router.put('/:id/status', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const orderId = req.params.id;
     const { status, remark } = req.body;
     
@@ -193,7 +195,7 @@ router.put('/order/:id/status', adminMiddleware, async (req, res, next) => {
     
     // 检查订单是否存在
     const order = await db.collection('orders').findOne({
-      _id: ObjectId(orderId)
+      _id: new ObjectId(orderId)
     });
     
     if (!order) {
@@ -226,7 +228,7 @@ router.put('/order/:id/status', adminMiddleware, async (req, res, next) => {
     
     // 更新订单
     await db.collection('orders').updateOne(
-      { _id: ObjectId(orderId) },
+      { _id: new ObjectId(orderId) },
       { $set: updateData }
     );
     
@@ -234,7 +236,7 @@ router.put('/order/:id/status', adminMiddleware, async (req, res, next) => {
     await db.collection('audit_logs').insertOne({
       type: 'admin_order_status_update',
       userId: req.user.userId,
-      orderId: ObjectId(orderId),
+      orderId: new ObjectId(orderId),
       oldStatus: order.status,
       newStatus: status || order.status,
       remark: remark || '',
@@ -259,14 +261,14 @@ router.put('/order/:id/status', adminMiddleware, async (req, res, next) => {
  * DELETE /api/admin/order/:id
  * 订单删除
  */
-router.delete('/order/:id', adminMiddleware, async (req, res, next) => {
+router.delete('/:id', adminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const orderId = req.params.id;
     
     // 检查订单是否存在
     const order = await db.collection('orders').findOne({
-      _id: ObjectId(orderId)
+      _id: new ObjectId(orderId)
     });
     
     if (!order) {
@@ -280,14 +282,14 @@ router.delete('/order/:id', adminMiddleware, async (req, res, next) => {
     
     // 删除订单
     await db.collection('orders').deleteOne({
-      _id: ObjectId(orderId)
+      _id: new ObjectId(orderId)
     });
     
     // 记录审计日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_order_delete',
       userId: req.user.userId,
-      orderId: ObjectId(orderId),
+      orderId: new ObjectId(orderId),
       orderNo: order.orderNo,
       timestamp: new Date()
     });

@@ -6,9 +6,11 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongodb');
+
+
 
 /**
  * 超级管理员权限中间件
@@ -21,9 +23,9 @@ const superAdminMiddleware = async (req, res, next) => {
       throw new AppError('权限不足，需要管理员权限', 'FORBIDDEN', 403);
     }
     
-    const db = getDb();
+    const db = req.app.get('db');
     const admin = await db.collection('users').findOne({
-      _id: ObjectId(req.user.userId)
+      _id: new ObjectId(req.user.userId)
     });
     
     // 检查是否为超级管理员（permissions 包含 'all' 或 'manage_admins'）
@@ -42,9 +44,9 @@ const superAdminMiddleware = async (req, res, next) => {
  * 管理员列表
  * 查询参数：page, pageSize, status, keyword
  */
-router.get('/admins', superAdminMiddleware, async (req, res, next) => {
+router.get('/', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const {
       page = 1,
       pageSize = 20,
@@ -122,11 +124,11 @@ router.get('/admins', superAdminMiddleware, async (req, res, next) => {
  */
 router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.params.id;
     
     const admin = await db.collection('users').findOne(
-      { _id: ObjectId(adminId), role: 'admin' },
+      { _id: new ObjectId(adminId), role: 'admin' },
       { projection: { passwordHash: 0, sessionKey: 0 } }
     );
     
@@ -165,7 +167,7 @@ router.get('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  */
 router.post('/admin', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const { username, password, nickName, phone, email, permissions } = req.body;
     
     // 验证必填字段
@@ -209,7 +211,7 @@ router.post('/admin', superAdminMiddleware, async (req, res, next) => {
     // 记录审计日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_create',
-      userId: ObjectId(req.user.userId),
+      userId: new ObjectId(req.user.userId),
       targetAdminId: result.insertedId,
       targetUsername: username,
       permissions: newAdmin.permissions,
@@ -239,7 +241,7 @@ router.post('/admin', superAdminMiddleware, async (req, res, next) => {
  */
 router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.params.id;
     const { nickName, phone, email, permissions, status } = req.body;
     
@@ -259,7 +261,7 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     if (status !== undefined) updateData.status = status;
     
     const result = await db.collection('users').findOneAndUpdate(
-      { _id: ObjectId(adminId), role: 'admin' },
+      { _id: new ObjectId(adminId), role: 'admin' },
       { $set: updateData },
       { returnDocument: 'after' }
     );
@@ -271,8 +273,8 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     // 记录审计日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_update',
-      userId: ObjectId(req.user.userId),
-      targetAdminId: ObjectId(adminId),
+      userId: new ObjectId(req.user.userId),
+      targetAdminId: new ObjectId(adminId),
       targetUsername: result.username,
       changes: updateData,
       timestamp: new Date()
@@ -301,7 +303,7 @@ router.put('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  */
 router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.params.id;
     
     // 不能删除自己
@@ -310,7 +312,7 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     }
     
     const admin = await db.collection('users').findOne({
-      _id: ObjectId(adminId),
+      _id: new ObjectId(adminId),
       role: 'admin'
     });
     
@@ -320,7 +322,7 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     
     // 软删除：将状态设为 inactive
     await db.collection('users').updateOne(
-      { _id: ObjectId(adminId) },
+      { _id: new ObjectId(adminId) },
       { 
         $set: { 
           status: 'inactive',
@@ -333,8 +335,8 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
     // 记录审计日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_delete',
-      userId: ObjectId(req.user.userId),
-      targetAdminId: ObjectId(adminId),
+      userId: new ObjectId(req.user.userId),
+      targetAdminId: new ObjectId(adminId),
       targetUsername: admin.username,
       timestamp: new Date()
     });
@@ -359,7 +361,7 @@ router.delete('/admin/:id', superAdminMiddleware, async (req, res, next) => {
  */
 router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.params.id;
     const { newPassword } = req.body;
     
@@ -373,7 +375,7 @@ router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, n
     }
     
     const admin = await db.collection('users').findOne({
-      _id: ObjectId(adminId),
+      _id: new ObjectId(adminId),
       role: 'admin'
     });
     
@@ -384,7 +386,7 @@ router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, n
     const passwordHash = await bcrypt.hash(newPassword, 10);
     
     await db.collection('users').updateOne(
-      { _id: ObjectId(adminId) },
+      { _id: new ObjectId(adminId) },
       { 
         $set: { 
           passwordHash,
@@ -397,8 +399,8 @@ router.put('/admin/:id/reset-password', superAdminMiddleware, async (req, res, n
     // 记录审计日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_password_reset',
-      userId: ObjectId(req.user.userId),
-      targetAdminId: ObjectId(adminId),
+      userId: new ObjectId(req.user.userId),
+      targetAdminId: new ObjectId(adminId),
       targetUsername: admin.username,
       timestamp: new Date()
     });

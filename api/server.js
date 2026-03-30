@@ -155,8 +155,12 @@ async function startServer() {
   }
 }
 
-// 导出 db 和 redis 客户端供路由使用
-module.exports = { app, getDb: () => db, getRedis: () => redisClient };
-
 // 启动
 startServer();
+
+// 导出 app 和获取 db 的函数供路由使用
+module.exports = { 
+  app, 
+  getDb: () => db, 
+  getRedis: () => redisClient 
+};

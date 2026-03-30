@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../../middleware/auth');
 const { AppError } = require('../../middleware/errorHandler');
-const { getDb } = require('../../server');
+const server = require('../../server');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongodb');
@@ -24,7 +24,11 @@ router.post('/login', async (req, res, next) => {
       throw new AppError('用户名和密码不能为空', 'MISSING_CREDENTIALS', 400);
     }
     
-    const db = getDb();
+    const db = req.app.get('db');
+    
+    if (!db) {
+      throw new AppError('数据库未连接', 'DATABASE_NOT_CONNECTED', 500);
+    }
     
     // 查找管理员（支持 username 或 phone 登录）
     const admin = await db.collection('users').findOne({
@@ -113,7 +117,7 @@ router.post('/login', async (req, res, next) => {
  */
 router.get('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.user.userId;
     
     // 验证是否为管理员
@@ -122,7 +126,7 @@ router.get('/profile', authMiddleware, async (req, res, next) => {
     }
     
     const admin = await db.collection('users').findOne(
-      { _id: ObjectId(adminId) },
+      { _id: new ObjectId(adminId) },
       { projection: { passwordHash: 0, sessionKey: 0 } }
     );
     
@@ -160,7 +164,7 @@ router.get('/profile', authMiddleware, async (req, res, next) => {
  */
 router.put('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.user.userId;
     
     if (req.user.role !== 'admin') {
@@ -179,7 +183,7 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
     if (email !== undefined) updateData.email = email;
     
     const result = await db.collection('users').findOneAndUpdate(
-      { _id: ObjectId(adminId) },
+      { _id: new ObjectId(adminId) },
       { $set: updateData },
       { returnDocument: 'after' }
     );
@@ -214,7 +218,7 @@ router.put('/profile', authMiddleware, async (req, res, next) => {
  */
 router.put('/password', authMiddleware, async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const adminId = req.user.userId;
     
     if (req.user.role !== 'admin') {
@@ -232,7 +236,7 @@ router.put('/password', authMiddleware, async (req, res, next) => {
     }
     
     const admin = await db.collection('users').findOne({
-      _id: ObjectId(adminId)
+      _id: new ObjectId(adminId)
     });
     
     if (!admin) {
@@ -256,7 +260,7 @@ router.put('/password', authMiddleware, async (req, res, next) => {
     const passwordHash = await bcrypt.hash(newPassword, 10);
     
     await db.collection('users').updateOne(
-      { _id: ObjectId(adminId) },
+      { _id: new ObjectId(adminId) },
       { 
         $set: { 
           passwordHash,
@@ -269,7 +273,7 @@ router.put('/password', authMiddleware, async (req, res, next) => {
     // 记录密码修改日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_password_change',
-      userId: ObjectId(adminId),
+      userId: new ObjectId(adminId),
       username: admin.username,
       timestamp: new Date()
     });
@@ -295,7 +299,7 @@ router.post('/logout', authMiddleware, async (req, res, next) => {
     // 记录登出日志
     await db.collection('audit_logs').insertOne({
       type: 'admin_logout',
-      userId: ObjectId(req.user.userId),
+      userId: new ObjectId(req.user.userId),
       username: req.user.username,
       ip: req.ip || req.headers['x-forwarded-for'],
       timestamp: new Date()
