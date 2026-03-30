@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "资质审核",
+  "navigationBarBackgroundColor": "#4A5D4E",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

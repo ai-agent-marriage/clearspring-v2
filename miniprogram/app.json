@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/service/service",
-    "pages/order/order"
+    "pages/order/order",
+    "pages/admin/audit-h5/audit-h5",
+    "pages/admin/arbitration-h5/arbitration-h5"
   ],
   "window": {
     "backgroundTextStyle": "dark",

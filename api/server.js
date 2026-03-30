@@ -29,7 +29,20 @@ const PORT = process.env.PORT || 3000;
 
 // 基础中间件
 app.use(helmet());
-app.use(cors());
+
+// CORS 配置 - 允许 PC 管理后台访问
+app.use(cors({
+  origin: [
+    'http://localhost:8080',
+    'http://101.96.192.63:8080',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -1,0 +1,670 @@
+/**
+ * 清如 ClearSpring V2.0 - 管理端申诉仲裁 H5 页样式
+ * 页面路径：pages/admin/arbitration-h5/arbitration-h5
+ * 
+ * 设计规范：
+ * - 主色调：岱绿 #4A5D4E
+ * - 组件圆角：24rpx
+ * - 移动端优化
+ */
+
+/* ====================
+   CSS 变量定义
+   ==================== */
+page {
+  --executor-green: #4A5D4E;
+  --executor-green-light: #6B7D6E;
+  --executor-green-dark: #3A4A3E;
+  --executor-green-bg: rgba(74, 93, 78, 0.08);
+  --bg-primary: #F5F5F0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-hint: #999999;
+  --card-radius: 24rpx;
+  --btn-min-height: 88rpx;
+  --shadow-light: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+/* ====================
+   页面基础样式
+   ==================== */
+.arbitration-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(135deg, #F5F5F0 0%, #EBEAE6 100%);
+}
+
+/* ====================
+   筛选栏
+   ==================== */
+.filter-bar {
+  display: flex;
+  background: #FFFFFF;
+  padding: 20rpx 30rpx;
+  box-shadow: var(--shadow-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 20rpx;
+}
+
+.filter-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.filter-item.active {
+  color: var(--executor-green);
+  font-weight: bold;
+}
+
+.filter-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background: linear-gradient(90deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  border-radius: 3rpx;
+}
+
+.filter-badge {
+  margin-left: 12rpx;
+  padding: 4rpx 16rpx;
+  background: #F44336;
+  color: #FFFFFF;
+  font-size: 24rpx;
+  border-radius: 20rpx;
+}
+
+/* ====================
+   列表滚动区域
+   ==================== */
+.list-scroll {
+  flex: 1;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* ====================
+   仲裁卡片
+   ==================== */
+.arbitration-list {
+  padding-bottom: 40rpx;
+}
+
+.arbitration-card {
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  margin-bottom: 30rpx;
+  transition: all 0.3s ease;
+}
+
+.arbitration-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-medium);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.status-tag {
+  padding: 8rpx 24rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.status-tag.pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #FFC107;
+}
+
+.status-tag.processed {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.card-body {
+  padding: 30rpx;
+}
+
+.appeal-info {
+  margin-bottom: 30rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.info-value.amount {
+  color: #F44336;
+  font-weight: bold;
+}
+
+.info-divider {
+  height: 1rpx;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0;
+}
+
+.appeal-reason {
+  margin-bottom: 24rpx;
+}
+
+.reason-label,
+.note-label {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-hint);
+  margin-bottom: 12rpx;
+}
+
+.reason-content,
+.note-content {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.6;
+  background: var(--executor-green-bg);
+  padding: 20rpx;
+  border-radius: var(--card-radius);
+}
+
+.executor-note {
+  margin-top: 24rpx;
+}
+
+.card-footer {
+  padding: 30rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.action-btns {
+  display: flex;
+}
+
+.action-btn {
+  flex: 1;
+  min-height: var(--btn-min-height);
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.action-btn text:first-child {
+  font-size: 32rpx;
+}
+
+.process-btn {
+  background: linear-gradient(135deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8rpx 24rpx rgba(74, 93, 78, 0.3);
+}
+
+.process-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 16rpx rgba(74, 93, 78, 0.2);
+}
+
+.result-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-label {
+  font-size: 26rpx;
+  color: var(--text-hint);
+  margin-bottom: 8rpx;
+}
+
+.result-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.result-value.support {
+  color: #4CAF50;
+}
+
+.result-value.reject {
+  color: #F44336;
+}
+
+.result-value.mediate {
+  color: #FF9800;
+}
+
+.process-time {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+/* ====================
+   空状态
+   ==================== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-state text:first-child {
+  font-size: 120rpx;
+  color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--text-hint);
+}
+
+/* ====================
+   加载更多
+   ==================== */
+.load-more,
+.no-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+  font-size: 26rpx;
+  color: var(--text-hint);
+  gap: 12rpx;
+}
+
+.load-more text:first-child {
+  font-size: 32rpx;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ====================
+   仲裁弹窗
+   ==================== */
+.arbitration-modal .cu-dialog {
+  width: 90%;
+  max-height: 85vh;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.close-icon {
+  font-size: 40rpx;
+  color: var(--text-hint);
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30rpx;
+}
+
+.detail-section {
+  margin-bottom: 40rpx;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 24rpx;
+}
+
+.detail-list {
+  background: var(--executor-green-bg);
+  border-radius: var(--card-radius);
+  padding: 24rpx;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.detail-row:first-child {
+  padding-top: 0;
+}
+
+.detail-row:last-child {
+  padding-bottom: 0;
+}
+
+.detail-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.detail-value {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.detail-value.amount {
+  color: #F44336;
+  font-weight: bold;
+}
+
+.detail-value.reason {
+  text-align: right;
+  max-width: 400rpx;
+}
+
+.appeal-detail,
+.executor-detail {
+  background: var(--executor-green-bg);
+  border-radius: var(--card-radius);
+  padding: 24rpx;
+}
+
+.evidence-list {
+  margin-top: 20rpx;
+}
+
+.evidence-title {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-hint);
+  margin-bottom: 16rpx;
+}
+
+.evidence-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.evidence-thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: var(--card-radius);
+  border: 2rpx solid rgba(74, 93, 78, 0.2);
+}
+
+.note-content-box {
+  margin-top: 16rpx;
+}
+
+.note-content-box .note-content {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.6;
+  background: #FFFFFF;
+  padding: 20rpx;
+  border-radius: var(--card-radius);
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.arbitration-form {
+  background: var(--executor-green-bg);
+  border-radius: var(--card-radius);
+  padding: 24rpx;
+}
+
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.result-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.result-option {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  border: 2rpx solid rgba(74, 93, 78, 0.2);
+  transition: all 0.3s ease;
+}
+
+.result-option:active {
+  transform: scale(0.98);
+}
+
+.result-option.active {
+  border-color: var(--executor-green);
+  background: rgba(74, 93, 78, 0.08);
+}
+
+.option-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  transition: all 0.3s ease;
+}
+
+.option-icon text {
+  font-size: 32rpx;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.result-option.active .option-icon {
+  background: var(--executor-green);
+}
+
+.result-option.active .option-icon text {
+  color: #FFFFFF;
+}
+
+.option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 6rpx;
+}
+
+.option-desc {
+  font-size: 26rpx;
+  color: var(--text-hint);
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  border: 2rpx solid rgba(0, 0, 0, 0.1);
+  padding: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-btn {
+  flex: 1;
+  min-height: var(--btn-min-height);
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.modal-btn text:first-child {
+  font-size: 32rpx;
+}
+
+.cancel-btn {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-secondary);
+}
+
+.cancel-btn:active {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8rpx 24rpx rgba(74, 93, 78, 0.3);
+}
+
+.confirm-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 16rpx rgba(74, 93, 78, 0.2);
+}
+
+.confirm-btn[disabled] {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+}
+
+/* ====================
+   响应式适配
+   ==================== */
+@media (max-width: 375px) {
+  .filter-bar {
+    padding: 16rpx 20rpx;
+  }
+  
+  .filter-item {
+    font-size: 28rpx;
+  }
+  
+  .arbitration-card {
+    margin-bottom: 24rpx;
+  }
+  
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding: 24rpx;
+  }
+  
+  .order-title {
+    font-size: 28rpx;
+  }
+  
+  .action-btn {
+    font-size: 28rpx;
+    min-height: 80rpx;
+  }
+}

@@ -1,0 +1,234 @@
+<!--
+  清如 ClearSpring V2.0 - 管理端申诉仲裁 H5 页
+  页面路径：pages/admin/arbitration-h5/arbitration-h5
+  设计规范：
+    - 主色调：岱绿 #4A5D4E
+    - 组件圆角：24rpx
+    - 移动端优化
+-->
+
+<view class="arbitration-page">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">申诉仲裁</block>
+  </cu-custom>
+
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-item {{currentFilter === 'all' ? 'active' : ''}}" bindtap="setFilter" data-filter="all">
+      <text>全部</text>
+    </view>
+    <view class="filter-item {{currentFilter === 'pending' ? 'active' : ''}}" bindtap="setFilter" data-filter="pending">
+      <text>待处理</text>
+      <text class="filter-badge" wx:if="{{pendingCount > 0}}">{{pendingCount}}</text>
+    </view>
+    <view class="filter-item {{currentFilter === 'processed' ? 'active' : ''}}" bindtap="setFilter" data-filter="processed">
+      <text>已处理</text>
+    </view>
+  </view>
+
+  <!-- 申诉列表 -->
+  <scroll-view scroll-y class="list-scroll" bindscrolltolower="loadMore">
+    <view class="arbitration-list">
+      <!-- 列表项 -->
+      <view class="arbitration-card card-shadow" wx:for="{{arbitrationList}}" wx:key="id" bindtap="viewDetail" data-item="{{item}}">
+        <view class="card-header">
+          <view class="order-info">
+            <text class="order-title">订单号：{{item.orderNo}}</text>
+            <text class="order-time">{{item.appealTime}}</text>
+          </view>
+          <view class="status-tag {{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        
+        <view class="card-body">
+          <view class="appeal-info">
+            <view class="info-row">
+              <text class="info-label">申诉人</text>
+              <text class="info-value">{{item.appealerName}}</text>
+            </view>
+            <view class="info-divider"></view>
+            <view class="info-row">
+              <text class="info-label">执行者</text>
+              <text class="info-value">{{item.executorName}}</text>
+            </view>
+            <view class="info-divider"></view>
+            <view class="info-row">
+              <text class="info-label">订单金额</text>
+              <text class="info-value amount">¥{{item.orderAmount}}</text>
+            </view>
+          </view>
+          
+          <view class="appeal-reason">
+            <text class="reason-label">申诉原因</text>
+            <text class="reason-content">{{item.appealReason}}</text>
+          </view>
+          
+          <view class="executor-note" wx:if="{{item.executorNote}}">
+            <text class="note-label">执行者说明</text>
+            <text class="note-content">{{item.executorNote}}</text>
+          </view>
+        </view>
+
+        <view class="card-footer">
+          <view class="action-btns" wx:if="{{item.status === 0}}">
+            <button class="action-btn process-btn" bindtap="processAppeal" data-item="{{item}}" catchtap="true">
+              <text class="cuIcon-cuIcon-edit"></text>
+              <text>处理申诉</text>
+            </button>
+          </view>
+          <view class="result-info" wx:if="{{item.status === 1}}">
+            <text class="result-label">仲裁结果</text>
+            <text class="result-value {{item.resultClass}}">{{item.resultText}}</text>
+            <text class="process-time">处理时间：{{item.processTime}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{arbitrationList.length === 0}}">
+        <text class="cuIcon-cuIcon-question"></text>
+        <text class="empty-text">暂无申诉记录</text>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{arbitrationList.length > 0 && !isLastPage}}">
+        <text class="cuIcon-cuIcon-loading1"></text>
+        <text>加载中...</text>
+      </view>
+
+      <!-- 没有更多 -->
+      <view class="no-more" wx:if="{{isLastPage && arbitrationList.length > 0}}">
+        <text>没有更多了</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 仲裁处理弹窗 -->
+  <view class="cu-modal arbitration-modal {{showArbitrationModal ? 'show' : ''}}" bindtap="hideArbitrationModal">
+    <view class="cu-dialog" catchtap="true">
+      <view class="modal-header">
+        <text class="modal-title">仲裁处理</text>
+        <text class="cuIcon-cuIcon-close close-icon" bindtap="hideArbitrationModal"></text>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 订单信息 -->
+        <view class="detail-section">
+          <text class="section-title">订单信息</text>
+          <view class="detail-list">
+            <view class="detail-row">
+              <text class="detail-label">订单号</text>
+              <text class="detail-value">{{currentAppeal.orderNo}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">订单金额</text>
+              <text class="detail-value amount">¥{{currentAppeal.orderAmount}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">服务时间</text>
+              <text class="detail-value">{{currentAppeal.serviceTime}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">服务内容</text>
+              <text class="detail-value">{{currentAppeal.serviceContent}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 申诉方信息 -->
+        <view class="detail-section">
+          <text class="section-title">申诉说明</text>
+          <view class="appeal-detail">
+            <view class="detail-row">
+              <text class="detail-label">申诉人</text>
+              <text class="detail-value">{{currentAppeal.appealerName}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">申诉原因</text>
+              <text class="detail-value reason">{{currentAppeal.appealReason}}</text>
+            </view>
+            <view class="evidence-list" wx:if="{{currentAppeal.evidence && currentAppeal.evidence.length > 0}}">
+              <text class="evidence-title">凭证</text>
+              <view class="evidence-images">
+                <image wx:for="{{currentAppeal.evidence}}" wx:for-item="img" wx:key="*this" 
+                       src="{{img}}" mode="aspectFill" class="evidence-thumb"
+                       bindtap="previewEvidence" data-src="{{img}}"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 执行者说明 -->
+        <view class="detail-section" wx:if="{{currentAppeal.executorNote}}">
+          <text class="section-title">执行者说明</text>
+          <view class="executor-detail">
+            <view class="detail-row">
+              <text class="detail-label">执行者</text>
+              <text class="detail-value">{{currentAppeal.executorName}}</text>
+            </view>
+            <view class="note-content-box">
+              <text class="note-content">{{currentAppeal.executorNote}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 仲裁表单 -->
+        <view class="detail-section">
+          <text class="section-title">仲裁结果</text>
+          <view class="arbitration-form">
+            <view class="form-group">
+              <view class="result-options">
+                <view class="result-option {{arbitrationResult === 'support' ? 'active' : ''}}" 
+                      bindtap="selectResult" data-result="support">
+                  <view class="option-icon">
+                    <text class="cuIcon-cuIcon-check"></text>
+                  </view>
+                  <view class="option-info">
+                    <text class="option-title">支持申诉</text>
+                    <text class="option-desc">申诉理由成立</text>
+                  </view>
+                </view>
+                
+                <view class="result-option {{arbitrationResult === 'reject' ? 'active' : ''}}" 
+                      bindtap="selectResult" data-result="reject">
+                  <view class="option-icon">
+                    <text class="cuIcon-cuIcon-close"></text>
+                  </view>
+                  <view class="option-info">
+                    <text class="option-title">驳回申诉</text>
+                    <text class="option-desc">申诉理由不成立</text>
+                  </view>
+                </view>
+                
+                <view class="result-option {{arbitrationResult === 'mediate' ? 'active' : ''}}" 
+                      bindtap="selectResult" data-result="mediate">
+                  <view class="option-icon">
+                    <text class="cuIcon-cuIcon-people"></text>
+                  </view>
+                  <view class="option-info">
+                    <text class="option-title">调解处理</text>
+                    <text class="option-desc">双方协商和解</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+            
+            <view class="form-group">
+              <text class="form-label">仲裁说明</text>
+              <textarea class="form-textarea" placeholder="请填写仲裁说明和依据" 
+                        value="{{arbitrationNote}}" bindinput="onNoteInput" maxlength="500"></textarea>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel-btn" bindtap="hideArbitrationModal">取消</button>
+        <button class="modal-btn confirm-btn" bindtap="submitArbitration" disabled="{{!canSubmit}}">
+          <text class="cuIcon-cuIcon-submit"></text>
+          <text>提交仲裁</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,170 @@
+<!--
+  清如 ClearSpring V2.0 - 管理端资质审核 H5 页
+  页面路径：pages/admin/audit-h5/audit-h5
+  设计规范：
+    - 主色调：岱绿 #4A5D4E
+    - 组件圆角：24rpx
+    - 移动端优化
+-->
+
+<view class="audit-page">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">资质审核</block>
+  </cu-custom>
+
+  <!-- 筛选 Tab -->
+  <view class="filter-tabs">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-tab="0">
+      <text>待审核</text>
+      <text class="tab-badge" wx:if="{{pendingCount > 0}}">{{pendingCount}}</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-tab="1">
+      <text>已通过</text>
+    </view>
+    <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-tab="2">
+      <text>已驳回</text>
+    </view>
+  </view>
+
+  <!-- 审核列表 -->
+  <scroll-view scroll-y class="list-scroll" bindscrolltolower="loadMore">
+    <view class="audit-list">
+      <!-- 列表项 -->
+      <view class="audit-card card-shadow" wx:for="{{auditList}}" wx:key="id" bindtap="viewDetail" data-item="{{item}}">
+        <view class="card-header">
+          <view class="user-info">
+            <text class="user-name">{{item.userName}}</text>
+            <text class="user-id">ID: {{item.userId}}</text>
+          </view>
+          <view class="status-tag {{item.statusClass}}">{{item.statusText}}</view>
+        </view>
+        
+        <view class="card-body">
+          <view class="info-row">
+            <text class="info-label">申请时间</text>
+            <text class="info-value">{{item.applyTime}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">资料完整性</text>
+            <view class="completeness-bar">
+              <view class="completeness-fill" style="width: {{item.completeness}}%;"></view>
+            </view>
+            <text class="completeness-text">{{item.completeness}}%</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">资料预览</text>
+            <view class="preview-images">
+              <image wx:for="{{item.previewImages}}" wx:for-item="img" wx:key="*this" 
+                     src="{{img}}" mode="aspectFill" class="preview-thumb"></image>
+            </view>
+          </view>
+        </view>
+
+        <view class="card-footer">
+          <view class="action-btns" wx:if="{{item.status === 0}}">
+            <button class="action-btn reject-btn" bindtap="rejectAudit" data-item="{{item}}" catchtap="true">
+              <text class="cuIcon-cuIcon-close"></text>
+              <text>驳回</text>
+            </button>
+            <button class="action-btn approve-btn" bindtap="approveAudit" data-item="{{item}}" catchtap="true">
+              <text class="cuIcon-cuIcon-check"></text>
+              <text>通过</text>
+            </button>
+          </view>
+          <text class="audit-time" wx:if="{{item.auditTime}}">审核时间：{{item.auditTime}}</text>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{auditList.length === 0}}">
+        <text class="cuIcon-cuIcon-document"></text>
+        <text class="empty-text">暂无审核记录</text>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{auditList.length > 0 && !isLastPage}}">
+        <text class="cuIcon-cuIcon-loading1"></text>
+        <text>加载中...</text>
+      </view>
+
+      <!-- 没有更多 -->
+      <view class="no-more" wx:if="{{isLastPage && auditList.length > 0}}">
+        <text>没有更多了</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 审核弹窗 -->
+  <view class="cu-modal audit-modal {{showAuditModal ? 'show' : ''}}" bindtap="hideAuditModal">
+    <view class="cu-dialog" catchtap="true">
+      <view class="modal-header">
+        <text class="modal-title">{{modalTitle}}</text>
+        <text class="cuIcon-cuIcon-close close-icon" bindtap="hideAuditModal"></text>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 用户信息 -->
+        <view class="detail-section">
+          <text class="section-title">用户信息</text>
+          <view class="detail-list">
+            <view class="detail-row">
+              <text class="detail-label">姓名</text>
+              <text class="detail-value">{{currentAudit.userName}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">手机号</text>
+              <text class="detail-value">{{currentAudit.phone}}</text>
+            </view>
+            <view class="detail-row">
+              <text class="detail-label">申请时间</text>
+              <text class="detail-value">{{currentAudit.applyTime}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 资料预览 -->
+        <view class="detail-section">
+          <text class="section-title">资质资料</text>
+          <view class="image-grid">
+            <view class="image-item" wx:for="{{currentAudit.images}}" wx:for-item="img" wx:key="*this" 
+                  bindtap="previewImage" data-src="{{img}}">
+              <image src="{{img}}" mode="aspectFill"></image>
+              <text class="image-label">{{imgLabels[index]}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 驳回原因选择 -->
+        <view class="detail-section" wx:if="{{modalType === 'reject'}}">
+          <text class="section-title">驳回原因</text>
+          <view class="reason-tags">
+            <view class="reason-tag {{selectedReason === reason ? 'active' : ''}}" 
+                  wx:for="{{rejectReasons}}" wx:for-item="reason" wx:key="*this"
+                  bindtap="selectReason" data-reason="{{reason}}">
+              <text>{{reason}}</text>
+            </view>
+          </view>
+          <view class="reason-input-wrap">
+            <textarea class="reason-input" placeholder="其他原因（选填）" 
+                      value="{{customReason}}" bindinput="onReasonInput" maxlength="200"></textarea>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel-btn" bindtap="hideAuditModal">取消</button>
+        <button class="modal-btn confirm-btn {{modalType}}" bindtap="confirmAudit">
+          <text wx:if="{{modalType === 'approve'}}">
+            <text class="cuIcon-cuIcon-check"></text>
+            <text>确认通过</text>
+          </text>
+          <text wx:else>
+            <text class="cuIcon-cuIcon-close"></text>
+            <text>确认驳回</text>
+          </text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>
