@@ -1,0 +1,9 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "清如 · ClearSpring",
+  "navigationBarBackgroundColor": "#EFEEE9",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#EFEEE9",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true
+}

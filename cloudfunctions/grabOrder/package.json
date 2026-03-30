@@ -1,0 +1,9 @@
+{
+  "name": "grabOrder",
+  "version": "1.0.0",
+  "description": "抢单云函数（分布式锁）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

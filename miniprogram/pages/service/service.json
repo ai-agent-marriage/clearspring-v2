@@ -1,0 +1,9 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "服务",
+  "navigationBarBackgroundColor": "#EFEEE9",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#EFEEE9",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true
+}

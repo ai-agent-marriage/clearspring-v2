@@ -1,0 +1,9 @@
+{
+  "name": "uploadEvidence",
+  "version": "1.0.0",
+  "description": "证据上传云函数（断点续传）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}
