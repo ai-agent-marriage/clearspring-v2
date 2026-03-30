@@ -139,7 +139,7 @@ page {
 }
 
 .grab-btn {
-  min-height: 72rpx;
+  min-height: 88rpx;
   padding: 0 40rpx;
   border-radius: 36rpx;
   background: linear-gradient(135deg, var(--executor-green) 0%, var(--executor-green-light) 100%);

@@ -129,7 +129,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   color: #fff;
+  min-height: 88rpx;
+  min-width: 88rpx;
+  padding: 10rpx;
 }
 
 .control-icon {
@@ -167,8 +171,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   color: #fff;
   opacity: 0.8;
+  min-height: 88rpx;
+  min-width: 88rpx;
+  padding: 10rpx;
 }
 
 .action-icon {

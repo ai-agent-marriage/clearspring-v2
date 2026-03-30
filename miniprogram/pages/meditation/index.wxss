@@ -218,6 +218,10 @@
   border-radius: 30rpx;
   font-size: 28rpx;
   font-weight: bold;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .checkin-btn.checked {

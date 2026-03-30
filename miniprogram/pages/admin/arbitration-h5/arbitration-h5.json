@@ -1,4 +1,7 @@
 {
+  "usingComponents": {
+    "form-validator": "/components/form-validator/form-validator"
+  },
   "navigationBarTitleText": "申诉仲裁",
   "navigationBarBackgroundColor": "#4A5D4E",
   "navigationBarTextStyle": "white",

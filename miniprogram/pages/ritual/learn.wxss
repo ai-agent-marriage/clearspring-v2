@@ -30,6 +30,10 @@
   padding: 8rpx 20rpx;
   background: rgba(212, 165, 116, 0.1);
   border-radius: 24rpx;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progress-bar {
@@ -119,8 +123,8 @@
 }
 
 .audio-btn {
-  width: 80rpx;
-  height: 80rpx;
+  width: 88rpx;
+  height: 88rpx;
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   border-radius: 50%;
   display: flex;
@@ -259,6 +263,10 @@
   background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
   color: #FFFFFF;
   padding: 0 60rpx;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 完成弹窗 */
@@ -308,6 +316,10 @@
   background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
   color: #FFFFFF;
   width: 100%;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 加载状态 */

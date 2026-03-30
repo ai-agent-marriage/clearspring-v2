@@ -66,8 +66,8 @@ page {
 }
 
 .back-btn {
-  width: 72rpx;
-  height: 72rpx;
+  width: 88rpx;
+  height: 88rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -202,8 +202,8 @@ page {
 }
 
 .quantity-btn {
-  width: 72rpx;
-  height: 72rpx;
+  width: 88rpx;
+  height: 88rpx;
   border-radius: 50%;
   background: var(--primary-gold);
   display: flex;

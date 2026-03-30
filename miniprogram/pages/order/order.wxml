@@ -106,14 +106,21 @@
           <text class="cuIcon-cuIcon-mobile section-icon"></text>
           <text class="section-title">联系电话</text>
         </view>
-        <input 
-          class="form-input" 
-          type="number" 
-          placeholder="请输入手机号码"
-          value="{{contactPhone}}"
-          bindinput="onPhoneInput"
-          maxlength="11"
-        />
+        <form-validator 
+          class="phone-validator"
+          rules="{{phoneRules}}" 
+          field-name="联系电话"
+          auto-hide-delay="3000"
+        >
+          <input 
+            class="form-input {{phoneInvalid ? 'input-error' : ''}}"
+            type="number" 
+            placeholder="请输入手机号码"
+            value="{{contactPhone}}"
+            bindinput="onPhoneInput"
+            maxlength="11"
+          />
+        </form-validator>
       </view>
 
       <!-- 订单备注 -->

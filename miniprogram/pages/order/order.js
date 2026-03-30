@@ -35,6 +35,7 @@ Page({
     contactPhone: '',  // 联系电话
     orderRemark: '',  // 订单备注
     canSubmit: false,  // 是否可以提交
+    phoneInvalid: false,  // 手机号验证状态
     
     // 订单详情相关
     orderDetail: {},  // 订单详情
@@ -49,7 +50,13 @@ Page({
       pending_execution: '待执行',
       completed: '已完成',
       cancelled: '已取消'
-    }
+    },
+    
+    // 表单验证规则
+    phoneRules: [
+      { required: true, message: '请输入联系电话' },
+      { mobile: true, message: '手机号码格式不正确' }
+    ]
   },
 
   /**
@@ -311,9 +318,18 @@ Page({
    * 联系电话输入
    */
   onPhoneInput(e) {
+    const value = e.detail.value;
     this.setData({
-      contactPhone: e.detail.value
+      contactPhone: value
     });
+    
+    // 实时验证手机号
+    const validator = this.selectComponent('.phone-validator');
+    if (validator) {
+      const isValid = validator.validate(value);
+      this.setData({ phoneInvalid: !isValid });
+    }
+    
     this.checkCanSubmit();
   },
 
@@ -351,6 +367,19 @@ Page({
    * 提交订单
    */
   async submitOrder() {
+    // 验证手机号
+    const phoneValidator = this.selectComponent('.phone-validator');
+    if (phoneValidator) {
+      const isPhoneValid = phoneValidator.validate(this.data.contactPhone);
+      if (!isPhoneValid) {
+        wx.showToast({
+          title: '请填写正确的手机号',
+          icon: 'none'
+        });
+        return;
+      }
+    }
+    
     if (!this.data.canSubmit) {
       wx.showToast({
         title: '请填写完整信息',

@@ -30,7 +30,15 @@ Page({
     // 用户信息
     userInfo: null,
     maskedPhone: '',
-    maskedIdCard: ''
+    maskedIdCard: '',
+    contactPhone: '',  // 联系手机
+    phoneInvalid: false,  // 手机号验证状态
+    
+    // 表单验证规则
+    phoneRules: [
+      { required: true, message: '请输入联系手机' },
+      { mobile: true, message: '手机号码格式不正确' }
+    ]
   },
 
   /**
@@ -221,11 +229,26 @@ Page({
   },
 
   /**
+   * 联系手机输入
+   */
+  onContactPhoneInput(e) {
+    const value = e.detail.value;
+    this.setData({ contactPhone: value });
+    
+    // 实时验证手机号
+    const validator = this.selectComponent('.contact-phone-validator');
+    if (validator) {
+      const isValid = validator.validate(value);
+      this.setData({ phoneInvalid: !isValid });
+    }
+  },
+
+  /**
    * 检查是否可以提交
    */
   checkCanSubmit() {
-    const { idCardFront, idCardBack, releaseCert, recommendLetter } = this.data;
-    const canSubmit = !!(idCardFront && idCardBack && releaseCert && recommendLetter);
+    const { idCardFront, idCardBack, releaseCert, recommendLetter, contactPhone } = this.data;
+    const canSubmit = !!(idCardFront && idCardBack && releaseCert && recommendLetter && contactPhone && contactPhone.length === 11);
     this.setData({ canSubmit });
   },
 
@@ -233,6 +256,16 @@ Page({
    * 提交审核
    */
   async submitQualification() {
+    // 验证联系手机
+    const phoneValidator = this.selectComponent('.contact-phone-validator');
+    if (phoneValidator) {
+      const isPhoneValid = phoneValidator.validate(this.data.contactPhone);
+      if (!isPhoneValid) {
+        wx.showToast({ title: '请填写正确的联系手机号', icon: 'none' });
+        return;
+      }
+    }
+    
     if (!this.data.canSubmit) {
       wx.showToast({ title: '请上传完整资料', icon: 'none' });
       return;
@@ -255,7 +288,8 @@ Page({
                 idCardBack: this.data.idCardBack,
                 releaseCert: this.data.releaseCert,
                 recommendLetter: this.data.recommendLetter,
-                userInfo: this.data.userInfo
+                userInfo: this.data.userInfo,
+                contactPhone: this.data.contactPhone
               }
             });
             

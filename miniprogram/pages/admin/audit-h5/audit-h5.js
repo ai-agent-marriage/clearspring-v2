@@ -44,7 +44,13 @@ Page({
       '其他'
     ],
     selectedReason: '',
-    customReason: ''
+    customReason: '',
+    reasonInvalid: false,  // 原因验证状态
+    
+    // 表单验证规则
+    reasonRules: [
+      { maxLength: 200, message: '驳回原因不能超过 200 字' }
+    ]
   },
 
   /**
@@ -279,7 +285,15 @@ Page({
    * 驳回原因输入
    */
   onReasonInput(e) {
-    this.setData({ customReason: e.detail.value });
+    const value = e.detail.value;
+    this.setData({ customReason: value });
+    
+    // 实时验证原因长度
+    const validator = this.selectComponent('.reason-validator');
+    if (validator) {
+      const isValid = validator.validate(value);
+      this.setData({ reasonInvalid: !isValid });
+    }
   },
 
   /**
@@ -288,10 +302,21 @@ Page({
   async confirmAudit() {
     const { modalType, currentAudit, selectedReason, customReason } = this.data;
     
-    // 驳回需要选择原因
-    if (modalType === 'reject' && !selectedReason && !customReason) {
-      wx.showToast({ title: '请选择或填写驳回原因', icon: 'none' });
-      return;
+    // 驳回需要验证原因
+    if (modalType === 'reject') {
+      const reasonValidator = this.selectComponent('.reason-validator');
+      if (reasonValidator) {
+        const isReasonValid = reasonValidator.validate(customReason);
+        if (!isReasonValid) {
+          wx.showToast({ title: '请填写正确的驳回原因', icon: 'none' });
+          return;
+        }
+      }
+      
+      if (!selectedReason && !customReason) {
+        wx.showToast({ title: '请选择或填写驳回原因', icon: 'none' });
+        return;
+      }
     }
     
     try {

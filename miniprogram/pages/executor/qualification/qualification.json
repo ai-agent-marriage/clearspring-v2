@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "cu-custom": "/colorui/components/cu-custom"
+    "cu-custom": "/colorui/components/cu-custom",
+    "form-validator": "/components/form-validator/form-validator"
   },
   "navigationBarTitleText": "资质审核",
   "enablePullDownRefresh": true

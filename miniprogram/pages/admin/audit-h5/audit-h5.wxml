@@ -145,10 +145,22 @@
               <text>{{reason}}</text>
             </view>
           </view>
-          <view class="reason-input-wrap">
-            <textarea class="reason-input" placeholder="其他原因（选填）" 
-                      value="{{customReason}}" bindinput="onReasonInput" maxlength="200"></textarea>
-          </view>
+          <form-validator 
+            class="reason-validator"
+            rules="{{reasonRules}}" 
+            field-name="驳回原因"
+            auto-hide-delay="3000"
+          >
+            <view class="reason-input-wrap">
+              <textarea 
+                class="reason-input {{reasonInvalid ? 'input-error' : ''}}"
+                placeholder="请输入驳回原因（选填）" 
+                value="{{customReason}}" 
+                bindinput="onReasonInput" 
+                maxlength="200"
+              ></textarea>
+            </view>
+          </form-validator>
         </view>
       </view>
 

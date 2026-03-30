@@ -374,8 +374,8 @@ page {
 /* 通知按钮 */
 .notification-btn {
   position: relative;
-  width: 72rpx;
-  height: 72rpx;
+  width: 88rpx;
+  height: 88rpx;
   display: flex;
   align-items: center;
   justify-content: center;

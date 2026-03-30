@@ -215,8 +215,20 @@
             
             <view class="form-group">
               <text class="form-label">仲裁说明</text>
-              <textarea class="form-textarea" placeholder="请填写仲裁说明和依据" 
-                        value="{{arbitrationNote}}" bindinput="onNoteInput" maxlength="500"></textarea>
+              <form-validator 
+                class="note-validator"
+                rules="{{noteRules}}" 
+                field-name="仲裁说明"
+                auto-hide-delay="3000"
+              >
+                <textarea 
+                  class="form-textarea {{noteInvalid ? 'input-error' : ''}}"
+                  placeholder="请填写仲裁说明和依据" 
+                  value="{{arbitrationNote}}" 
+                  bindinput="onNoteInput" 
+                  maxlength="500"
+                ></textarea>
+              </form-validator>
             </view>
           </view>
         </view>

@@ -139,6 +139,25 @@
           <text class="info-label">身份证号</text>
           <text class="info-value">{{maskedIdCard}}</text>
         </view>
+        <view class="info-divider"></view>
+        <view class="info-item">
+          <text class="info-label">联系手机</text>
+          <form-validator 
+            class="contact-phone-validator"
+            rules="{{phoneRules}}" 
+            field-name="联系手机"
+            auto-hide-delay="3000"
+          >
+            <input 
+              class="info-input {{phoneInvalid ? 'input-error' : ''}}"
+              type="number"
+              placeholder="请输入联系手机号"
+              value="{{contactPhone}}"
+              bindinput="onContactPhoneInput"
+              maxlength="11"
+            />
+          </form-validator>
+        </view>
       </view>
     </view>
 

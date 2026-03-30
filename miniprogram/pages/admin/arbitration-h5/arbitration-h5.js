@@ -32,7 +32,15 @@ Page({
     // 仲裁表单
     arbitrationResult: '', // support / reject / mediate
     arbitrationNote: '',
-    canSubmit: false
+    noteInvalid: false,  // 说明验证状态
+    canSubmit: false,
+    
+    // 表单验证规则
+    noteRules: [
+      { required: true, message: '请输入仲裁说明' },
+      { minLength: 10, message: '仲裁说明至少 10 字' },
+      { maxLength: 500, message: '仲裁说明不能超过 500 字' }
+    ]
   },
 
   /**
@@ -271,8 +279,16 @@ Page({
    */
   onNoteInput(e) {
     const note = e.detail.value;
-    this.setData({ 
-      arbitrationNote: note,
+    this.setData({ arbitrationNote: note });
+    
+    // 实时验证说明内容
+    const validator = this.selectComponent('.note-validator');
+    if (validator) {
+      const isValid = validator.validate(note);
+      this.setData({ noteInvalid: !isValid });
+    }
+    
+    this.setData({
       canSubmit: !!this.data.arbitrationResult
     });
   },
@@ -298,6 +314,16 @@ Page({
     if (!arbitrationResult) {
       wx.showToast({ title: '请选择仲裁结果', icon: 'none' });
       return;
+    }
+    
+    // 验证仲裁说明
+    const noteValidator = this.selectComponent('.note-validator');
+    if (noteValidator) {
+      const isNoteValid = noteValidator.validate(arbitrationNote);
+      if (!isNoteValid) {
+        wx.showToast({ title: '请填写正确的仲裁说明', icon: 'none' });
+        return;
+      }
     }
     
     if (!arbitrationNote || arbitrationNote.length < 10) {

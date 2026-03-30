@@ -1,0 +1,14 @@
+<!-- 表单验证错误提示组件 -->
+<view class="form-validator-container">
+  <!-- 错误提示消息 -->
+  <view 
+    class="error-message {{showError ? 'show' : 'hide'}}" 
+    wx:if="{{errorMessage}}"
+  >
+    <text class="error-icon">⚠️</text>
+    <text class="error-text">{{errorMessage}}</text>
+  </view>
+  
+  <!-- 插槽：用于放置需要验证的表单元素 -->
+  <slot></slot>
+</view>

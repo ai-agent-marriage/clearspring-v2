@@ -629,7 +629,7 @@ radio.white.checked .uni-radio-input {
 	box-sizing: border-box;
 	padding: 0 30upx;
 	font-size: 28upx;
-	height: 64upx;
+	min-height: 88upx;
 	line-height: 1;
 	text-align: center;
 	text-decoration: none;
@@ -689,24 +689,24 @@ radio.white.checked .uni-radio-input {
 .cu-btn.lg {
 	padding: 0 40upx;
 	font-size: 32upx;
-	height: 80upx;
+	min-height: 96upx;
 }
 
 .cu-btn.cuIcon.sm {
-	width: 48upx;
-	height: 48upx;
+	width: 88upx;
+	height: 88upx;
 }
 
 .cu-btn.cuIcon {
-	width: 64upx;
-	height: 64upx;
+	width: 88upx;
+	height: 88upx;
 	border-radius: 500upx;
 	padding: 0;
 }
 
 button.cuIcon.lg {
-	width: 80upx;
-	height: 80upx;
+	width: 96upx;
+	height: 96upx;
 }
 
 .cu-btn.shadow-blur::before {
