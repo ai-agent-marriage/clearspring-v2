@@ -1,0 +1,158 @@
+<!--pages/ritual/practice.wxml-->
+<view class="container" wx:if="{{ritual}}">
+  <!-- 顶部进度 -->
+  <view class="header">
+    <view class="phase-indicator">
+      <view class="phase-item {{currentPhase === 'prepare' ? 'active' : ''}}">准备</view>
+      <view class="phase-line"></view>
+      <view class="phase-item {{currentPhase === 'practice' ? 'active' : ''}}">实践</view>
+      <view class="phase-line"></view>
+      <view class="phase-item {{currentPhase === 'dedication' ? 'active' : ''}}">回向</view>
+    </view>
+  </view>
+
+  <!-- 准备阶段 -->
+  <view class="phase-content" wx:if="{{currentPhase === 'prepare'}}">
+    <view class="section">
+      <view class="section-title">📋 实践前准备清单</view>
+      <view class="checklist">
+        <view 
+          wx:for="{{checklist}}" 
+          wx:key="id"
+          class="check-item {{item.checked ? 'checked' : ''}}"
+          data-index="{{index}}"
+          bindtap="onCheckToggle"
+        >
+          <view class="check-icon">{{item.checked ? '☑' : '☐'}}</view>
+          <view class="check-text">{{item.text}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="tips-section">
+      <view class="section-title">💡 温馨提示</view>
+      <view class="tips-list">
+        <view class="tip-item">• 选择适合被放生物种生存的环境</view>
+        <view class="tip-item">• 避免在禁止放生的区域进行</view>
+        <view class="tip-item">• 注意保护生态环境，不要随意放生外来物种</view>
+        <view class="tip-item">• 放生过程中保持慈悲心和恭敬心</view>
+      </view>
+    </view>
+
+    <view class="action-section">
+      <button class="btn btn-primary" bindtap="onStartPractice" disabled="{{!isChecklistComplete()}}">开始实践</button>
+    </view>
+  </view>
+
+  <!-- 实践阶段 -->
+  <view class="phase-content" wx:if="{{currentPhase === 'practice'}}">
+    <view class="section">
+      <view class="section-title">📝 实践过程记录</view>
+      
+      <view class="form-item">
+        <text class="form-label">放生数量</text>
+        <input 
+          class="form-input" 
+          type="number" 
+          placeholder="请输入放生数量"
+          value="{{practiceRecord.animals}}"
+          bindinput="onAnimalCountChange"
+        />
+        <text class="form-unit">只/条</text>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">实践笔记</text>
+        <textarea 
+          class="form-textarea" 
+          placeholder="记录实践过程中的感受和观察..."
+          value="{{practiceRecord.notes}}"
+          bindinput="onPracticeNotesChange"
+          maxlength="500"
+        />
+      </view>
+
+      <view class="timer-box">
+        <text class="timer-label">实践时间</text>
+        <text class="timer-value">{{practiceRecord.startTime ? '进行中' : '未开始'}}</text>
+      </view>
+    </view>
+
+    <view class="action-section">
+      <button class="btn btn-primary" bindtap="onToDedication">进入回向</button>
+    </view>
+  </view>
+
+  <!-- 回向阶段 -->
+  <view class="phase-content" wx:if="{{currentPhase === 'dedication'}}">
+    <view class="section">
+      <view class="section-title">🙏 实践后回向</view>
+      
+      <view class="dedication-box">
+        <view class="dedication-text">{{dedication.text}}</view>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">自定义回向文（可选）</text>
+        <textarea 
+          class="form-textarea" 
+          placeholder="输入您的个性化回向文..."
+          value="{{dedication.customText}}"
+          bindinput="onCustomDedicationChange"
+          maxlength="500"
+        />
+      </view>
+
+      <button class="btn btn-small" bindtap="onSaveDedication">保存回向文</button>
+    </view>
+
+    <view class="section">
+      <view class="section-title">✨ 功德记录</view>
+      
+      <view class="form-item">
+        <text class="form-label">功德数量</text>
+        <input 
+          class="form-input" 
+          type="number" 
+          placeholder="请输入功德数"
+          value="{{merit.count}}"
+          bindinput="onMeritCountChange"
+        />
+        <text class="form-unit">点</text>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">功德备注</text>
+        <input 
+          class="form-input" 
+          placeholder="备注说明（可选）"
+          value="{{merit.note}}"
+          bindinput="onMeritNoteChange"
+        />
+      </view>
+    </view>
+
+    <view class="action-section">
+      <button class="btn btn-success" bindtap="onCompleteDedication">完成实践</button>
+    </view>
+  </view>
+
+  <!-- 完成弹窗 -->
+  <view class="complete-modal" wx:if="{{showComplete}}">
+    <view class="complete-content">
+      <text class="complete-icon">🎉</text>
+      <text class="complete-title">功德圆满</text>
+      <text class="complete-desc">随喜赞叹您的放生功德</text>
+      <view class="merit-summary">
+        <text class="merit-num">{{merit.count}}</text>
+        <text class="merit-label">点功德</text>
+      </view>
+      <button class="btn btn-home" bindtap="onGoHome">返回首页</button>
+    </view>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view wx:if="{{!ritual}}" class="loading">
+  <text>加载中...</text>
+</view>

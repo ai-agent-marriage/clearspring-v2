@@ -23,15 +23,6 @@ async function initializeDatabase() {
     console.log('✅ MongoDB 连接成功');
     
     const db = client.db(DB_NAME);
-  
-  console.log('🔗 连接 MongoDB...');
-  const client = new MongoClient(uri);
-  
-  try {
-    await client.connect();
-    console.log('✅ MongoDB 连接成功');
-    
-    const db = client.db(dbName);
     
     // 1. 创建 wiki_contents 集合
     console.log('\n📚 初始化 wiki_contents (百科内容)...');
