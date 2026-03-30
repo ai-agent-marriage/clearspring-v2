@@ -1,0 +1,105 @@
+<!--pages/ritual/index.wxml-->
+<view class="container">
+  <!-- 顶部统计 -->
+  <view class="header">
+    <view class="title">放生仪轨</view>
+    <view class="stats">
+      <view class="stat-item">
+        <text class="stat-num">{{completedCount}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-num">{{totalCount}}</text>
+        <text class="stat-label">总仪轨</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-box">
+    <input 
+      class="search-input" 
+      placeholder="搜索仪轨名称" 
+      placeholder-class="search-placeholder"
+      value="{{searchKey}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+    />
+    <view class="search-icon">🔍</view>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="category-scroll">
+    <scroll-view scroll-x class="category-list">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="id"
+        class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onCategoryTap"
+      >
+        <text class="category-icon">{{item.icon}}</text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 推荐仪轨 -->
+  <view class="section">
+    <view class="section-title">推荐学习</view>
+    <view class="recommend-list">
+      <view 
+        class="recommend-item"
+        wx:for="{{filteredRituals}}"
+        wx:key="id"
+        wx:if="{{index < 3}}"
+        data-id="{{item.id}}"
+        bindtap="onRitualTap"
+      >
+        <view class="recommend-icon">{{item.difficulty === 'easy' ? '🌟' : '⭐'}}</view>
+        <view class="recommend-info">
+          <view class="recommend-title">{{item.title}}</view>
+          <view class="recommend-desc">{{item.duration}}分钟 · {{item.learnCount}}人已学</view>
+        </view>
+        <view class="recommend-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 仪轨列表 -->
+  <view class="section">
+    <view class="section-title">全部仪轨</view>
+    <view class="ritual-list">
+      <view 
+        wx:for="{{filteredRituals}}" 
+        wx:key="id"
+        class="ritual-item"
+        data-id="{{item.id}}"
+        bindtap="onRitualTap"
+      >
+        <view class="ritual-left">
+          <view class="ritual-icon">{{item.category === 'simple' ? '📿' : (item.category === 'complete' ? '📖' : '🎯')}}</view>
+          <view class="ritual-info">
+            <view class="ritual-title">{{item.title}}</view>
+            <view class="ritual-meta">
+              <text class="ritual-duration">{{item.duration}}分钟</text>
+              <text class="ritual-difficulty">{{item.difficulty === 'easy' ? '简单' : (item.difficulty === 'medium' ? '中等' : '困难')}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="ritual-right">
+          <view wx:if="{{userProgress[item.id] && userProgress[item.id].completed}}" class="completed-badge">✓</view>
+          <view wx:elif="{{userProgress[item.id] && userProgress[item.id].currentStep > 0}}" class="progress-badge">{{userProgress[item.id].currentStep}}/{{item.steps.length}}</view>
+          <view wx:else class="start-badge">开始</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{filteredRituals.length === 0}}" class="empty-state">
+    <text class="empty-icon">📚</text>
+    <text class="empty-text">暂无仪轨</text>
+  </view>
+</view>

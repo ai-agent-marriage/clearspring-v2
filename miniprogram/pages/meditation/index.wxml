@@ -1,0 +1,76 @@
+<!--pages/meditation/index.wxml-->
+<view class="meditation-container">
+  <!-- 顶部统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title">冥想修行</text>
+      <text class="streak-badge">连续 {{streakDays}} 天</text>
+    </view>
+    <view class="stats-content">
+      <view class="stat-item">
+        <text class="stat-value">{{totalMinutes}}</text>
+        <text class="stat-label">累计时长 (分钟)</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{totalCount}}</text>
+        <text class="stat-label">完成次数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐课程 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">推荐课程</text>
+      <text class="section-more" bindtap="goToCourses">查看全部</text>
+    </view>
+    <view class="recommend-courses">
+      <view class="course-card" wx:for="{{recommendedCourses}}" wx:key="id" bindtap="goToPlayer" data-course="{{item}}">
+        <image class="course-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="course-info">
+          <text class="course-name">{{item.name}}</text>
+          <text class="course-duration">{{item.duration}}分钟 · {{item.level}}</text>
+          <text class="course-count">{{item.count}}人已修习</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 冥想分类 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">课程分类</text>
+    </view>
+    <view class="category-grid">
+      <view class="category-item" bindtap="goToCourses" data-category="beginner">
+        <view class="category-icon beginner">🌱</view>
+        <text class="category-name">入门系列</text>
+        <text class="category-desc">基础入门</text>
+      </view>
+      <view class="category-item" bindtap="goToCourses" data-category="advanced">
+        <view class="category-icon advanced">🧘</view>
+        <text class="category-name">进阶系列</text>
+        <text class="category-desc">深度修行</text>
+      </view>
+      <view class="category-item" bindtap="goToCourses" data-category="special">
+        <view class="category-icon special">🌟</view>
+        <text class="category-name">专题系列</text>
+        <text class="category-desc">特定主题</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 每日签到 -->
+  <view class="section">
+    <view class="daily-checkin" bindtap="handleCheckin">
+      <view class="checkin-content">
+        <text class="checkin-title">今日冥想</text>
+        <text class="checkin-desc">每日坚持，积累功德</text>
+      </view>
+      <view class="checkin-btn {{isCheckedIn ? 'checked' : ''}}">
+        {{isCheckedIn ? '已签到' : '去签到'}}
+      </view>
+    </view>
+  </view>
+</view>

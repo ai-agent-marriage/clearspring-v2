@@ -1,0 +1,88 @@
+<!--pages/ritual/detail.wxml-->
+<view class="container" wx:if="{{ritual}}">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="category-tag">{{category.name}}</view>
+    <view class="title">{{ritual.title}}</view>
+    <view class="meta">
+      <text class="meta-item">⏱ {{ritual.duration}}分钟</text>
+      <text class="meta-item">👥 {{ritual.learnCount}}人已学</text>
+      <text class="meta-item">{{ritual.difficulty === 'easy' ? '🌟 简单' : (ritual.difficulty === 'medium' ? '⭐ 中等' : '💫 困难')}}</text>
+    </view>
+  </view>
+
+  <!-- 学习进度 -->
+  <view class="progress-section">
+    <view class="progress-info">
+      <text class="progress-text">学习进度</text>
+      <text class="progress-percent">{{isCompleted ? '100%' : (currentStep > 0 ? (currentStep / ritual.steps.length * 100 | number) + '%' : '未开始')}}</text>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{isCompleted ? '100%' : (currentStep > 0 ? (currentStep / ritual.steps.length * 100) + '%' : '0%')}}"></view>
+    </view>
+    <view class="progress-status">
+      <text wx:if="{{isCompleted}}" class="status-completed">✓ 已完成</text>
+      <text wx:elif="{{currentStep > 0}}" class="status-learning">学习中 {{currentStep}}/{{ritual.steps.length}}</text>
+      <text wx:else class="status-not-started">未开始</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button wx:if="{{!isCompleted && currentStep === 0}}" class="btn btn-primary" bindtap="onStartLearn">开始学习</button>
+    <button wx:elif="{{!isCompleted && currentStep > 0}}" class="btn btn-primary" bindtap="onContinueLearn">继续学习</button>
+    <button wx:if="{{isCompleted}}" class="btn btn-success" bindtap="onStartLearn">复习</button>
+    <button class="btn btn-secondary" bindtap="onStartPractice">开始实践</button>
+  </view>
+
+  <!-- 仪轨步骤 -->
+  <view class="section">
+    <view class="section-title">仪轨步骤</view>
+    <view class="steps-list">
+      <view 
+        wx:for="{{ritual.steps}}" 
+        wx:key="index"
+        class="step-item {{currentStep === index ? 'active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onStepTap"
+      >
+        <view class="step-number">{{index + 1}}</view>
+        <view class="step-content">
+          <view class="step-title">{{item.title}}</view>
+          <view class="step-desc">{{item.content}}</view>
+          <view class="step-meta">
+            <text class="step-duration">⏱ {{item.duration}}秒</text>
+            <text class="step-audio" bindtap="onPlayAudio" data-index="{{index}}">🎧 听讲解</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配套视频 -->
+  <view class="section">
+    <view class="section-title">配套视频</view>
+    <view class="video-box" bindtap="onPlayVideo">
+      <text class="video-icon">🎬</text>
+      <text class="video-text">点击播放教学视频</text>
+    </view>
+  </view>
+
+  <!-- 视频播放器弹窗 -->
+  <view class="video-modal" wx:if="{{showVideo}}">
+    <view class="video-content">
+      <video 
+        class="video-player"
+        src="{{videoUrl}}"
+        enable-progress-gesture
+        binderror="closeVideo"
+      />
+      <view class="video-close" bindtap="closeVideo">✕</view>
+    </view>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view wx:if="{{!ritual}}" class="loading">
+  <text>加载中...</text>
+</view>

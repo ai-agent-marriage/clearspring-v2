@@ -1,0 +1,108 @@
+<!--pages/meditation/stats.wxml-->
+<view class="stats-container">
+  <!-- 总览卡片 -->
+  <view class="overview-card">
+    <view class="overview-header">
+      <text class="overview-title">修行总览</text>
+      <text class="overview-subtitle">持续精进，积累功德</text>
+    </view>
+    <view class="overview-stats">
+      <view class="overview-item">
+        <text class="overview-value">{{totalMinutes}}</text>
+        <text class="overview-label">累计时长 (分钟)</text>
+      </view>
+      <view class="overview-divider"></view>
+      <view class="overview-item">
+        <text class="overview-value">{{totalCount}}</text>
+        <text class="overview-label">完成次数</text>
+      </view>
+      <view class="overview-divider"></view>
+      <view class="overview-item">
+        <text class="overview-value">{{streakDays}}</text>
+        <text class="overview-label">连续天数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 冥想日历热力图 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">冥想日历</text>
+      <text class="section-subtitle">过去 30 天</text>
+    </view>
+    <view class="calendar-grid">
+      <view class="calendar-day" wx:for="{{calendarDays}}" wx:key="date">
+        <text class="day-date">{{item.date}}</text>
+        <view class="day-dot {{item.level}}"></view>
+      </view>
+    </view>
+    <view class="calendar-legend">
+      <view class="legend-item">
+        <view class="legend-dot level-0"></view>
+        <text class="legend-text">未冥想</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot level-1"></view>
+        <text class="legend-text">1-10 分钟</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot level-2"></view>
+        <text class="legend-text">11-20 分钟</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-dot level-3"></view>
+        <text class="legend-text">20+ 分钟</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就徽章 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">成就徽章</text>
+      <text class="section-subtitle">{{unlockedBadges.length}}/{{allBadges.length}}</text>
+    </view>
+    <view class="badges-grid">
+      <view class="badge-item" wx:for="{{allBadges}}" wx:key="id">
+        <view class="badge-icon {{item.unlocked ? 'unlocked' : 'locked'}}">
+          <text class="badge-emoji">{{item.emoji}}</text>
+        </view>
+        <text class="badge-name">{{item.name}}</text>
+        <text class="badge-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 周统计 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">本周统计</text>
+    </view>
+    <view class="week-stats">
+      <view class="week-item" wx:for="{{weekDays}}" wx:key="day">
+        <text class="week-day">{{item.day}}</text>
+        <view class="week-bar-container">
+          <view class="week-bar" style="height: {{item.height}}%"></view>
+        </view>
+        <text class="week-value">{{item.minutes}}分钟</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最爱课程 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最爱课程</text>
+    </view>
+    <view class="favorite-course" wx:if="{{favoriteCourse}}">
+      <image class="favorite-image" src="{{favoriteCourse.image}}" mode="aspectFill"></image>
+      <view class="favorite-info">
+        <text class="favorite-name">{{favoriteCourse.name}}</text>
+        <text class="favorite-count">已完成 {{favoriteCourse.completedCount}} 次</text>
+      </view>
+    </view>
+    <view class="empty-favorite" wx:else>
+      <text class="empty-text">暂无最爱课程</text>
+    </view>
+  </view>
+</view>

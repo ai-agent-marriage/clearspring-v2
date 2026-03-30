@@ -1,0 +1,147 @@
+/* pages/meditation/courses.wxss */
+.courses-container {
+  min-height: 100vh;
+  background: #F5F1E8;
+  padding: 20rpx;
+}
+
+/* 分类筛选 */
+.category-filter {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.filter-scroll {
+  white-space: nowrap;
+}
+
+.filter-item {
+  display: inline-block;
+  padding: 12rpx 32rpx;
+  margin-right: 16rpx;
+  background: #F8F6F0;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.filter-item.active {
+  background: linear-gradient(135deg, #D4B87B 0%, #C4A86B 100%);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 课程列表 */
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.course-item {
+  display: flex;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  align-items: center;
+}
+
+.course-left {
+  position: relative;
+  margin-right: 20rpx;
+}
+
+.course-thumb {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.course-badge {
+  position: absolute;
+  top: -10rpx;
+  left: -10rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.course-badge.beginner {
+  background: linear-gradient(135deg, #4CAF50 0%, #45A049 100%);
+}
+
+.course-badge.advanced {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.course-badge.special {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.course-middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140rpx;
+}
+
+.course-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.course-desc {
+  font-size: 24rpx;
+  color: #999;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-meta {
+  display: flex;
+  gap: 20rpx;
+}
+
+.meta-item {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.course-right {
+  margin-left: 20rpx;
+}
+
+.play-icon {
+  font-size: 40rpx;
+  color: #D4B87B;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+}

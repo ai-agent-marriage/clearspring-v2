@@ -19,6 +19,7 @@ const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
 const executorRoutes = require('./routes/executor');
 const adminRoutes = require('./routes/admin');
+const contentRoutes = require('./routes/content');
 
 // 中间件导入
 const { errorHandler } = require('./middleware/errorHandler');
@@ -93,6 +94,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/executor', executorRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/content', contentRoutes);
 
 // 健康检查
 app.get('/health', (req, res) => {

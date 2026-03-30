@@ -1,0 +1,82 @@
+<!--pages/ritual/learn.wxml-->
+<view class="container" wx:if="{{ritual && currentStep}}">
+  <!-- 顶部进度 -->
+  <view class="header">
+    <view class="header-top">
+      <view class="step-indicator">步骤 {{currentStepIndex + 1}} / {{ritual.steps.length}}</view>
+      <view class="notes-btn" bindtap="onOpenNotes">📝 笔记</view>
+    </view>
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentStepIndex + 1) / ritual.steps.length * 100}}%"></view>
+    </view>
+  </view>
+
+  <!-- 步骤内容 -->
+  <view class="step-content">
+    <view class="step-icon">{{currentStepIndex + 1}}</view>
+    <view class="step-title">{{currentStep.title}}</view>
+    <view class="step-text">{{currentStep.content}}</view>
+  </view>
+
+  <!-- 音频播放 -->
+  <view class="audio-box" wx:if="{{currentStep.audio}}">
+    <view class="audio-info">
+      <text class="audio-icon">{{isPlaying ? '🔊' : '🔇'}}</text>
+      <text class="audio-text">{{isPlaying ? '播放中...' : '点击播放讲解'}}</text>
+    </view>
+    <view class="audio-duration">⏱ {{currentStep.duration}}秒</view>
+    <view class="audio-btn {{isPlaying ? 'playing' : ''}}" bindtap="onPlayAudio">
+      <text wx:if="{{!isPlaying}}">▶</text>
+      <text wx:else>⏸</text>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="footer">
+    <view class="footer-left">
+      <button class="btn btn-prev" bindtap="onPrevStep" disabled="{{currentStepIndex === 0}}">上一步</button>
+    </view>
+    <view class="footer-right">
+      <button class="btn btn-checkin" bindtap="onCheckIn">打卡</button>
+      <button class="btn btn-next" bindtap="onNextStep">
+        <text wx:if="{{currentStepIndex < ritual.steps.length - 1}}">下一步</text>
+        <text wx:else>完成</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 笔记弹窗 -->
+  <view class="notes-modal" wx:if="{{showNotes}}">
+    <view class="notes-content">
+      <view class="notes-header">
+        <text class="notes-title">学习笔记</text>
+        <text class="notes-close" bindtap="onCloseNotes">✕</text>
+      </view>
+      <textarea 
+        class="notes-input" 
+        placeholder="记录您的学习心得..." 
+        value="{{notes}}"
+        bindinput="onNotesInput"
+        maxlength="1000"
+      />
+      <view class="notes-footer">
+        <button class="btn btn-save" bindtap="onSaveNotes">保存笔记</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 完成状态 -->
+  <view class="complete-modal" wx:if="{{isCompleted}}">
+    <view class="complete-content">
+      <text class="complete-icon">🎉</text>
+      <text class="complete-title">学习完成</text>
+      <text class="complete-desc">随喜赞叹您的精进学习</text>
+      <button class="btn btn-practice" bindtap="onGoHome">返回首页</button>
+    </view>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view wx:if="{{!ritual}}" class="loading">
+  <text>加载中...</text>
+</view>

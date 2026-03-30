@@ -1,0 +1,317 @@
+/* pages/ritual/learn.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F5F0E6 0%, #FFFFFF 100%);
+  padding: 0 30rpx;
+  padding-bottom: 160rpx;
+}
+
+/* 头部 */
+.header {
+  padding: 40rpx 0 30rpx;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.step-indicator {
+  font-size: 28rpx;
+  color: #666666;
+  font-weight: 500;
+}
+
+.notes-btn {
+  font-size: 26rpx;
+  color: #D4A574;
+  padding: 8rpx 20rpx;
+  background: rgba(212, 165, 116, 0.1);
+  border-radius: 24rpx;
+}
+
+.progress-bar {
+  height: 8rpx;
+  background: #F5F5F5;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4A574 0%, #C89564 100%);
+  border-radius: 4rpx;
+  transition: width 0.3s;
+}
+
+/* 步骤内容 */
+.step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.step-icon {
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 40rpx;
+  box-shadow: 0 8rpx 24rpx rgba(212, 165, 116, 0.3);
+}
+
+.step-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.step-text {
+  font-size: 32rpx;
+  color: #666666;
+  line-height: 1.8;
+  text-align: center;
+  padding: 0 20rpx;
+}
+
+/* 音频区域 */
+.audio-box {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 40rpx;
+}
+
+.audio-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.audio-icon {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+}
+
+.audio-text {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.audio-duration {
+  font-size: 24rpx;
+  color: #999999;
+  margin: 0 30rpx;
+}
+
+.audio-btn {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 36rpx;
+  transition: all 0.3s;
+}
+
+.audio-btn.playing {
+  background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+}
+
+/* 底部操作 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  background: #FFFFFF;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.footer-left {
+  flex: 1;
+}
+
+.footer-right {
+  flex: 2;
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn {
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  border: none;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn-prev {
+  background: #F5F5F5;
+  color: #666666;
+}
+
+.btn-prev[disabled] {
+  opacity: 0.5;
+}
+
+.btn-checkin {
+  background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+  color: #FFFFFF;
+  flex: 1;
+}
+
+.btn-next {
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  color: #FFFFFF;
+  flex: 2;
+}
+
+/* 笔记弹窗 */
+.notes-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.notes-content {
+  width: 100%;
+  background: #FFFFFF;
+  border-radius: 30rpx 30rpx 0 0;
+  padding: 40rpx 30rpx;
+  max-height: 70vh;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.notes-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.notes-close {
+  font-size: 40rpx;
+  color: #999999;
+  padding: 10rpx;
+}
+
+.notes-input {
+  width: 100%;
+  height: 300rpx;
+  padding: 20rpx;
+  background: #F5F5F5;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #333333;
+  margin-bottom: 30rpx;
+}
+
+.notes-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  color: #FFFFFF;
+  padding: 0 60rpx;
+}
+
+/* 完成弹窗 */
+.complete-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complete-content {
+  background: #FFFFFF;
+  border-radius: 30rpx;
+  padding: 80rpx 60rpx;
+  text-align: center;
+  width: 80%;
+}
+
+.complete-icon {
+  font-size: 120rpx;
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+.complete-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.complete-desc {
+  font-size: 28rpx;
+  color: #666666;
+  display: block;
+  margin-bottom: 40rpx;
+}
+
+.btn-practice {
+  background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+  color: #FFFFFF;
+  width: 100%;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 28rpx;
+  color: #999999;
+}

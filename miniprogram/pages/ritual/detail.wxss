@@ -1,0 +1,305 @@
+/* pages/ritual/detail.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F5F0E6 0%, #FFFFFF 100%);
+  padding-bottom: 120rpx;
+}
+
+/* 头部 */
+.header {
+  padding: 40rpx 30rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 0 0 30rpx 30rpx;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  color: #FFFFFF;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  margin-bottom: 20rpx;
+  line-height: 1.4;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.meta-item {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 进度区域 */
+.progress-section {
+  margin: 30rpx;
+  padding: 30rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.progress-percent {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #D4A574;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: #F5F5F5;
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #D4A574 0%, #C89564 100%);
+  border-radius: 6rpx;
+  transition: width 0.3s;
+}
+
+.progress-status {
+  text-align: center;
+}
+
+.status-completed {
+  font-size: 26rpx;
+  color: #52C41A;
+  font-weight: 500;
+}
+
+.status-learning {
+  font-size: 26rpx;
+  color: #D4A574;
+  font-weight: 500;
+}
+
+.status-not-started {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  border: none;
+}
+
+.btn::after {
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #D4A574;
+  border: 2rpx solid #D4A574;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+  color: #FFFFFF;
+}
+
+/* 区块 */
+.section {
+  margin-bottom: 30rpx;
+  padding: 0 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 24rpx;
+}
+
+/* 步骤列表 */
+.steps-list {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.step-item {
+  display: flex;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  transition: all 0.3s;
+}
+
+.step-item:last-child {
+  border-bottom: none;
+}
+
+.step-item.active {
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(200, 149, 100, 0.1) 100%);
+}
+
+.step-number {
+  width: 60rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.step-desc {
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+
+.step-meta {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.step-duration {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.step-audio {
+  font-size: 24rpx;
+  color: #D4A574;
+  padding: 4rpx 16rpx;
+  background: rgba(212, 165, 116, 0.1);
+  border-radius: 16rpx;
+}
+
+/* 视频区域 */
+.video-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 30rpx;
+  background: linear-gradient(135deg, #F5F0E6 0%, #FFFFFF 100%);
+  border-radius: 16rpx;
+  border: 2rpx dashed #D4A574;
+}
+
+.video-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.video-text {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+/* 视频弹窗 */
+.video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-content {
+  position: relative;
+  width: 100%;
+  max-width: 600rpx;
+}
+
+.video-player {
+  width: 100%;
+  border-radius: 16rpx;
+}
+
+.video-close {
+  position: absolute;
+  top: -60rpx;
+  right: 0;
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 36rpx;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 28rpx;
+  color: #999999;
+}

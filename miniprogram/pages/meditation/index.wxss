@@ -1,0 +1,226 @@
+/* pages/meditation/index.wxss */
+.meditation-container {
+  padding: 20rpx;
+  background: linear-gradient(180deg, #F5F1E8 0%, #EFEEE9 100%);
+  min-height: 100vh;
+}
+
+/* 统计卡片 */
+.stats-card {
+  background: linear-gradient(135deg, #D4B87B 0%, #C4A86B 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(212, 184, 123, 0.3);
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.stats-title {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.streak-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+}
+
+.stats-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.stat-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 通用区块 */
+.section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #D4B87B;
+}
+
+/* 推荐课程 */
+.recommend-courses {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.course-card {
+  display: flex;
+  background: #F8F6F0;
+  border-radius: 16rpx;
+  overflow: hidden;
+  padding: 20rpx;
+}
+
+.course-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+}
+
+.course-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.course-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.course-duration {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.course-count {
+  font-size: 24rpx;
+  color: #D4B87B;
+}
+
+/* 分类网格 */
+.category-grid {
+  display: flex;
+  justify-content: space-around;
+  padding: 20rpx 0;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 33.33%;
+}
+
+.category-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+}
+
+.category-icon.beginner {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+.category-icon.advanced {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+}
+
+.category-icon.special {
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+}
+
+.category-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.category-desc {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 每日签到 */
+.daily-checkin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #F5F1E8 0%, #EFEEE9 100%);
+  padding: 30rpx;
+  border-radius: 16rpx;
+}
+
+.checkin-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkin-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.checkin-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.checkin-btn {
+  background: #D4B87B;
+  color: #fff;
+  padding: 16rpx 40rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.checkin-btn.checked {
+  background: #C8E6C9;
+  color: #2E7D32;
+}

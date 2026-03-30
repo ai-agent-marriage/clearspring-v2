@@ -1,0 +1,47 @@
+<!--pages/meditation/courses.wxml-->
+<view class="courses-container">
+  <!-- 分类筛选 -->
+  <view class="category-filter">
+    <scroll-view class="filter-scroll" scroll-x>
+      <view class="filter-item {{currentCategory === '' ? 'active' : ''}}" bindtap="filterByCategory" data-category="">
+        全部
+      </view>
+      <view class="filter-item {{currentCategory === 'beginner' ? 'active' : ''}}" bindtap="filterByCategory" data-category="beginner">
+        入门
+      </view>
+      <view class="filter-item {{currentCategory === 'advanced' ? 'active' : ''}}" bindtap="filterByCategory" data-category="advanced">
+        进阶
+      </view>
+      <view class="filter-item {{currentCategory === 'special' ? 'active' : ''}}" bindtap="filterByCategory" data-category="special">
+        专题
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 课程列表 -->
+  <view class="course-list">
+    <view class="course-item" wx:for="{{filteredCourses}}" wx:key="id" bindtap="goToPlayer" data-course="{{item}}">
+      <view class="course-left">
+        <image class="course-thumb" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="course-badge {{item.levelType}}">{{item.level}}</view>
+      </view>
+      <view class="course-middle">
+        <text class="course-title">{{item.name}}</text>
+        <text class="course-desc">{{item.description}}</text>
+        <view class="course-meta">
+          <text class="meta-item">⏱️ {{item.duration}}分钟</text>
+          <text class="meta-item">👥 {{item.count}}人</text>
+        </view>
+      </view>
+      <view class="course-right">
+        <text class="play-icon">▶️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredCourses.length === 0}}">
+    <text class="empty-icon">🧘</text>
+    <text class="empty-text">暂无课程</text>
+  </view>
+</view>

@@ -1,0 +1,87 @@
+<!--pages/meditation/player.wxml-->
+<view class="player-container">
+  <!-- 顶部进度 -->
+  <view class="progress-section">
+    <view class="progress-info">
+      <text class="current-time">{{formatCurrentTime}}</text>
+      <text class="total-time">{{formatTotalTime}}</text>
+    </view>
+    <slider 
+      class="progress-slider" 
+      value="{{currentTime}}" 
+      max="{{totalDuration}}" 
+      block-size="24"
+      activeColor="#D4B87B"
+      bindchanging="onSliderChanging"
+    />
+  </view>
+
+  <!-- 冥想引导图 -->
+  <view class="guide-section">
+    <view class="guide-circle {{isPlaying ? 'playing' : ''}}">
+      <image class="guide-image" src="{{courseImage}}" mode="aspectFill"></image>
+    </view>
+    <view class="guide-text">
+      <text class="guide-title">{{courseName}}</text>
+      <text class="guide-subtitle">{{guideText}}</text>
+    </view>
+  </view>
+
+  <!-- 倒计时显示 -->
+  <view class="countdown-section" wx:if="{{showCountdown}}">
+    <view class="countdown-circle">
+      <text class="countdown-time">{{formatCountdown}}</text>
+      <text class="countdown-label">剩余时间</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-section">
+    <!-- 播放控制 -->
+    <view class="play-controls">
+      <view class="control-btn" bindtap="skipBackward">
+        <text class="control-icon">⏪</text>
+        <text class="control-label">-15s</text>
+      </view>
+      
+      <view class="control-btn main-btn" bindtap="togglePlay">
+        <text class="control-icon main-icon">{{isPlaying ? '⏸️' : '▶️'}}</text>
+      </view>
+      
+      <view class="control-btn" bindtap="skipForward">
+        <text class="control-icon">⏩</text>
+        <text class="control-label">+15s</text>
+      </view>
+    </view>
+
+    <!-- 功能按钮 -->
+    <view class="action-buttons">
+      <view class="action-btn" bindtap="toggleCountdown">
+        <text class="action-icon">⏱️</text>
+        <text class="action-text">{{showCountdown ? '隐藏倒计时' : '显示倒计时'}}</text>
+      </view>
+      <view class="action-btn" bindtap="setTimer">
+        <text class="action-icon">⏰</text>
+        <text class="action-text">定时关闭</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部完成按钮 -->
+  <view class="bottom-section">
+    <button class="complete-btn" bindtap="completeMeditation" disabled="{{!isCompleted}}">
+      {{isCompleted ? '已完成' : '完成冥想'}}
+    </button>
+  </view>
+
+  <!-- 隐藏音频元素 -->
+  <audio 
+    id="meditationAudio"
+    src="{{audioUrl}}"
+    loop="{{false}}"
+    bindplay="onAudioPlay"
+    bindpause="onAudioPause"
+    bindended="onAudioEnded"
+    bindtimeupdate="onTimeUpdate"
+  ></audio>
+</view>

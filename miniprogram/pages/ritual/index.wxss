@@ -1,0 +1,284 @@
+/* pages/ritual/index.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F5F0E6 0%, #FFFFFF 100%);
+  padding-bottom: 120rpx;
+}
+
+/* 头部统计 */
+.header {
+  padding: 40rpx 30rpx 30rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 0 0 30rpx 30rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  margin-bottom: 30rpx;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16rpx;
+  padding: 20rpx 30rpx;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 40rpx;
+}
+
+/* 搜索框 */
+.search-box {
+  position: relative;
+  margin: -24rpx 30rpx 30rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.search-input {
+  font-size: 28rpx;
+  color: #333333;
+  padding-right: 60rpx;
+}
+
+.search-placeholder {
+  color: #999999;
+}
+
+.search-icon {
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32rpx;
+}
+
+/* 分类标签 */
+.category-scroll {
+  margin-bottom: 30rpx;
+  padding: 0 30rpx;
+}
+
+.category-list {
+  white-space: nowrap;
+}
+
+.category-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 16rpx 32rpx;
+  margin-right: 20rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+}
+
+.category-item.active {
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+}
+
+.category-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.category-name {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.category-item.active .category-name {
+  color: #FFFFFF;
+}
+
+/* 区块 */
+.section {
+  margin-bottom: 40rpx;
+  padding: 0 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 24rpx;
+}
+
+/* 推荐列表 */
+.recommend-list {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.recommend-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.recommend-item:last-child {
+  border-bottom: none;
+}
+
+.recommend-icon {
+  font-size: 48rpx;
+  margin-right: 24rpx;
+}
+
+.recommend-info {
+  flex: 1;
+}
+
+.recommend-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.recommend-desc {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.recommend-arrow {
+  font-size: 40rpx;
+  color: #CCCCCC;
+}
+
+/* 仪轨列表 */
+.ritual-list {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.ritual-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.ritual-item:last-child {
+  border-bottom: none;
+}
+
+.ritual-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.ritual-icon {
+  font-size: 48rpx;
+  margin-right: 24rpx;
+}
+
+.ritual-info {
+  flex: 1;
+}
+
+.ritual-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.ritual-meta {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.ritual-duration {
+  margin-right: 20rpx;
+}
+
+.ritual-right {
+  display: flex;
+  align-items: center;
+}
+
+.completed-badge {
+  width: 48rpx;
+  height: 48rpx;
+  background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.progress-badge {
+  padding: 8rpx 20rpx;
+  background: linear-gradient(135deg, #D4A574 0%, #C89564 100%);
+  border-radius: 24rpx;
+  color: #FFFFFF;
+  font-size: 24rpx;
+}
+
+.start-badge {
+  padding: 8rpx 20rpx;
+  background: #F5F5F5;
+  border-radius: 24rpx;
+  color: #666666;
+  font-size: 24rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}
