@@ -1,0 +1,16 @@
+name: Deployment Notification
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Production"]
+    types: [completed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Feishu notification
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"msg_type":"text","content":{"text":"部署完成！"}}' \
+            ${{ secrets.FEISHU_WEBHOOK }}

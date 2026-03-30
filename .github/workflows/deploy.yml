@@ -1,0 +1,49 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+      
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./api
+      
+      - name: Run tests
+        run: npm test
+        working-directory: ./api
+      
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./admin-pc
+      
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v3
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: 101.96.192.63
+          REMOTE_USER: root
+          SOURCE: ./
+          TARGET: /root/.openclaw/workspace/projects/clearspring-v2
+          EXCLUDE: "/node_modules/, /.git/"
+      
+      - name: Restart service
+        uses: appleboy/ssh-action@master
+        with:
+          host: 101.96.192.63
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/.openclaw/workspace/projects/clearspring-v2/api
+            npm install
+            pm2 restart clearspring-api
