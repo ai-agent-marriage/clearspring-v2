@@ -1,0 +1,264 @@
+/**
+ * 清如 ClearSpring V2.0 - 收入管理样式
+ */
+
+page {
+  --executor-green: #4A5D4E;
+  --executor-green-light: #6B7D6E;
+  --bg-primary: #F5F5F0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-hint: #999999;
+  --card-radius: 24rpx;
+}
+
+.income-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.content-scroll {
+  flex: 1;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+
+.card-gradient {
+  margin-top: 30rpx;
+  padding: 40rpx;
+  background: linear-gradient(135deg, var(--executor-green) 0%, var(--executor-green-light) 100%);
+  border-radius: var(--card-radius);
+  box-shadow: 0 8rpx 40rpx rgba(74, 93, 78, 0.3);
+  color: #FFFFFF;
+}
+
+.income-header {
+  margin-bottom: 20rpx;
+}
+
+.income-label {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.income-amount {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 40rpx;
+}
+
+.income-amount .currency {
+  font-size: 40rpx;
+  margin-right: 8rpx;
+}
+
+.income-amount .number {
+  font-size: 72rpx;
+  font-weight: bold;
+}
+
+.income-tabs {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20rpx;
+  padding: 20rpx 0;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+.tab-item.active {
+  transform: scale(1.05);
+}
+
+.tab-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.tab-label {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.withdraw-section {
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.withdraw-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  transition: all 0.3s ease;
+}
+
+.withdraw-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+.withdraw-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.withdraw-amount {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--executor-green);
+}
+
+.withdraw-action {
+  display: flex;
+  align-items: center;
+}
+
+.withdraw-btn {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--executor-green);
+  margin-right: 16rpx;
+}
+
+.withdraw-action text:last-child {
+  font-size: 32rpx;
+  color: var(--text-hint);
+}
+
+.withdraw-rules {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: rgba(74, 93, 78, 0.08);
+  border-radius: 16rpx;
+}
+
+.withdraw-rules text:first-child {
+  font-size: 32rpx;
+  color: var(--executor-green);
+  margin-right: 16rpx;
+}
+
+.withdraw-rules text:last-child {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+}
+
+.section-title text:first-child {
+  margin-right: 16rpx;
+  font-size: 40rpx;
+  color: var(--executor-green);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.detail-left {
+  display: flex;
+  align-items: center;
+}
+
+.detail-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  background: rgba(74, 93, 78, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.detail-icon text {
+  font-size: 40rpx;
+  color: var(--executor-green);
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.detail-time {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.detail-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.detail-amount {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.detail-amount.positive {
+  color: var(--executor-green);
+}
+
+.detail-status {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.empty-state, .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 0;
+}
+
+.empty-state text:first-child {
+  font-size: 120rpx;
+  color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--text-hint);
+}

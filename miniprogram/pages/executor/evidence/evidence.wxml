@@ -1,0 +1,84 @@
+<!--
+  清如 ClearSpring V2.0 - 证据提交
+  页面路径：pages/executor/evidence/evidence
+-->
+
+<view class="evidence-page">
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">证据提交</block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 任务信息 -->
+    <view wx:if="{{taskInfo}}" class="task-info card-shadow">
+      <text class="info-label">任务：</text>
+      <text class="info-value">{{taskInfo.species}} x {{taskInfo.quantity}}</text>
+    </view>
+
+    <!-- 照片/视频上传 -->
+    <view class="upload-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-camera"></text>
+        <text>现场证据</text>
+        <text class="required-mark">*</text>
+      </view>
+      
+      <view class="media-grid">
+        <view wx:for="{{mediaList}}" wx:key="index" class="media-item">
+          <image wx:if="{{item.type === 'image'}}" src="{{item.path}}" mode="aspectFill"></image>
+          <video wx:if="{{item.type === 'video'}}" src="{{item.path}}" controls></video>
+          <view class="delete-btn" bindtap="deleteMedia" data-index="{{index}}">
+            <text class="cuIcon-cuIcon-close"></text>
+          </view>
+        </view>
+        
+        <view class="upload-btn" bindtap="uploadMedia">
+          <text class="cuIcon-cuIcon-add"></text>
+          <text>添加证据</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 证据描述 -->
+    <view class="desc-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-edit"></text>
+        <text>证据描述</text>
+      </view>
+      
+      <textarea 
+        class="desc-input"
+        placeholder="请描述放生过程、地点环境等信息"
+        value="{{description}}"
+        bindinput="onDescInput"
+        maxlength="500"
+      ></textarea>
+      
+      <view class="char-count">{{descriptionLength}}/500</view>
+    </view>
+
+    <!-- 地点确认 -->
+    <view class="location-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-location"></text>
+        <text>放生地点</text>
+      </view>
+      
+      <view class="location-card card-shadow" bindtap="selectLocation">
+        <text class="location-text">{{locationText || '点击选择放生地点'}}</text>
+        <text class="cuIcon-cuIcon-right"></text>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="submit-btn {{canSubmit ? '' : 'disabled'}}" bindtap="submitEvidence" disabled="{{!canSubmit}}">
+        <text class="cuIcon-cuIcon-submit"></text>
+        <text>提交证据</text>
+      </button>
+      <text class="submit-hint">请确保所有证据真实有效</text>
+    </view>
+
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+</view>

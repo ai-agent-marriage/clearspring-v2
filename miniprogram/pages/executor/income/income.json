@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  },
+  "navigationBarTitleText": "收入管理",
+  "enablePullDownRefresh": true
+}

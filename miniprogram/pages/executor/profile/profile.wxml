@@ -1,0 +1,142 @@
+<!--
+  清如 ClearSpring V2.0 - 执行者个人中心
+  页面路径：pages/executor/profile/profile
+-->
+
+<view class="profile-page">
+  <cu-custom bgColor="bg-gradual-green" :isBack="false">
+    <block slot="content">个人中心</block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 个人信息卡片 -->
+    <view class="profile-card card-gradient">
+      <view class="profile-header">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/static/avatar/default.png'}}" mode="aspectFill"></image>
+        <view class="profile-info">
+          <text class="nickname">{{userInfo.nickName || '未登录'}}</text>
+          <view class="level-tag" wx:if="{{userInfo.level}}">
+            <text>{{userInfo.levelName || '初级执行者'}}</text>
+          </view>
+        </view>
+        <view class="edit-btn" bindtap="editProfile">
+          <text class="cuIcon-cuIcon-edit"></text>
+        </view>
+      </view>
+      
+      <view class="profile-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{totalTasks}}</text>
+          <text class="stat-label">完成任务</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{rating}}</text>
+          <text class="stat-label">好评率</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{totalIncome}}</text>
+          <text class="stat-label">累计收入</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 资质状态 -->
+    <view class="qualification-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-document"></text>
+        <text>资质认证</text>
+      </view>
+      <view class="qual-card card-shadow" bindtap="goToQualification">
+        <view class="qual-info">
+          <text class="qual-label">认证状态</text>
+          <text class="qual-value {{qualificationClass}}">{{qualificationText}}</text>
+        </view>
+        <text class="cuIcon-cuIcon-right"></text>
+      </view>
+    </view>
+
+    <!-- 功能菜单 -->
+    <view class="menu-section">
+      <view class="menu-group card-shadow">
+        <view class="menu-item" bindtap="goToMyTasks">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-task"></text>
+          </text>
+          <text class="menu-label">我的任务</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="menu-divider"></view>
+        <view class="menu-item" bindtap="goToIncome">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-wallet"></text>
+          </text>
+          <text class="menu-label">收入管理</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="menu-divider"></view>
+        <view class="menu-item" bindtap="goToAssistant">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-read"></text>
+          </text>
+          <text class="menu-label">任务助手</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+      </view>
+
+      <view class="menu-group card-shadow">
+        <view class="menu-item" bindtap="goToSettings">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-settings"></text>
+          </text>
+          <text class="menu-label">设置</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="menu-divider"></view>
+        <view class="menu-item" bindtap="goToHelp">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-help"></text>
+          </text>
+          <text class="menu-label">帮助与反馈</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+        <view class="menu-divider"></view>
+        <view class="menu-item" bindtap="goToAbout">
+          <text class="menu-icon">
+            <text class="cuIcon-cuIcon-info"></text>
+          </text>
+          <text class="menu-label">关于我们</text>
+          <text class="cuIcon-cuIcon-right"></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 退出登录 -->
+    <view wx:if="{{isLogin}}" class="logout-section">
+      <button class="logout-btn" bindtap="logout">退出登录</button>
+    </view>
+
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+
+  <!-- 底部 TabBar -->
+  <view class="tabbar">
+    <view class="tabbar-item" bindtap="goToHome">
+      <text class="cuIcon-cuIcon-home"></text>
+      <text class="tabbar-label">首页</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToOrderHall">
+      <text class="cuIcon-cuIcon-shop"></text>
+      <text class="tabbar-label">抢单</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToTasks">
+      <text class="cuIcon-cuIcon-task"></text>
+      <text class="tabbar-label">任务</text>
+    </view>
+    <view class="tabbar-item active">
+      <text class="cuIcon-cuIcon-profile"></text>
+      <text class="tabbar-label">我的</text>
+    </view>
+  </view>
+</view>
