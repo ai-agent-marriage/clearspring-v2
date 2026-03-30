@@ -122,7 +122,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { exportOrders, exportExecutors, exportRevenue, getExportHistory } from '@/api/export'
+import { exportOrderList, exportExecutorList, exportProfitRecords, exportQualificationList } from '@/api/export'
 
 const exporting = ref(false)
 const exportHistory = ref([])
