@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Send Feishu notification
         run: |
-          curl -X POST -H "Content-Type: application/json" \
-            -d '{"msg_type":"text","content":{"text":"部署完成！"}}' \
-            ${{ secrets.FEISHU_WEBHOOK }}
+          if [ -n "${{ secrets.FEISHU_WEBHOOK }}" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"msg_type":"text","content":{"text":"部署完成！"}}' \
+              ${{ secrets.FEISHU_WEBHOOK }} || true
+          else
+            echo "⚠️ FEISHU_WEBHOOK not configured, skipping notification"
+          fi
+        continue-on-error: true
