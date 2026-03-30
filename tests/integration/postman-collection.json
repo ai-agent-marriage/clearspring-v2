@@ -1,0 +1,331 @@
+{
+  "info": {
+    "name": "清如 ClearSpring V2 - 管理端 API",
+    "description": "管理端 8 个 API 接口的 Postman 测试集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{admin_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "订单管理",
+      "item": [
+        {
+          "name": "GET /api/admin/orders - 订单列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders?page=1&pageSize=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "orders"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "20"},
+                {"key": "status", "value": "", "disabled": true},
+                {"key": "paymentStatus", "value": "", "disabled": true},
+                {"key": "serviceType", "value": "", "disabled": true},
+                {"key": "startDate", "value": "", "disabled": true},
+                {"key": "endDate", "value": "", "disabled": true},
+                {"key": "keyword", "value": "", "disabled": true}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/orders - 按状态筛选",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders?status=paid&page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "orders"],
+              "query": [
+                {"key": "status", "value": "paid"},
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/orders - 关键词搜索",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/orders?keyword=ORD&page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "orders"],
+              "query": [
+                {"key": "keyword", "value": "ORD"},
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/order/:id/status - 更新订单状态",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"remark\": \"管理员手动完成\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/order/:id/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "order", ":id", "status"],
+              "variable": [
+                {"key": "id", "value": "ORDER_ID_HERE"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/admin/order/:id - 删除订单",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/order/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "order", ":id"],
+              "variable": [
+                {"key": "id", "value": "ORDER_ID_HERE"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "资质审核",
+      "item": [
+        {
+          "name": "GET /api/admin/qualifications - 资质列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/qualifications?page=1&pageSize=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "qualifications"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "20"},
+                {"key": "status", "value": "", "disabled": true},
+                {"key": "type", "value": "", "disabled": true},
+                {"key": "userId", "value": "", "disabled": true}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/qualifications - 待审核",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/qualifications?status=pending&page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "qualifications"],
+              "query": [
+                {"key": "status", "value": "pending"},
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/qualification/:id - 审核通过",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\",\n  \"auditRemark\": \"审核通过，资质有效\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/qualification/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "qualification", ":id"],
+              "variable": [
+                {"key": "id", "value": "QUALIFICATION_ID_HERE"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/qualification/:id - 审核驳回",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"rejected\",\n  \"rejectReason\": \"图片不清晰，无法辨认\",\n  \"auditRemark\": \"请重新上传清晰图片\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/qualification/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "qualification", ":id"],
+              "variable": [
+                {"key": "id", "value": "QUALIFICATION_ID_HERE"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "执行者管理",
+      "item": [
+        {
+          "name": "GET /api/admin/executors - 执行者列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/executors?page=1&pageSize=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "executors"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "20"},
+                {"key": "status", "value": "", "disabled": true},
+                {"key": "keyword", "value": "", "disabled": true},
+                {"key": "serviceType", "value": "", "disabled": true}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/executors - 活跃执行者",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/executors?status=active&page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "executors"],
+              "query": [
+                {"key": "status", "value": "active"},
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/admin/executors - 关键词搜索",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/executors?keyword=张&page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "executors"],
+              "query": [
+                {"key": "keyword", "value": "张"},
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/executor/:id/status - 更新状态",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"inactive\",\n  \"remark\": \"暂时停用\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/executor/:id/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "executor", ":id", "status"],
+              "variable": [
+                {"key": "id", "value": "EXECUTOR_ID_HERE"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "分账配置",
+      "item": [
+        {
+          "name": "GET /api/admin/profit-sharing - 获取配置",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/admin/profit-sharing",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "profit-sharing"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/admin/profit-sharing - 更新配置",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"platformRate\": 0.10,\n  \"executorMinRate\": 0.70,\n  \"executorMaxRate\": 0.90,\n  \"defaultExecutorRate\": 0.80,\n  \"minOrderAmount\": 10,\n  \"maxOrderAmount\": 10000,\n  \"serviceTypeRates\": {\n    \"cleaning\": {\n      \"platformRate\": 0.10,\n      \"executorRate\": 0.85\n    },\n    \"maintenance\": {\n      \"platformRate\": 0.12,\n      \"executorRate\": 0.82\n    }\n  },\n  \"tieredRates\": [\n    {\"minOrders\": 0, \"maxOrders\": 10, \"executorRateBonus\": 0},\n    {\"minOrders\": 11, \"maxOrders\": 30, \"executorRateBonus\": 0.02},\n    {\"minOrders\": 31, \"maxOrders\": 50, \"executorRateBonus\": 0.03},\n    {\"minOrders\": 51, \"maxOrders\": null, \"executorRateBonus\": 0.05}\n  ],\n  \"withdrawMinAmount\": 100,\n  \"withdrawFee\": 0,\n  \"withdrawTaxRate\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/profit-sharing",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "profit-sharing"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

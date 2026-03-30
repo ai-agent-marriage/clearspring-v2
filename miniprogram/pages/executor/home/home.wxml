@@ -1,0 +1,163 @@
+<!--
+  清如 ClearSpring V2.0 - 执行者首页
+  页面路径：pages/executor/home/home
+  设计规范：
+    - 主色调：岱绿 #4A5D4E
+    - 组件圆角：24rpx
+    - 按钮热区：≥88rpx
+-->
+
+<view class="home-page">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-gradual-green" :isBack="false">
+    <block slot="content">执行者中心</block>
+    <block slot="right">
+      <view class="notification-btn" bindtap="goToNotification">
+        <text class="cuIcon-cuIcon-notice"></text>
+        <view wx:if="{{hasUnreadNotice}}" class="notice-dot"></view>
+      </view>
+    </block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 收入概览卡片 -->
+    <view class="income-card card-gradient">
+      <view class="income-header">
+        <text class="income-label">累计收入</text>
+        <text class="income-update">更新于：{{updateTime}}</text>
+      </view>
+      <view class="income-amount">
+        <text class="currency">¥</text>
+        <text class="number">{{totalIncome}}</text>
+      </view>
+      <view class="income-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{todayIncome}}</text>
+          <text class="stat-label">今日</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{weekIncome}}</text>
+          <text class="stat-label">本周</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-value">{{monthIncome}}</text>
+          <text class="stat-label">本月</text>
+        </view>
+      </view>
+      <view class="income-actions">
+        <button class="action-btn primary" bindtap="goToIncome">
+          <text class="cuIcon-cuIcon-wallet"></text>
+          <text>收入明细</text>
+        </button>
+        <button class="action-btn secondary" bindtap="withdraw">
+          <text class="cuIcon-cuIcon-recharge"></text>
+          <text>提现</text>
+        </button>
+      </view>
+    </view>
+
+    <!-- 任务统计卡片 -->
+    <view class="task-stats-card card-shadow">
+      <view class="stats-title">
+        <text class="cuIcon-cuIcon-task"></text>
+        <text>任务统计</text>
+      </view>
+      <view class="stats-grid">
+        <view class="stat-card" bindtap="goToMyTasks" data-status="ongoing">
+          <view class="stat-icon bg-green">
+            <text class="cuIcon-cuIcon-run"></text>
+          </view>
+          <text class="stat-number">{{ongoingTasks}}</text>
+          <text class="stat-text">进行中</text>
+        </view>
+        <view class="stat-card" bindtap="goToMyTasks" data-status="pending">
+          <view class="stat-icon bg-blue">
+            <text class="cuIcon-cuIcon-time"></text>
+          </view>
+          <text class="stat-number">{{pendingTasks}}</text>
+          <text class="stat-text">待开始</text>
+        </view>
+        <view class="stat-card" bindtap="goToMyTasks" data-status="completed">
+          <view class="stat-icon bg-orange">
+            <text class="cuIcon-cuIcon-check"></text>
+          </view>
+          <text class="stat-number">{{completedTasks}}</text>
+          <text class="stat-text">已完成</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷操作入口 -->
+    <view class="quick-actions">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-apps"></text>
+        <text>快捷操作</text>
+      </view>
+      <view class="actions-grid">
+        <view class="action-item" bindtap="goToOrderHall">
+          <view class="action-icon bg-gradual-green">
+            <text class="cuIcon-cuIcon-shop"></text>
+          </view>
+          <text class="action-label">抢单大厅</text>
+        </view>
+        <view class="action-item" bindtap="goToMyTasks">
+          <view class="action-icon bg-gradual-blue">
+            <text class="cuIcon-cuIcon-task"></text>
+          </view>
+          <text class="action-label">我的任务</text>
+        </view>
+        <view class="action-item" bindtap="goToAssistant">
+          <view class="action-icon bg-gradual-cyan">
+            <text class="cuIcon-cuIcon-read"></text>
+          </view>
+          <text class="action-label">任务助手</text>
+        </view>
+        <view class="action-item" bindtap="goToEvidence">
+          <view class="action-icon bg-gradual-purple">
+            <text class="cuIcon-cuIcon-camera"></text>
+          </view>
+          <text class="action-label">证据提交</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 公告通知 -->
+    <view wx:if="{{notice}}" class="notice-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-notice"></text>
+        <text>平台公告</text>
+      </view>
+      <view class="notice-card card-shadow" bindtap="viewNotice">
+        <view class="notice-content">
+          <text class="notice-text">{{notice}}</text>
+        </view>
+        <text class="cuIcon-cuIcon-right"></text>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+
+  <!-- 底部 TabBar -->
+  <view class="tabbar">
+    <view class="tabbar-item active">
+      <text class="cuIcon-cuIcon-home"></text>
+      <text class="tabbar-label">首页</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToOrderHall">
+      <text class="cuIcon-cuIcon-shop"></text>
+      <text class="tabbar-label">抢单</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToMyTasks">
+      <text class="cuIcon-cuIcon-task"></text>
+      <text class="tabbar-label">任务</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToProfile">
+      <text class="cuIcon-cuIcon-profile"></text>
+      <text class="tabbar-label">我的</text>
+    </view>
+  </view>
+</view>

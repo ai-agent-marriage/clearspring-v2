@@ -1,0 +1,85 @@
+<!--
+  清如 ClearSpring V2.0 - 任务助手
+  页面路径：pages/executor/assistant/assistant
+-->
+
+<view class="assistant-page">
+  <cu-custom bgColor="bg-gradual-green" :isBack="true">
+    <block slot="content">任务助手</block>
+  </cu-custom>
+
+  <scroll-view scroll-y class="content-scroll">
+    <!-- 任务详情 -->
+    <view wx:if="{{taskId}}" class="task-detail card-shadow">
+      <view class="detail-header">
+        <text class="detail-title">当前任务</text>
+        <view class="status-tag {{taskStatus}}">{{statusText}}</view>
+      </view>
+      <view class="detail-content">
+        <view class="detail-item">
+          <text class="detail-label">物种</text>
+          <text class="detail-value">{{taskInfo.species}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">数量</text>
+          <text class="detail-value">{{taskInfo.quantity}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">地点</text>
+          <text class="detail-value">{{taskInfo.location}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">时间要求</text>
+          <text class="detail-value">{{taskInfo.requiredTime}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 放生仪轨指引 -->
+    <view class="guide-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-read"></text>
+        <text>放生仪轨指引</text>
+      </view>
+      
+      <view class="guide-steps">
+        <view wx:for="{{guideSteps}}" wx:key="index" class="guide-step card-shadow">
+          <view class="step-number">{{item.index}}</view>
+          <view class="step-content">
+            <text class="step-title">{{item.title}}</text>
+            <text class="step-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 注意事项 -->
+    <view class="tips-section">
+      <view class="section-title">
+        <text class="cuIcon-cuIcon-notice"></text>
+        <text>注意事项</text>
+      </view>
+      
+      <view class="tips-list">
+        <view wx:for="{{tips}}" wx:key="index" class="tip-item card-shadow">
+          <text class="cuIcon-cuIcon-info"></text>
+          <text class="tip-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-section">
+      <button class="action-btn primary" bindtap="startTask">
+        <text class="cuIcon-cuIcon-run"></text>
+        <text>开始任务</text>
+      </button>
+      <button class="action-btn secondary" bindtap="contactSupport">
+        <text class="cuIcon-cuIcon-phone"></text>
+        <text>联系客服</text>
+      </button>
+    </view>
+
+    <view style="height: 100rpx;"></view>
+  </scroll-view>
+</view>

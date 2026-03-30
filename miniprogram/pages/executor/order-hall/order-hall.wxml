@@ -1,0 +1,91 @@
+<!--
+  清如 ClearSpring V2.0 - 抢单大厅
+  页面路径：pages/executor/order-hall/order-hall
+-->
+
+<view class="order-hall-page">
+  <cu-custom bgColor="bg-gradual-green" :isBack="false">
+    <block slot="content">抢单大厅</block>
+  </cu-custom>
+
+  <view class="filter-section">
+    <scroll-view scroll-x class="filter-scroll">
+      <view class="filter-item {{currentFilter === 'all' ? 'active' : ''}}" bindtap="setFilter" data-type="all">
+        <text>全部</text>
+      </view>
+      <view class="filter-item {{currentFilter === 'fish' ? 'active' : ''}}" bindtap="setFilter" data-type="fish">
+        <text>鱼类</text>
+      </view>
+      <view class="filter-item {{currentFilter === 'bird' ? 'active' : ''}}" bindtap="setFilter" data-type="bird">
+        <text>鸟类</text>
+      </view>
+      <view class="filter-item {{currentFilter === 'animal' ? 'active' : ''}}" bindtap="setFilter" data-type="animal">
+        <text>动物</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <scroll-view scroll-y class="order-list" bindscrolltolower="loadMore">
+    <view wx:for="{{orderList}}" wx:key="id" class="order-card card-shadow">
+      <view class="order-header">
+        <view class="order-species">
+          <text class="cuIcon-cuIcon-fish"></text>
+          <text>{{item.species}}</text>
+        </view>
+        <view class="order-urgent {{item.isUrgent ? 'active' : ''}}">
+          <text wx:if="{{item.isUrgent}}">急</text>
+        </view>
+      </view>
+      
+      <view class="order-body">
+        <view class="order-info">
+          <text class="info-item">数量：{{item.quantity}}</text>
+          <text class="info-item">地点：{{item.location}}</text>
+          <text class="info-item">时间：{{item.requiredTime}}</text>
+        </view>
+        <view class="order-reward">
+          <text class="reward-label">报酬</text>
+          <text class="reward-amount">¥{{item.reward}}</text>
+        </view>
+      </view>
+      
+      <view class="order-footer">
+        <text class="order-distance">距离 {{item.distance}}</text>
+        <button class="grab-btn {{item.isGrabbed ? 'grabbed' : ''}}" 
+                bindtap="grabOrder" 
+                data-id="{{item.id}}"
+                disabled="{{item.isGrabbed}}">
+          {{item.isGrabbed ? '已抢单' : '立即抢单'}}
+        </button>
+      </view>
+    </view>
+
+    <view wx:if="{{orderList.length === 0}}" class="empty-state">
+      <text class="cuIcon-cuIcon-empty"></text>
+      <text class="empty-text">暂无订单</text>
+    </view>
+
+    <view wx:if="{{loading}}" class="loading-state">
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+
+  <view class="tabbar">
+    <view class="tabbar-item" bindtap="goToHome">
+      <text class="cuIcon-cuIcon-home"></text>
+      <text class="tabbar-label">首页</text>
+    </view>
+    <view class="tabbar-item active">
+      <text class="cuIcon-cuIcon-shop"></text>
+      <text class="tabbar-label">抢单</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToTasks">
+      <text class="cuIcon-cuIcon-task"></text>
+      <text class="tabbar-label">任务</text>
+    </view>
+    <view class="tabbar-item" bindtap="goToProfile">
+      <text class="cuIcon-cuIcon-profile"></text>
+      <text class="tabbar-label">我的</text>
+    </view>
+  </view>
+</view>
