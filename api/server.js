@@ -44,6 +44,10 @@ async function connectMongoDB() {
     const client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017/clearspring_v2');
     await client.connect();
     db = client.db('clearspring_v2');
+    
+    // 设置到 app 对象，供路由使用
+    app.set('db', db);
+    
     console.log('✅ MongoDB 连接成功');
     return db;
   } catch (error) {

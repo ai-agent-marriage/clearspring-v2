@@ -6,7 +6,8 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware } = require('../middleware/auth');
 const { AppError } = require('../middleware/errorHandler');
-const { getDb } = require('../server');
+
+// 数据库连接通过 req.app.get 获取
 const { ObjectId } = require('mongodb');
 
 /**
@@ -15,7 +16,7 @@ const { ObjectId } = require('mongodb');
  */
 router.get('/list', async (req, res, next) => {
   try {
-    const db = getDb();
+    const db = req.app.get('db');
     const { status, page = 1, pageSize = 10 } = req.query;
     
     // 构建查询条件
