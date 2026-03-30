@@ -1,52 +1,43 @@
 import request from './request'
 
-// 获取基础配置
-export function getBaseConfig() {
+/**
+ * 获取系统设置
+ */
+export function getSystemSettings() {
   return request({
-    url: '/admin/settings/base',
+    url: '/admin/settings',
     method: 'get'
   })
 }
 
-// 更新基础配置
-export function updateBaseConfig(data) {
+/**
+ * 更新系统设置
+ */
+export function updateSystemSettings(settings) {
   return request({
-    url: '/admin/settings/base',
+    url: '/admin/settings',
     method: 'put',
-    data
+    data: settings
   })
 }
 
-// 获取权限配置
-export function getPermissionConfig() {
-  return request({
-    url: '/admin/settings/permissions',
-    method: 'get'
-  })
-}
-
-// 更新权限配置
-export function updatePermissionConfig(data) {
-  return request({
-    url: '/admin/settings/permissions',
-    method: 'put',
-    data
-  })
-}
-
-// 获取操作日志
+/**
+ * 获取操作日志
+ */
 export function getOperationLogs(params) {
   return request({
-    url: '/admin/settings/logs',
+    url: '/admin/logs',
     method: 'get',
     params
   })
 }
 
-// 获取系统信息
-export function getSystemInfo() {
+/**
+ * 获取管理员列表
+ */
+export function getAdminList() {
   return request({
-    url: '/admin/settings/system-info',
+    url: '/admin/admins',
     method: 'get'
   })
 }

@@ -1,46 +1,48 @@
 import request from './request'
 
+/**
+ * 获取执行者列表
+ */
 export function getExecutorList(params) {
   return request({
-    url: '/executor/list',
+    url: '/admin/executors',
     method: 'get',
     params
   })
 }
 
+/**
+ * 获取执行者详情
+ */
 export function getExecutorDetail(id) {
   return request({
-    url: `/executor/${id}`,
+    url: `/admin/executors/${id}`,
     method: 'get'
   })
 }
 
-export function createExecutor(data) {
+/**
+ * 更新执行者状态
+ */
+export function updateExecutorStatus(id, status, reason = '') {
   return request({
-    url: '/executor',
-    method: 'post',
-    data
-  })
-}
-
-export function updateExecutor(id, data) {
-  return request({
-    url: `/executor/${id}`,
+    url: `/admin/executors/${id}/status`,
     method: 'put',
-    data
+    data: {
+      status,
+      reason
+    }
   })
 }
 
-export function deleteExecutor(id) {
+/**
+ * 导出执行者数据
+ */
+export function exportExecutors(params) {
   return request({
-    url: `/executor/${id}`,
-    method: 'delete'
-  })
-}
-
-export function toggleExecutorStatus(id) {
-  return request({
-    url: `/executor/${id}/toggle`,
-    method: 'post'
+    url: '/admin/executors/export',
+    method: 'get',
+    params,
+    responseType: 'blob'
   })
 }

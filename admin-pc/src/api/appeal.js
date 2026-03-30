@@ -1,31 +1,36 @@
 import request from './request'
 
+/**
+ * 获取申诉列表
+ */
 export function getAppealList(params) {
   return request({
-    url: '/appeal/list',
+    url: '/admin/appeals',
     method: 'get',
     params
   })
 }
 
+/**
+ * 获取申诉详情
+ */
 export function getAppealDetail(id) {
   return request({
-    url: `/appeal/${id}`,
+    url: `/admin/appeals/${id}`,
     method: 'get'
   })
 }
 
-export function handleAppeal(id, data) {
+/**
+ * 仲裁申诉
+ */
+export function arbitrateAppeal(id, result, reason = '') {
   return request({
-    url: `/appeal/${id}/handle`,
-    method: 'post',
-    data
-  })
-}
-
-export function resolveAppeal(id) {
-  return request({
-    url: `/appeal/${id}/resolve`,
-    method: 'post'
+    url: `/admin/appeals/${id}/arbitrate`,
+    method: 'put',
+    data: {
+      result,
+      reason
+    }
   })
 }

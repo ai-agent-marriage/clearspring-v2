@@ -1,39 +1,48 @@
 import request from './request'
 
+/**
+ * 获取资质审核列表
+ */
 export function getQualificationList(params) {
   return request({
-    url: '/qualification/list',
+    url: '/admin/qualifications',
     method: 'get',
     params
   })
 }
 
+/**
+ * 获取资质详情
+ */
 export function getQualificationDetail(id) {
   return request({
-    url: `/qualification/${id}`,
+    url: `/admin/qualifications/${id}`,
     method: 'get'
   })
 }
 
-export function reviewQualification(id, data) {
+/**
+ * 审核资质（通过/驳回）
+ */
+export function auditQualification(id, status, reason = '') {
   return request({
-    url: `/qualification/${id}/review`,
-    method: 'post',
-    data
+    url: `/admin/qualifications/${id}`,
+    method: 'put',
+    data: {
+      status,
+      reason
+    }
   })
 }
 
-export function approveQualification(id) {
+/**
+ * 导出资质数据
+ */
+export function exportQualifications(params) {
   return request({
-    url: `/qualification/${id}/approve`,
-    method: 'post'
-  })
-}
-
-export function rejectQualification(id, data) {
-  return request({
-    url: `/qualification/${id}/reject`,
-    method: 'post',
-    data
+    url: '/admin/qualifications/export',
+    method: 'get',
+    params,
+    responseType: 'blob'
   })
 }

@@ -1,40 +1,45 @@
 import request from './request'
 
-export function getProfitList(params) {
+/**
+ * 获取分账配置
+ */
+export function getProfitSharingConfig() {
   return request({
-    url: '/profit/list',
-    method: 'get',
-    params
-  })
-}
-
-export function getProfitDetail(id) {
-  return request({
-    url: `/profit/${id}`,
+    url: '/admin/profit-sharing',
     method: 'get'
   })
 }
 
-export function getProfitSummary(params) {
+/**
+ * 更新分账配置
+ */
+export function updateProfitSharingConfig(config) {
   return request({
-    url: '/profit/summary',
+    url: '/admin/profit-sharing',
+    method: 'put',
+    data: config
+  })
+}
+
+/**
+ * 获取分账记录
+ */
+export function getProfitRecords(params) {
+  return request({
+    url: '/admin/profit-sharing/records',
     method: 'get',
     params
   })
 }
 
-export function distributeProfit(id, data) {
+/**
+ * 导出分账数据
+ */
+export function exportProfitRecords(params) {
   return request({
-    url: `/profit/${id}/distribute`,
-    method: 'post',
-    data
-  })
-}
-
-export function getProfitRecords(executorId, params) {
-  return request({
-    url: `/profit/executor/${executorId}/records`,
+    url: '/admin/profit-sharing/export',
     method: 'get',
-    params
+    params,
+    responseType: 'blob'
   })
 }

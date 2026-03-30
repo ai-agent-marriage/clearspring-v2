@@ -1,54 +1,49 @@
 import request from './request'
 
-export function getAdminList(params) {
+/**
+ * 管理员登录
+ */
+export function adminLogin(username, password) {
   return request({
-    url: '/admin/list',
-    method: 'get',
-    params
+    url: '/admin/login',
+    method: 'post',
+    data: {
+      username,
+      password
+    }
   })
 }
 
-export function getAdminDetail(id) {
+/**
+ * 获取管理员信息
+ */
+export function getAdminInfo() {
   return request({
-    url: `/admin/${id}`,
+    url: '/admin/info',
     method: 'get'
   })
 }
 
-export function createAdmin(data) {
+/**
+ * 退出登录
+ */
+export function adminLogout() {
   return request({
-    url: '/admin',
-    method: 'post',
-    data
-  })
-}
-
-export function updateAdmin(id, data) {
-  return request({
-    url: `/admin/${id}`,
-    method: 'put',
-    data
-  })
-}
-
-export function deleteAdmin(id) {
-  return request({
-    url: `/admin/${id}`,
-    method: 'delete'
-  })
-}
-
-export function updateAdminRole(id, data) {
-  return request({
-    url: `/admin/${id}/role`,
-    method: 'put',
-    data
-  })
-}
-
-export function resetAdminPassword(id) {
-  return request({
-    url: `/admin/${id}/reset-password`,
+    url: '/admin/logout',
     method: 'post'
+  })
+}
+
+/**
+ * 修改密码
+ */
+export function changePassword(oldPassword, newPassword) {
+  return request({
+    url: '/admin/change-password',
+    method: 'post',
+    data: {
+      oldPassword,
+      newPassword
+    }
   })
 }
