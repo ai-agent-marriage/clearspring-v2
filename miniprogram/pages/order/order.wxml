@@ -46,7 +46,7 @@
         </view>
         <picker mode="selector" range="{{speciesList}}" range-key="name" value="{{speciesIndex}}" bindchange="onSpeciesChange">
           <view class="picker-item">
-            <text class="picker-label">{{speciesList[speciesIndex]?.name || '请选择物种'}}</text>
+            <text class="picker-label">{{speciesList[speciesIndex].name || '请选择物种'}}</text>
             <text class="cuIcon-cuIcon-right text-hint"></text>
           </view>
         </picker>

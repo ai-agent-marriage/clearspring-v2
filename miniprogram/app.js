@@ -65,9 +65,9 @@ App({
       
       if (userInfo) {
         this.globalData.userInfo = userInfo;
-        logger.info('用户已登录:', userInfo);
+        console.log('用户已登录:', userInfo);
       } else {
-        logger.info('用户未登录');
+        console.log('用户未登录');
       }
     } catch (error) {
       console.error('检查登录状态失败:', error);
