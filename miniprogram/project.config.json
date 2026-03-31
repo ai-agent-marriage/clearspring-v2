@@ -1,5 +1,6 @@
 {
   "description": "清如 ClearSpring V2.0 - 放生服务小程序",
+  "cloudfunctionRoot": "../cloudfunctions/",
   "packOptions": {
     "ignore": [],
     "include": []
