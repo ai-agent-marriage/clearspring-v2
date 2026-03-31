@@ -164,22 +164,31 @@ Page({
       const userInfo = {
         phone: this.data.phone,
         nickName: '用户_' + this.data.phone.substr(7, 4),
-        avatarUrl: '/static/avatar/default.png'
+        avatarUrl: '/static/avatar/default.png',
+        userId: 'user_' + this.data.phone
       };
       
       wx.setStorageSync('userInfo', userInfo);
+      console.log('用户信息已保存:', userInfo);
 
       wx.showToast({
         title: '登录成功',
-        icon: 'success'
+        icon: 'success',
+        duration: 1500
       });
 
-      // 返回上一页或跳转到首页
+      // 返回上一页（会自动触发 onShow 刷新数据）
       setTimeout(() => {
         wx.navigateBack({
-          delta: 1
+          delta: 1,
+          fail: () => {
+            // 如果无法返回，跳转到首页
+            wx.switchTab({
+              url: '/pages/index/index'
+            });
+          }
         });
-      }, 1000);
+      }, 1500);
 
     } catch (error) {
       console.error('登录失败:', error);

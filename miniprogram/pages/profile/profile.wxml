@@ -13,20 +13,33 @@
   </view>
 
   <!-- 用户信息卡片 -->
-  <view class="user-card card-shadow">
+  <view class="user-card card-shadow" wx:if="{{userInfo}}">
     <view class="user-header">
-      <image class="user-avatar" src="/static/avatar/default.png" mode="aspectFill"></image>
+      <image class="user-avatar" src="{{userInfo.avatarUrl || '/static/avatar/default.png'}}" mode="aspectFill"></image>
       <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
-        <text class="user-phone">{{userInfo.phone || '点击登录'}}</text>
+        <text class="user-name">{{userInfo.nickName || '用户'}}</text>
+        <text class="user-phone">{{userInfo.phone ? userInfo.phone : '未绑定手机号'}}</text>
       </view>
     </view>
     <view class="user-actions">
-      <button class="login-btn" wx:if="{{!userInfo.phone}}" bindtap="goToLogin">
-        立即登录
-      </button>
-      <button class="logout-btn" wx:else bindtap="logout">
+      <button class="logout-btn" bindtap="logout">
         退出登录
+      </button>
+    </view>
+  </view>
+  
+  <!-- 未登录提示 -->
+  <view class="user-card card-shadow" wx:else>
+    <view class="user-header">
+      <image class="user-avatar" src="/static/avatar/default.png" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">未登录</text>
+        <text class="user-phone">点击登录体验更多功能</text>
+      </view>
+    </view>
+    <view class="user-actions">
+      <button class="login-btn" bindtap="goToLogin">
+        立即登录
       </button>
     </view>
   </view>

@@ -8,9 +8,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
+    userInfo: null,
     todayMeritCount: 0,
-    totalMeritCount: 0
+    totalMeritCount: 0,
+    forestCount: 0
   },
 
   /**
@@ -18,14 +19,13 @@ Page({
    */
   onLoad(options) {
     console.log('个人中心页加载完成', options);
-    this.loadUserInfo();
-    this.loadMeritData();
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    // 每次显示时刷新用户信息
     this.loadUserInfo();
     this.loadMeritData();
   },
@@ -37,7 +37,14 @@ Page({
     try {
       const userInfo = wx.getStorageSync('userInfo');
       if (userInfo) {
-        this.setData({ userInfo });
+        this.setData({ 
+          userInfo: {
+            ...userInfo,
+            phone: userInfo.phone || userInfo.mobile
+          }
+        });
+      } else {
+        this.setData({ userInfo: null });
       }
     } catch (error) {
       console.error('加载用户信息失败:', error);
@@ -53,7 +60,8 @@ Page({
       // 暂时使用模拟数据
       this.setData({
         todayMeritCount: 3,
-        totalMeritCount: 28
+        totalMeritCount: 28,
+        forestCount: 1
       });
     } catch (error) {
       console.error('加载功德数据失败:', error);
@@ -79,7 +87,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.removeStorageSync('userInfo');
-          this.setData({ userInfo: {} });
+          this.setData({ userInfo: null });
           wx.showToast({
             title: '已退出登录',
             icon: 'success'
