@@ -1,0 +1,208 @@
+/* 清如 ClearSpring V2.0 - 个人中心页样式 (Stitch 风格) */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #EFEEE9 0%, #E8E6DF 100%);
+}
+
+/* 顶部导航栏 */
+.navbar {
+  height: 100rpx;
+  padding: 0 32rpx;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+}
+
+.navbar-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #4A5D4E;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  margin: 24rpx;
+  padding: 32rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(135deg, #4A5D4E 0%, #334537 100%);
+  color: #FFFFFF;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+  color: #D4B87B;
+}
+
+.user-phone {
+  display: block;
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.user-actions {
+  margin-top: 16rpx;
+}
+
+.login-btn,
+.logout-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.login-btn::after,
+.logout-btn::after {
+  border: none;
+}
+
+/* 功德统计 */
+.merit-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  padding: 0 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.stat-item {
+  padding: 32rpx 16rpx;
+  border-radius: 24rpx;
+  background: #FFFFFF;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.stat-icon {
+  width: 88rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #D4B87B 0%, #C4A86B 100%);
+  border-radius: 50%;
+  color: #FFFFFF;
+  font-size: 40rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #4A5D4E;
+}
+
+/* 功能菜单 */
+.menu-list {
+  padding: 0 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.menu-item {
+  padding: 32rpx 24rpx;
+  border-radius: 24rpx;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.menu-left text:first-child {
+  font-size: 40rpx;
+  color: #4A5D4E;
+}
+
+.menu-label {
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.text-hint {
+  font-size: 32rpx;
+  color: #999999;
+}
+
+/* 底部信息 */
+.footer {
+  padding: 32rpx;
+  text-align: center;
+  margin-top: 32rpx;
+}
+
+.footer-text {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.footer-version {
+  display: block;
+  font-size: 20rpx;
+  color: #BBBBBB;
+}
+
+/* 卡片阴影 */
+.card-shadow {
+  box-shadow: 0 8rpx 24rpx rgba(74, 93, 78, 0.12);
+}
+
+/* 液态玻璃效果 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+}

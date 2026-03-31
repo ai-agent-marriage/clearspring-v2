@@ -1,0 +1,82 @@
+<!--
+  清如 ClearSpring V2.0 - 个人中心页
+  页面路径：pages/profile/profile
+  设计规范：Stitch 风格
+-->
+
+<view class="profile-page">
+  <!-- 顶部导航栏 -->
+  <view class="navbar glass-effect">
+    <view class="navbar-content">
+      <text class="navbar-title">个人中心</text>
+    </view>
+  </view>
+
+  <!-- 用户信息卡片 -->
+  <view class="user-card card-shadow">
+    <view class="user-header">
+      <image class="user-avatar" src="/static/avatar/default.png" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
+        <text class="user-phone">{{userInfo.phone || '点击登录'}}</text>
+      </view>
+    </view>
+    <view class="user-actions">
+      <button class="login-btn" wx:if="{{!userInfo.phone}}" bindtap="goToLogin">
+        立即登录
+      </button>
+      <button class="logout-btn" wx:else bindtap="logout">
+        退出登录
+      </button>
+    </view>
+  </view>
+
+  <!-- 功德统计 -->
+  <view class="merit-stats">
+    <view class="stat-item card-shadow" bindtap="goToTodayMerit">
+      <view class="stat-icon">
+        <text class="cuIcon-cuIcon-sun"></text>
+      </view>
+      <text class="stat-label">今日功德</text>
+      <text class="stat-value">{{todayMeritCount}}</text>
+    </view>
+    <view class="stat-item card-shadow" bindtap="goToTotalMerit">
+      <view class="stat-icon">
+        <text class="cuIcon-cuIcon-rank"></text>
+      </view>
+      <text class="stat-label">累计功德</text>
+      <text class="stat-value">{{totalMeritCount}}</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-list">
+    <view class="menu-item card-shadow" bindtap="goToOrders">
+      <view class="menu-left">
+        <text class="cuIcon-cuIcon-order"></text>
+        <text class="menu-label">我的订单</text>
+      </view>
+      <text class="cuIcon-cuIcon-right text-hint"></text>
+    </view>
+    <view class="menu-item card-shadow" bindtap="goToMeritForest">
+      <view class="menu-left">
+        <text class="cuIcon-cuIcon-tree"></text>
+        <text class="menu-label">功德林</text>
+      </view>
+      <text class="cuIcon-cuIcon-right text-hint"></text>
+    </view>
+    <view class="menu-item card-shadow" bindtap="goToSettings">
+      <view class="menu-left">
+        <text class="cuIcon-cuIcon-settings"></text>
+        <text class="menu-label">设置</text>
+      </view>
+      <text class="cuIcon-cuIcon-right text-hint"></text>
+    </view>
+  </view>
+
+  <!-- 底部信息 -->
+  <view class="footer">
+    <text class="footer-text">清如 · ClearSpring V2.0</text>
+    <text class="footer-version">Version 2.0.0</text>
+  </view>
+</view>
