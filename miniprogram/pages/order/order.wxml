@@ -67,7 +67,7 @@
             <text class="cuIcon-cuIcon-add"></text>
           </view>
         </view>
-        <text class="quantity-unit">{{selectedSpecies?.unit || '份'}}</text>
+        <text class="quantity-unit">{{selectedSpecies.unit || '份'}}</text>
       </view>
 
       <!-- 放生时间 -->
