@@ -46,8 +46,8 @@
         "selectedIconPath": "static/tabbar/order-active.png"
       },
       {
-        "pagePath": "pages/profile/profile",
-        "text": "我的",
+        "pagePath": "pages/meditation/index",
+        "text": "冥想",
         "iconPath": "static/tabbar/profile.png",
         "selectedIconPath": "static/tabbar/profile-active.png"
       }
