@@ -1,10 +1,6 @@
 <!--
-  清如 ClearSpring V2.0 - 服务页
+  清如 ClearSpring V2.0 - 服务页 (Stitch 风格)
   页面路径：pages/service/service
-  页面结构：
-    1. 服务分类 Tab（物命救护/法事服务/随喜功德）
-    2. 服务列表（卡片式布局）
-    3. 服务详情弹窗
 -->
 
 <view class="service-page">
@@ -61,114 +57,11 @@
             <view class="service-price">
               <text class="price-symbol">¥</text>
               <text class="price-value">{{item.price}}</text>
-              <text class="price-unit" wx:if="{{item.unit}}">/{{item.unit}}</text>
             </view>
-            
-            <view class="service-sales">
-              <text class="sales-value">{{item.sales}}</text>
-              <text class="sales-label">人参与</text>
-            </view>
+            <button class="service-action-btn">立即放生</button>
           </view>
         </view>
-        
-        <view class="service-actions">
-          <button class="action-btn btn-primary" bindtap="selectService" data-service="{{item}}">
-            <text>选择</text>
-          </button>
-        </view>
       </view>
-    </view>
-    
-    <!-- 空状态 -->
-    <view class="empty-state" wx:if="{{filteredServices.length === 0}}">
-      <text class="cuIcon-cuIcon-empty text-grey"></text>
-      <text class="empty-text">暂无服务</text>
-    </view>
-    
-    <!-- 加载更多 -->
-    <view class="load-more" wx:if="{{hasMore}}">
-      <text class="cuIcon-cuIcon-loading1 loading"></text>
-      <text>加载更多...</text>
     </view>
   </scroll-view>
-
-  <!-- 底部 TabBar -->
-  <view class="tabbar">
-    <view class="tabbar-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
-      <text class="cuIcon-cuIcon-home"></text>
-      <text class="tabbar-label">首页</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
-      <text class="cuIcon-cuIcon-shop"></text>
-      <text class="tabbar-label">服务</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
-      <text class="cuIcon-cuIcon-order"></text>
-      <text class="tabbar-label">订单</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3">
-      <text class="cuIcon-cuIcon-profile"></text>
-      <text class="tabbar-label">我的</text>
-    </view>
-  </view>
-
-  <!-- 服务详情弹窗 -->
-  <view class="cu-modal bottom-modal {{showDetailModal ? 'show' : ''}}" bindtap="hideServiceDetail">
-    <view class="cu-dialog service-detail-modal" catchtap="stopPropagation">
-      <!-- 弹窗头部 -->
-      <view class="modal-header">
-        <text class="modal-title">服务详情</text>
-        <text class="cuIcon-cuIcon-close close-btn" bindtap="hideServiceDetail"></text>
-      </view>
-      
-      <!-- 弹窗内容 -->
-      <scroll-view scroll-y class="modal-content" style="max-height: 60vh;">
-        <view class="detail-image-wrapper" wx:if="{{selectedService.image}}">
-          <image class="detail-image" src="{{selectedService.image}}" mode="aspectFill"></image>
-        </view>
-        
-        <view class="detail-info">
-          <text class="detail-title">{{selectedService.title}}</text>
-          
-          <view class="detail-price-row">
-            <view class="detail-price">
-              <text class="price-symbol">¥</text>
-              <text class="price-value">{{selectedService.price}}</text>
-            </view>
-            <view class="detail-sales" wx:if="{{selectedService.sales}}">
-              <text>已有 {{selectedService.sales}} 人参与</text>
-            </view>
-          </view>
-          
-          <view class="detail-divider"></view>
-          
-          <view class="detail-section">
-            <text class="section-title">服务介绍</text>
-            <text class="section-content">{{selectedService.description}}</text>
-          </view>
-          
-          <view class="detail-section" wx:if="{{selectedService.rules}}">
-            <text class="section-title">服务规则</text>
-            <view class="rules-list">
-              <view class="rule-item" wx:for="{{selectedService.rules}}" wx:key="index">
-                <text class="cuIcon-cuIcon-info text-primary"></text>
-                <text>{{item}}</text>
-              </view>
-            </view>
-          </view>
-          
-          <view class="detail-section" wx:if="{{selectedService.notice}}">
-            <text class="section-title">注意事项</text>
-            <text class="section-content notice-text">{{selectedService.notice}}</text>
-          </view>
-        </view>
-      </scroll-view>
-      
-      <!-- 弹窗底部操作 -->
-      <view class="modal-footer">
-        <button class="footer-btn btn-cancel" bindtap="hideServiceDetail">取消</button>
-        <button class="footer-btn btn-confirm bg-gradual-red" bindtap="confirmService">确认选择</button>
-      </view>
-    </view>
-  </view>
 </view>

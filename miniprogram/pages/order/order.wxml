@@ -1,26 +1,18 @@
 <!--
-  清如 ClearSpring V2.0 - 订单页
+  清如 ClearSpring V2.0 - 订单页 (Stitch 风格)
   页面路径：pages/order/order
-  页面结构：
-    1. 订单创建表单（物种/数量/时间/地点）
-    2. 订单确认页
-    3. 订单状态展示（待支付/待执行/已完成）
 -->
 
 <view class="order-page">
   <!-- 顶部导航栏 -->
   <view class="navbar glass-effect">
     <view class="navbar-content">
-      <view class="back-btn" bindtap="goBack" wx:if="{{!isFromTab}}">
-        <text class="cuIcon-cuIcon-back"></text>
-      </view>
       <text class="navbar-title">{{orderMode === 'create' ? '创建订单' : '订单详情'}}</text>
-      <view class="placeholder" style="width: 72rpx;"></view>
     </view>
   </view>
 
   <!-- 订单创建表单 -->
-  <scroll-view scroll-y class="content-scroll" wx:if="{{orderMode === 'create'}}" style="height: calc(100vh - 100rpx - 120rpx);">
+  <scroll-view scroll-y class="content-scroll" style="height: calc(100vh - 100rpx - 120rpx);">
     
     <!-- 服务信息卡片 -->
     <view class="service-info-card card-shadow" wx:if="{{selectedService}}">
@@ -39,7 +31,7 @@
     <!-- 订单表单 -->
     <view class="order-form">
       <!-- 物种选择 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-fish section-icon"></text>
           <text class="section-title">选择物种</text>
@@ -53,7 +45,7 @@
       </view>
 
       <!-- 数量选择 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-number section-icon"></text>
           <text class="section-title">放生数量</text>
@@ -71,7 +63,7 @@
       </view>
 
       <!-- 放生时间 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-time section-icon"></text>
           <text class="section-title">放生时间</text>
@@ -85,7 +77,7 @@
       </view>
 
       <!-- 祈福信息 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-edit section-icon"></text>
           <text class="section-title">祈福对象</text>
@@ -101,30 +93,23 @@
       </view>
 
       <!-- 联系方式 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-mobile section-icon"></text>
           <text class="section-title">联系电话</text>
         </view>
-        <form-validator 
-          class="phone-validator"
-          rules="{{phoneRules}}" 
-          field-name="联系电话"
-          auto-hide-delay="3000"
-        >
-          <input 
-            class="form-input {{phoneInvalid ? 'input-error' : ''}}"
-            type="number" 
-            placeholder="请输入手机号码"
-            value="{{contactPhone}}"
-            bindinput="onPhoneInput"
-            maxlength="11"
-          />
-        </form-validator>
+        <input 
+          class="form-input {{phoneInvalid ? 'input-error' : ''}}"
+          type="number" 
+          placeholder="请输入手机号码"
+          value="{{contactPhone}}"
+          bindinput="onPhoneInput"
+          maxlength="11"
+        />
       </view>
 
       <!-- 订单备注 -->
-      <view class="form-section">
+      <view class="form-section card-shadow">
         <view class="section-header">
           <text class="cuIcon-cuIcon-info section-icon"></text>
           <text class="section-title">订单备注</text>
@@ -139,136 +124,36 @@
         <text class="char-count">{{orderRemark.length}}/200</text>
       </view>
 
-      <!-- 费用明细 -->
-      <view class="price-section card-shadow">
-        <view class="price-row">
-          <text class="price-label">单价</text>
-          <text class="price-value">¥{{selectedService.price || 0}}</text>
+      <!-- 订单摘要 -->
+      <view class="order-summary card-shadow">
+        <view class="summary-row">
+          <text class="summary-label">物种</text>
+          <text class="summary-value">{{selectedSpecies.name || '-'}}</text>
         </view>
-        <view class="price-row">
-          <text class="price-label">数量</text>
-          <text class="price-value">x {{quantity}}</text>
+        <view class="summary-row">
+          <text class="summary-label">数量</text>
+          <text class="summary-value">{{quantity}} {{selectedSpecies.unit || '份'}}</text>
         </view>
-        <view class="price-divider"></view>
-        <view class="price-row total">
-          <text class="price-label">合计</text>
+        <view class="summary-row">
+          <text class="summary-label">时间</text>
+          <text class="summary-value">{{releaseDate || '-'}}</text>
+        </view>
+        <view class="summary-row total">
+          <text class="summary-label">总计</text>
           <view class="total-price">
             <text class="price-symbol">¥</text>
-            <text class="price-value">{{totalAmount}}</text>
+            <text class="price-value">{{totalPrice}}</text>
           </view>
         </view>
       </view>
 
-      <!-- 底部占位 -->
-      <view style="height: 150rpx;"></view>
-    </view>
-  </scroll-view>
-
-  <!-- 订单详情/状态展示 -->
-  <scroll-view scroll-y class="content-scroll" wx:if="{{orderMode === 'detail'}}" style="height: calc(100vh - 100rpx);">
-    <!-- 订单状态卡片 -->
-    <view class="status-card {{'status-' + orderDetail.status}}">
-      <view class="status-icon">
-        <text class="cuIcon-{{statusIcons[orderDetail.status] || 'cuIcon-info'}}"></text>
-      </view>
-      <text class="status-text">{{statusTexts[orderDetail.status] || '订单详情'}}</text>
-      <text class="status-desc" wx:if="{{orderDetail.statusDesc}}">{{orderDetail.statusDesc}}</text>
-      
-      <!-- 操作按钮 -->
-      <view class="status-actions" wx:if="{{orderDetail.status === 'pending_payment'}}">
-        <button class="action-btn btn-pay" bindtap="payOrder">立即支付</button>
-      </view>
-      <view class="status-actions" wx:if="{{orderDetail.status === 'completed'}}">
-        <button class="action-btn btn-view" bindtap="viewEvidence">查看放生记录</button>
-      </view>
-    </view>
-
-    <!-- 订单信息 -->
-    <view class="order-detail-card card-shadow">
-      <view class="detail-section">
-        <text class="detail-label">订单编号</text>
-        <text class="detail-value">{{orderDetail.orderNo}}</text>
-      </view>
-      <view class="detail-section">
-        <text class="detail-label">下单时间</text>
-        <text class="detail-value">{{orderDetail.createTime}}</text>
-      </view>
-      <view class="detail-section">
-        <text class="detail-label">放生时间</text>
-        <text class="detail-value">{{orderDetail.releaseDate}}</text>
-      </view>
-      <view class="detail-section">
-        <text class="detail-label">祈福对象</text>
-        <text class="detail-value">{{orderDetail.blessingTarget || '未填写'}}</text>
-      </view>
-    </view>
-
-    <!-- 服务信息 -->
-    <view class="service-detail-card card-shadow">
-      <view class="service-header">
-        <image class="service-thumb" src="{{orderDetail.serviceImage}}" mode="aspectFill"></image>
-        <view class="service-meta">
-          <text class="service-title">{{orderDetail.serviceName}}</text>
-          <view class="service-quantity">
-            <text>数量：x{{orderDetail.quantity}}</text>
-          </view>
-        </view>
-      </view>
-      <view class="service-footer">
-        <text class="service-price">¥{{orderDetail.totalAmount}}</text>
-      </view>
-    </view>
-
-    <!-- 联系信息 -->
-    <view class="contact-card card-shadow">
-      <view class="contact-header">
-        <text class="cuIcon-cuIcon-mobile contact-icon"></text>
-        <text class="contact-title">联系方式</text>
-      </view>
-      <view class="contact-content">
-        <text class="contact-phone">{{orderDetail.contactPhone}}</text>
-        <button class="contact-btn" bindtap="callService">
-          <text class="cuIcon-cuIcon-phone"></text>
-          <text>联系客服</text>
+      <!-- 提交订单按钮 -->
+      <view class="submit-section">
+        <button class="submit-btn card-shadow" bindtap="submitOrder">
+          <text class="btn-text">提交订单</text>
         </button>
       </view>
-    </view>
 
-    <!-- 底部占位 -->
-    <view style="height: 150rpx;"></view>
+    </view>
   </scroll-view>
-
-  <!-- 底部提交按钮（创建模式） -->
-  <view class="bottom-bar" wx:if="{{orderMode === 'create'}}">
-    <view class="total-info">
-      <text class="total-label">实付金额</text>
-      <view class="total-price">
-        <text class="price-symbol">¥</text>
-        <text class="price-value">{{totalAmount}}</text>
-      </view>
-    </view>
-    <button class="submit-btn bg-gradual-red" bindtap="submitOrder" disabled="{{!canSubmit}}">
-      <text>{{canSubmit ? '提交订单' : '请填写完整信息'}}</text>
-    </button>
-  </view>
-
-  <!-- 底部 TabBar（从 Tab 进入时显示） -->
-  <view class="tabbar" wx:if="{{isFromTab}}">
-    <view class="tabbar-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
-      <text class="cuIcon-cuIcon-home"></text>
-      <text class="tabbar-label">首页</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
-      <text class="cuIcon-cuIcon-shop"></text>
-      <text class="tabbar-label">服务</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
-      <text class="cuIcon-cuIcon-order"></text>
-      <text class="tabbar-label">订单</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3">
-      <text class="cuIcon-cuIcon-profile"></text>
-      <text class="tabbar-label">我的</text>
-    </view>
-  </view>
 </view>
