@@ -1,0 +1,434 @@
+/**
+ * 清如 ClearSpring V2.0 - 首页样式
+ * 页面路径：pages/index/index
+ * 
+ * 设计规范：
+ * - 背景色：宣纸底 #EFEEE9
+ * - 主色调：禅意金 #D4B87B
+ * - 组件圆角：24rpx
+ * - 按钮热区：≥88rpx
+ */
+
+/* ====================
+   CSS 变量定义
+   ==================== */
+page {
+  --bg-primary: #EFEEE9;        /* 宣纸底 */
+  --primary-gold: #D4B87B;       /* 禅意金 */
+  --primary-gold-dark: #B89A5B;  /* 深金色 */
+  --text-primary: #333333;       /* 主文字色 */
+  --text-secondary: #666666;     /* 次要文字色 */
+  --text-hint: #999999;          /* 提示文字色 */
+  --border-color: rgba(212, 184, 123, 0.3);  /* 边框色 */
+  --card-radius: 24rpx;          /* 组件圆角 */
+  --btn-min-height: 88rpx;       /* 按钮最小热区 */
+  --shadow-light: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+/* ====================
+   页面基础样式
+   ==================== */
+.index-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(135deg, #EFEEE9 0%, #E8E6DE 100%);
+}
+
+.content-scroll {
+  flex: 1;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+
+/* ====================
+   顶部导航栏（液态玻璃效果）
+   ==================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  z-index: 1000;
+  padding-top: var(--status-bar-height, 0);
+}
+
+.glass-effect {
+  background: rgba(239, 238, 233, 0.7);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100rpx;
+  padding: 0 30rpx;
+}
+
+.navbar-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 30rpx;
+}
+
+.action-btn {
+  width: 88rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(212, 184, 123, 0.1);
+}
+
+.action-btn text {
+  font-size: 40rpx;
+  color: var(--primary-gold);
+}
+
+/* ====================
+   卡片通用样式
+   ==================== */
+.card-shadow {
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  margin-bottom: 30rpx;
+}
+
+/* ====================
+   法师推荐语卡片
+   ==================== */
+.master-card {
+  margin-top: 30rpx;
+  padding: 40rpx;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF9F0 100%);
+  border: 1rpx solid var(--border-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.master-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--primary-gold);
+  margin-right: 24rpx;
+}
+
+.master-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.master-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.master-title {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.card-content {
+  margin-bottom: 24rpx;
+  padding: 30rpx;
+  background: rgba(212, 184, 123, 0.08);
+  border-radius: 16rpx;
+  border-left: 6rpx solid var(--primary-gold);
+}
+
+.quote-text {
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: var(--text-primary);
+  font-style: italic;
+  display: block;
+}
+
+.card-footer {
+  text-align: right;
+}
+
+.quote-source {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+/* ====================
+   如法性保障声明
+   ==================== */
+.dharma-guarantee {
+  padding: 40rpx;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F0E6 100%);
+}
+
+.guarantee-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.circle-info {
+  font-size: 40rpx;
+  color: var(--primary-gold);
+  margin-right: 16rpx;
+}
+
+.guarantee-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.guarantee-content {
+  margin-bottom: 24rpx;
+}
+
+.guarantee-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  text-align: justify;
+  display: block;
+}
+
+.guarantee-tags {
+  display: flex;
+  gap: 20rpx;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  padding: 12rpx 24rpx;
+  background: rgba(212, 184, 123, 0.15);
+  color: var(--primary-gold-dark);
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  border: 1rpx solid rgba(212, 184, 123, 0.3);
+}
+
+/* ====================
+   功德快捷入口
+   ==================== */
+.merit-entries {
+  margin-top: 30rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+}
+
+.section-title text:first-child {
+  margin-right: 16rpx;
+  font-size: 40rpx;
+  color: var(--primary-gold);
+}
+
+.entries-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx;
+}
+
+.entry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  background: #FFFFFF;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.entry-item:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-medium);
+}
+
+.entry-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.entry-icon text {
+  font-size: 56rpx;
+  color: #FFFFFF;
+}
+
+.entry-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.entry-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--primary-gold-dark);
+}
+
+/* ====================
+   快速放生按钮
+   ==================== */
+.quick-release-section {
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.quick-release-card {
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F5 100%);
+}
+
+.release-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.release-desc {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 16rpx;
+}
+
+.release-price {
+  font-size: 32rpx;
+  color: #E54D42;
+  font-weight: bold;
+}
+
+.price-number {
+  font-size: 48rpx;
+}
+
+.release-btn {
+  min-height: var(--btn-min-height);
+  padding: 0 48rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  box-shadow: 0 8rpx 24rpx rgba(229, 77, 66, 0.4);
+  transition: all 0.3s ease;
+}
+
+.release-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 16rpx rgba(229, 77, 66, 0.3);
+}
+
+.release-btn text:first-child {
+  font-size: 40rpx;
+}
+
+/* ====================
+   底部 TabBar
+   ==================== */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(100rpx + env(safe-area-inset-bottom) / 2);
+  padding-bottom: calc(env(safe-area-inset-bottom) / 2);
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+.tabbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 20rpx;
+  min-height: var(--btn-min-height);
+  min-width: 88rpx;
+  transition: all 0.3s ease;
+}
+
+.tabbar-item text:first-child {
+  font-size: 44rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.tabbar-label {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.tabbar-item.active text:first-child,
+.tabbar-item.active .tabbar-label {
+  color: var(--primary-gold);
+}
+
+.tabbar-item:active {
+  transform: scale(0.9);
+}
+
+/* ====================
+   响应式适配
+   ==================== */
+@media (max-width: 375px) {
+  .navbar-title {
+    font-size: 32rpx;
+  }
+  
+  .master-card,
+  .dharma-guarantee {
+    padding: 30rpx;
+  }
+  
+  .quote-text {
+    font-size: 28rpx;
+  }
+  
+  .release-btn {
+    padding: 0 36rpx;
+    font-size: 28rpx;
+  }
+}

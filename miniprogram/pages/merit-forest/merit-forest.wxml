@@ -1,0 +1,62 @@
+<!--
+  清如 ClearSpring V2.0 - 功德林页
+  页面路径：pages/merit-forest/merit-forest
+  设计规范：Stitch 风格 + 瀑布流布局
+-->
+
+<view class="merit-forest-page">
+  <!-- 顶部导航栏 -->
+  <view class="navbar glass-effect">
+    <view class="navbar-content">
+      <text class="navbar-title">功德林</text>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-card card-shadow">
+    <view class="stats-header">
+      <text class="stats-title">我的功德林</text>
+      <text class="stats-subtitle">累计放生 {{totalCount}} 次</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{totalCount}}</text>
+        <text class="stat-label">总次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{totalMerit}}</text>
+        <text class="stat-label">总功德</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{forestCount}}</text>
+        <text class="stat-label">功德树</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功德证书墙（瀑布流） -->
+  <view class="certificate-wall">
+    <view class="wall-title">功德证书</view>
+    <view class="waterfall">
+      <view 
+        class="certificate-card card-shadow" 
+        wx:for="{{certificates}}" 
+        wx:key="id"
+        bindtap="viewCertificate"
+        data-id="{{item.id}}"
+      >
+        <view class="cert-header">
+          <text class="cert-title">{{item.title}}</text>
+          <text class="cert-date">{{item.date}}</text>
+        </view>
+        <view class="cert-content">
+          <text class="cert-text">{{item.description}}</text>
+        </view>
+        <view class="cert-footer">
+          <text class="cert-merit">功德 +{{item.merit}}</text>
+          <text class="cuIcon-cuIcon-favorfill cert-icon"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

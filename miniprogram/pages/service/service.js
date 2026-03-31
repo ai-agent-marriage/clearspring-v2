@@ -24,8 +24,47 @@ Page({
       { id: 3, name: '随喜功德' }
     ],
     
-    // 服务列表
-    services: [],
+    // 服务列表（模拟数据）
+    services: [
+      {
+        id: 1,
+        title: '物命救护 - 鱼类放生',
+        description: '如法放生鱼类，功德无量，护生护命',
+        price: 100,
+        image: '/static/service/fish.jpg',
+        category: '物命救护',
+        tag: '热门',
+        rating: 4.9
+      },
+      {
+        id: 2,
+        title: '物命救护 - 鸟类放生',
+        description: '放生鸟类，护生护命，功德圆满',
+        price: 200,
+        image: '/static/service/bird.jpg',
+        category: '物命救护',
+        tag: '推荐',
+        rating: 4.8
+      },
+      {
+        id: 3,
+        title: '法事服务 - 超度法会',
+        description: '如法超度，离苦得乐，功德无量',
+        price: 500,
+        image: '/static/service/ceremony.jpg',
+        category: '法事服务',
+        rating: 5.0
+      },
+      {
+        id: 4,
+        title: '随喜功德 - 寺院建设',
+        description: '随喜赞助寺院建设，广种福田',
+        price: 50,
+        image: '/static/service/temple.jpg',
+        category: '随喜功德',
+        tag: '公益'
+      }
+    ],
     filteredServices: [],
     
     // 分页
