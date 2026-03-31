@@ -1,9 +1,6 @@
 /* 引入 CSS 变量规范 */
 @import "./css/variables.wxss";
 
-/* 引入 ColorUI */
-@import "./colorui/colorui/main.css";
-
 /* 全局样式 */
 page {
   background-color: var(--cs-bg-primary);

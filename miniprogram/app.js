@@ -21,12 +21,12 @@ App({
    * 生命周期函数--监听小程序初始化
    */
   onLaunch() {
-    logger.info('清如 ClearSpring V2.0 启动');
+    console.log('清如 ClearSpring V2.0 启动');
     
     // 获取系统信息
     const systemInfo = wx.getSystemInfoSync();
     this.globalData.systemInfo = systemInfo;
-    logger.info('系统信息:', systemInfo);
+    console.log('系统信息:', systemInfo);
 
     // 初始化云开发环境
     if (wx.cloud) {
@@ -34,7 +34,7 @@ App({
         env: 'cloud1-7ga68ls3ccebbe5b',
         traceUser: true
       });
-      logger.info('云开发环境初始化成功');
+      console.log('云开发环境初始化成功');
     }
 
     // 检查用户登录状态
@@ -45,14 +45,14 @@ App({
    * 生命周期函数--监听小程序显示
    */
   onShow() {
-    logger.info('小程序显示');
+    console.log('小程序显示');
   },
 
   /**
    * 生命周期函数--监听小程序隐藏
    */
   onHide() {
-    logger.info('小程序隐藏');
+    console.log('小程序隐藏');
   },
 
   /**
