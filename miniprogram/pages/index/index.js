@@ -107,7 +107,8 @@ Page({
    */
   async fetchUserInfo() {
     try {
-      // 调用云函数获取用户信息
+      // 暂时注释掉云函数调用，待后续实现
+      /*
       const res = await wx.cloud.callFunction({
         name: 'getUserInfo',
         data: {}
@@ -119,6 +120,8 @@ Page({
         });
         wx.setStorageSync('userInfo', res.result.data);
       }
+      */
+      console.log('获取用户信息功能待实现');
     } catch (error) {
       console.error('获取用户信息失败:', error);
     }
@@ -129,7 +132,8 @@ Page({
    */
   async refreshMeritData() {
     try {
-      // 调用云函数获取功德数据
+      // 暂时注释掉云函数调用，待后续实现
+      /*
       const res = await wx.cloud.callFunction({
         name: 'getMeritData',
         data: {}
@@ -143,6 +147,15 @@ Page({
           meritForestCount: forestCount || 0
         });
       }
+      */
+      console.log('获取功德数据功能待实现');
+      
+      // 使用默认值
+      this.setData({
+        todayMeritCount: 0,
+        totalMeritCount: 0,
+        meritForestCount: 0
+      });
     } catch (error) {
       console.error('获取功德数据失败:', error);
       // 使用默认值
