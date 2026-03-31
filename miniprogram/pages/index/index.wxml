@@ -1,18 +1,19 @@
 <!--
-  清如 ClearSpring V2.0 - 祈福者端首页
+  清如 ClearSpring V2.0 - 祈福者端首页 (Stitch 风格重制版)
   页面路径：pages/index/index
   设计规范：
     - 背景色：宣纸底 #EFEEE9
     - 主色调：禅意金 #D4B87B
+    - 辅助色：岱绿 #4A5D4E
     - 组件圆角：24rpx
     - 按钮热区：≥88rpx
+    - 液态玻璃效果
 -->
 
 <view class="index-page">
-  <!-- 顶部导航栏（液态玻璃效果） -->
+  <!-- 顶部导航栏（无标题，更简洁） -->
   <view class="navbar glass-effect">
     <view class="navbar-content">
-      <text class="navbar-title">清如 · ClearSpring</text>
       <view class="navbar-actions">
         <view class="action-btn">
           <text class="cuIcon-cuIcon-notice"></text>
@@ -27,6 +28,15 @@
   <!-- 滚动内容区 -->
   <scroll-view scroll-y class="content-scroll" style="height: calc(100vh - 100rpx - 120rpx);">
     
+    <!-- 欢迎语卡片（Stitch 风格） -->
+    <view class="welcome-card card-shadow">
+      <view class="welcome-header">
+        <text class="welcome-greeting">早安，吉祥</text>
+        <text class="welcome-subtitle">愿众生安乐，福慧双增</text>
+      </view>
+      <image class="welcome-image" src="/static/homepage/bird-hero.jpg" mode="aspectFill"></image>
+    </view>
+
     <!-- 法师推荐语卡片 -->
     <view class="master-card card-shadow">
       <view class="card-header">
@@ -44,95 +54,38 @@
       </view>
     </view>
 
-    <!-- 如法性保障声明 -->
-    <view class="dharma-guarantee card-shadow">
-      <view class="guarantee-header">
-        <text class="cuIcon-cuIcon-info circle-info"></text>
-        <text class="guarantee-title">如法性保障声明</text>
-      </view>
-      <view class="guarantee-content">
-        <text class="guarantee-text">
-          本平台所有放生活动均依佛制仪轨进行，由具德法师主持，确保如理如法。
-          每笔功德皆有回向，每次放生皆有记录，透明公开，因果不虚。
-        </text>
-      </view>
-      <view class="guarantee-tags">
-        <view class="tag-item">如法仪轨</view>
-        <view class="tag-item">透明公开</view>
-        <view class="tag-item">功德回向</view>
-      </view>
-    </view>
-
     <!-- 功德快捷入口 -->
-    <view class="merit-entries">
-      <view class="section-title">
-        <text class="cuIcon-cuIcon-gift"></text>
-        <text>功德快捷入口</text>
+    <view class="merit-grid">
+      <view class="merit-item card-shadow" bindtap="goToTodayMerit">
+        <view class="merit-icon">
+          <text class="cuIcon-cuIcon-sun"></text>
+        </view>
+        <text class="merit-label">今日功德</text>
+        <text class="merit-value">{{todayMeritCount}}</text>
       </view>
-      <view class="entries-grid">
-        <view class="entry-item" bindtap="goToTodayMerit">
-          <view class="entry-icon bg-red">
-            <text class="cuIcon-cuIcon-calendar"></text>
-          </view>
-          <text class="entry-label">今日功德</text>
-          <text class="entry-value">{{todayMeritCount}}</text>
+      <view class="merit-item card-shadow" bindtap="goToTotalMerit">
+        <view class="merit-icon">
+          <text class="cuIcon-cuIcon-rank"></text>
         </view>
-        <view class="entry-item" bindtap="goToTotalMerit">
-          <view class="entry-icon bg-orange">
-            <text class="cuIcon-cuIcon-rank"></text>
-          </view>
-          <text class="entry-label">累计功德</text>
-          <text class="entry-value">{{totalMeritCount}}</text>
+        <text class="merit-label">累计功德</text>
+        <text class="merit-value">{{totalMeritCount}}</text>
+      </view>
+      <view class="merit-item card-shadow" bindtap="goToMeritForest">
+        <view class="merit-icon">
+          <text class="cuIcon-cuIcon-tree"></text>
         </view>
-        <view class="entry-item" bindtap="goToMeritForest">
-          <view class="entry-icon bg-green">
-            <text class="cuIcon-cuIcon-tree"></text>
-          </view>
-          <text class="entry-label">功德林</text>
-          <text class="entry-value">{{meritForestCount}}</text>
-        </view>
+        <text class="merit-label">功德林</text>
+        <text class="merit-value">{{meritForestCount}}</text>
       </view>
     </view>
 
     <!-- 快速放生按钮 -->
     <view class="quick-release-section">
-      <view class="section-title">
+      <button class="quick-release-btn card-shadow" bindtap="quickRelease">
         <text class="cuIcon-cuIcon-fish"></text>
-        <text>快速放生</text>
-      </view>
-      <view class="quick-release-card card-shadow">
-        <view class="release-info">
-          <text class="release-desc">即刻参与放生，积累无量功德</text>
-          <text class="release-price">¥ <text class="price-number">99</text> 起</text>
-        </view>
-        <button class="release-btn bg-gradual-red" bindtap="quickRelease">
-          <text class="cuIcon-cuIcon-fire"></text>
-          <text>立即放生</text>
-        </button>
-      </view>
+        <text class="btn-text">快速放生</text>
+      </button>
     </view>
 
-    <!-- 底部占位（防止被 TabBar 遮挡） -->
-    <view style="height: 120rpx;"></view>
   </scroll-view>
-
-  <!-- 底部 TabBar -->
-  <view class="tabbar">
-    <view class="tabbar-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
-      <text class="cuIcon-cuIcon-home"></text>
-      <text class="tabbar-label">首页</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
-      <text class="cuIcon-cuIcon-shop"></text>
-      <text class="tabbar-label">服务</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
-      <text class="cuIcon-cuIcon-order"></text>
-      <text class="tabbar-label">订单</text>
-    </view>
-    <view class="tabbar-item {{currentTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3">
-      <text class="cuIcon-cuIcon-profile"></text>
-      <text class="tabbar-label">我的</text>
-    </view>
-  </view>
 </view>
