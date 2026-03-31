@@ -30,7 +30,7 @@
     <!-- 法师推荐语卡片 -->
     <view class="master-card card-shadow">
       <view class="card-header">
-        <image class="master-avatar" src="/static/avatar/master.png" mode="aspectFill"></image>
+        <image class="master-avatar" src="/static/avatar/default.png" mode="aspectFill"></image>
         <view class="master-info">
           <text class="master-name">释清净法师</text>
           <text class="master-title">本寺住持 · 放生仪轨传承人</text>
