@@ -1,0 +1,82 @@
+<!--
+  清如 ClearSpring V2.0 - 登录页
+  页面路径：pages/login/login
+  设计规范：Stitch 风格
+-->
+
+<view class="login-page">
+  <!-- Logo 区域 -->
+  <view class="logo-section">
+    <view class="logo-icon">
+      <text class="cuIcon-cuIcon-fish"></text>
+    </view>
+    <text class="logo-title">清如 · ClearSpring</text>
+    <text class="logo-subtitle">如法放生平台</text>
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="login-form card-shadow">
+    <view class="form-title">欢迎登录</view>
+    
+    <!-- 手机号输入 -->
+    <view class="form-group">
+      <view class="input-label">
+        <text class="cuIcon-cuIcon-mobile"></text>
+        <text class="label-text">手机号码</text>
+      </view>
+      <input 
+        class="form-input {{phoneInvalid ? 'input-error' : ''}}"
+        type="number" 
+        placeholder="请输入手机号码"
+        value="{{phone}}"
+        bindinput="onPhoneInput"
+        maxlength="11"
+      />
+      <text class="error-hint" wx:if="{{phoneInvalid}}">请输入正确的 11 位手机号</text>
+    </view>
+
+    <!-- 验证码输入 -->
+    <view class="form-group">
+      <view class="input-label">
+        <text class="cuIcon-cuIcon-lock"></text>
+        <text class="label-text">验证码</text>
+      </view>
+      <view class="code-input-wrapper">
+        <input 
+          class="code-input"
+          type="number" 
+          placeholder="请输入验证码"
+          value="{{code}}"
+          bindinput="onCodeInput"
+          maxlength="6"
+        />
+        <button 
+          class="code-btn {{!canSendCode ? 'disabled' : ''}}"
+          bindtap="sendCode"
+          disabled="{{!canSendCode}}"
+        >
+          {{sendCodeText}}
+        </button>
+      </view>
+    </view>
+
+    <!-- 登录按钮 -->
+    <button class="login-btn card-shadow" bindtap="login" loading="{{isLoading}}">
+      立即登录
+    </button>
+
+    <!-- 协议说明 -->
+    <view class="agreement">
+      <checkbox checked="{{agreeProtocol}}" bindtap="toggleAgreement" />
+      <text class="agreement-text">我已阅读并同意</text>
+      <text class="agreement-link" bindtap="viewAgreement">《用户协议》</text>
+      <text class="agreement-text">和</text>
+      <text class="agreement-link" bindtap="viewPrivacy">《隐私政策》</text>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="footer">
+    <text class="footer-text">登录即代表您同意我们的服务条款</text>
+  </view>
+</view>
